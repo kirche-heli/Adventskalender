@@ -36,15 +36,8 @@
       position:relative;
       overflow:hidden;
     }
-    header .brand{
-      max-width:1200px;
-      margin:0 auto;
-    }
-    h1{
-      margin:0 0 8px;
-      font-size:clamp(28px, 5vw, 48px);
-      letter-spacing:.5px;
-    }
+    header .brand{ max-width:1200px; margin:0 auto; }
+    h1{ margin:0 0 8px; font-size:clamp(28px, 5vw, 48px); letter-spacing:.5px; }
     .subtitle{
       font-size:clamp(14px, 2.4vw, 18px);
       opacity:.95;
@@ -53,265 +46,92 @@
       line-height:1.5;
     }
     nav{
-      display:flex;
-      gap:12px;
-      justify-content:center;
-      flex-wrap:wrap;
-      margin-top:22px;
+      display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:22px;
     }
     nav a{
-      display:inline-block;
-      text-decoration:none;
-      color:var(--burgundy);
-      background:var(--gold);
-      padding:10px 14px;
-      border-radius:999px;
-      font-weight:600;
-      box-shadow:var(--shadow);
+      display:inline-block; text-decoration:none; color:var(--burgundy);
+      background:var(--gold); padding:10px 14px; border-radius:999px; font-weight:600; box-shadow:var(--shadow);
     }
-    main{
-      max-width:1100px;
-      margin:-36px auto 60px;
-      padding:0 16px;
-    }
-    .card{
-      background:var(--card);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      padding:20px;
-      margin-bottom:18px;
-    }
-    .today{
-      display:grid;
-      gap:16px;
-    }
-    .today h2{
-      margin:0 0 6px;
-      font-size:22px;
-      color:var(--forest);
-    }
-    .today .row{
-      display:grid;
-      gap:14px;
-    }
-    .today .info{
-      display:flex;
-      flex-direction:column;
-      gap:8px;
-    }
-    .today .pill{
-      display:inline-block;
-      padding:6px 10px;
-      background:var(--paper);
-      border:1px solid #efe2d6;
-      border-radius:999px;
-      font-size:13px;
-      color:var(--muted);
-    }
-    .today .title{
-      font-size:20px;
-      font-weight:700;
-    }
-    .today .addr{
-      font-size:16px;
-    }
-    .weather{
-      display:flex;
-      align-items:center;
-      gap:14px;
-      padding:12px;
-      border:1px dashed #e6d7c6;
-      border-radius:14px;
-      background:#fffbf6;
-    }
-    .weather .big{
-      font-size:28px;
-      font-weight:700;
-      color:var(--burgundy-dark);
-    }
-    .weather small{
-      color:var(--muted);
-    }
-    .grid{
-      display:grid;
-      gap:16px;
-    }
+    main{ max-width:1100px; margin:-36px auto 60px; padding:0 16px; }
+    .card{ background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:20px; margin-bottom:18px; }
+
+    .today{ display:grid; gap:16px; }
+    .today h2{ margin:0 0 6px; font-size:22px; color:var(--forest); }
+    .today .row{ display:grid; gap:14px; }
+    .today .info{ display:flex; flex-direction:column; gap:8px; }
+    .today .pill{ display:inline-block; padding:6px 10px; background:var(--paper); border:1px solid #efe2d6; border-radius:999px; font-size:13px; color:var(--muted); }
+    .today .title{ font-size:20px; font-weight:700; }
+    .today .addr{ font-size:16px; }
+    .weather{ display:flex; align-items:center; gap:14px; padding:12px; border:1px dashed #e6d7c6; border-radius:14px; background:#fffbf6; }
+    .weather .big{ font-size:28px; font-weight:700; color:var(--burgundy-dark); }
+    .weather small{ color:var(--muted); }
+
+    .grid{ display:grid; gap:16px; }
     @media(min-width:850px){
-      .today .row{
-        grid-template-columns:2fr 1.2fr;
-        align-items:stretch;
-      }
+      .today .row{ grid-template-columns:2fr 1.2fr; align-items:stretch; }
       .grid.cols-2{ grid-template-columns:1fr 1fr; }
     }
-    h3{
-      margin:4px 0 12px;
-      font-size:20px;
-      color:var(--forest);
-    }
-    .list{
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-    }
-    .item{
-      display:flex;
-      gap:12px;
-      align-items:flex-start;
-      border:1px solid #eee5da;
-      padding:14px;
-      border-radius:14px;
-      background:#fffefe;
-    }
-    .day{
-      min-width:92px;
-      text-align:center;
-      background:var(--burgundy);
-      color:var(--cream);
-      padding:8px 10px;
-      border-radius:10px;
-      line-height:1.2;
-      box-shadow:var(--shadow);
-    }
-    .day .date{
-      font-size:18px;
-      font-weight:800;
-    }
-    .day .wd{
-      font-size:12px;
-      opacity:.95;
-    }
-    .meta{
-      flex:1;
-    }
-    .meta .host{
-      font-weight:700;
-      font-size:16px;
-    }
-    .meta .addr{
-      color:#444;
-      margin-top:2px;
-    }
-    .badge{
-      display:inline-block;
-      font-size:12px;
-      padding:4px 8px;
-      border-radius:999px;
-      background:#eef2ff;
-      color:#334155;
-      margin-top:6px;
-    }
+    h3{ margin:4px 0 12px; font-size:20px; color:var(--forest); }
+    .list{ display:flex; flex-direction:column; gap:10px; }
+    .item{ display:flex; gap:12px; align-items:flex-start; border:1px solid #eee5da; padding:14px; border-radius:14px; background:#fffefe; }
+    .day{ min-width:92px; text-align:center; background:var(--burgundy); color:var(--cream); padding:8px 10px; border-radius:10px; line-height:1.2; box-shadow:var(--shadow); }
+    .day .date{ font-size:18px; font-weight:800; }
+    .day .wd{ font-size:12px; opacity:.95; }
+    .meta{ flex:1; }
+    .meta .host{ font-weight:700; font-size:16px; }
+    .meta .addr{ color:#444; margin-top:2px; }
+    .badge{ display:inline-block; font-size:12px; padding:4px 8px; border-radius:999px; background:#eef2ff; color:#334155; margin-top:6px; }
     .free{ background:#fff1f1; color:#7a1d1d; }
-    form{
-      display:grid;
-      gap:12px;
-    }
-    label{
-      font-weight:600;
-    }
-    input[type="text"],
-    input[type="email"],
-    input[type="tel"],
-    textarea,
-    select{
-      width:100%;
-      padding:12px 14px;
-      border-radius:12px;
-      border:1px solid #e5e7eb;
-      background:#fff;
-      font-size:16px;
+
+    form{ display:grid; gap:12px; }
+    label{ font-weight:600; }
+    input[type="text"], input[type="email"], input[type="tel"], textarea{
+      width:100%; padding:12px 14px; border-radius:12px; border:1px solid #e5e7eb; background:#fff; font-size:16px;
     }
     textarea{ min-height:110px; resize:vertical; }
     .help{ color:var(--muted); font-size:14px; }
-    .choices{
-      display:grid;
-      gap:8px;
-      grid-template-columns:repeat(auto-fill, minmax(160px, 1fr));
-    }
-    .choice{
-      border:1px solid #e5e7eb;
-      border-radius:12px;
-      padding:10px 12px;
-      background:#fff;
-      display:flex;
-      gap:8px;
-      align-items:center;
-    }
-    .actions{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-    }
+    .actions{ display:flex; gap:10px; flex-wrap:wrap; }
     button{
-      border:none;
-      padding:12px 16px;
-      border-radius:12px;
-      background:var(--forest);
-      color:#fff;
-      font-weight:700;
-      cursor:pointer;
-      box-shadow:var(--shadow);
+      border:none; padding:12px 16px; border-radius:12px; background:var(--forest); color:#fff; font-weight:700; cursor:pointer; box-shadow:var(--shadow);
     }
     button.secondary{ background:var(--burgundy); }
     button.warn{ background:var(--danger); }
     .success{ color:var(--ok); font-weight:600; }
     .error{ color:var(--danger); font-weight:600; }
-    details{
-      background:#fffdf9;
-      border:1px solid #f0e6d9;
-      padding:14px;
-      border-radius:12px;
-    }
-    footer{
-      max-width:1100px;
-      margin:30px auto 80px;
-      padding:0 16px;
-      color:#222;
-    }
-    footer .footcard{
-      background:#ffffff;
-      border:1px solid #eee5da;
-      border-radius:16px;
-      padding:18px;
-      box-shadow:var(--shadow);
-    }
-    footer h4{ margin:0 0 10px; color:var(--burgundy-dark); }
-    .small{ font-size:14px; color:#394150; line-height:1.6; }
-    .logo{
-      width:84px; height:84px;
-      border-radius:12px;
-      object-fit:cover;
-      border:3px solid var(--gold);
-      box-shadow:var(--shadow);
-      background:#fff;
-    }
-    .head-flex{
-      display:flex; align-items:center; justify-content:center; gap:14px; margin-bottom:10px;
-    }
-    .visually-hidden{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
-    .admin{
-      background:#f6fbff;
-      border:1px solid #dbeafe;
-      border-radius:16px;
-      padding:16px;
-    }
-    .table{
-      width:100%;
-      border-collapse:collapse;
-      margin-top:10px;
-      font-size:14px;
-      background:#fff;
-      border-radius:12px;
-      overflow:hidden;
-      box-shadow:var(--shadow);
-    }
-    .table th, .table td{
-      padding:10px 12px;
-      border-bottom:1px solid #f0f0f0;
-      vertical-align:top;
-    }
-    .table th{ background:#f9fafb; text-align:left; color:#374151; }
+
+    details{ background:#fffdf9; border:1px solid #f0e6d9; padding:14px; border-radius:12px; }
+
+    footer{ max-width:1100px; margin:30px auto 80px; padding:0 16px; color:#222; text-align:center; }
+    .footlink{ font-size:14px; color:#1f2937; text-decoration:underline; cursor:pointer; }
+
+    .logo{ width:84px; height:84px; border-radius:12px; object-fit:cover; border:3px solid var(--gold); box-shadow:var(--shadow); background:#fff; }
+    .head-flex{ display:flex; align-items:center; justify-content:center; gap:14px; margin-bottom:10px; }
+
+    /* Dialoge */
+    dialog{ border:none; border-radius:16px; padding:0; width:min(900px, 92vw); box-shadow:var(--shadow); }
+    .dlg-body{ padding:18px; background:#ffffff; border-radius:16px; }
+    .dlg-head{ padding:16px 18px 0 18px; }
+    .dlg-title{ margin:0; color:var(--forest); font-size:20px; }
+    .dlg-foot{ padding:12px 18px 18px 18px; display:flex; justify-content:flex-end; gap:10px; }
+    .dlg-scroll{ max-height:68vh; overflow:auto; padding:0 18px 0 18px; }
+    .link-as-btn{ background:#e5e7eb; color:#111827; border-radius:12px; padding:8px 12px; cursor:pointer; display:inline-block; }
     .muted{ color:#6b7280; }
     .center{ text-align:center; }
+
+    /* Termin-Auswahlraster */
+    .picker-grid{
+      display:grid; gap:10px;
+      grid-template-columns:repeat(auto-fill, minmax(110px, 1fr));
+      margin-top:10px;
+    }
+    .pick{
+      border:1px solid #e5e7eb; border-radius:12px; padding:10px;
+      text-align:center; cursor:pointer; user-select:none; background:#fff;
+    }
+    .pick .d{ font-weight:800; font-size:18px; }
+    .pick.sel{ outline:3px solid var(--gold); background:#fffaf0; }
+    .preview-chips{ display:flex; gap:8px; flex-wrap:wrap; margin-top:6px; }
+    .chip{ background:#eef2ff; color:#334155; padding:4px 8px; border-radius:999px; font-size:12px; }
   </style>
 </head>
 <body>
@@ -330,12 +150,12 @@
         <a href="#termine">Termine</a>
         <a href="#anmeldung">Gastgeber werden</a>
         <a href="#info">Information</a>
-        <a href="#impressum">Impressum und Datenschutz</a>
       </nav>
     </div>
   </header>
 
   <main>
+    <!-- HEUTE -->
     <section id="heute" class="card today" aria-labelledby="heute-title">
       <h2 id="heute-title">Heute um 18 Uhr</h2>
       <div class="row">
@@ -355,15 +175,17 @@
       </div>
     </section>
 
+    <!-- TERMINE -->
     <section id="termine" class="card" aria-labelledby="termine-title">
       <h3 id="termine-title">Alle Termine</h3>
       <p class="help">Zeitraum von Samstag, 30. November, bis Montag, 23. Dezember. Beginn jeweils um 18 Uhr. Änderungen sind möglich.</p>
       <div class="list" id="terminListe" role="list"></div>
     </section>
 
+    <!-- ANMELDUNG -->
     <section id="anmeldung" class="card" aria-labelledby="anmeldung-title">
       <h3 id="anmeldung-title">Gastgeber werden</h3>
-      <p>Sie möchten einen Abend ausrichten. Das freut uns. Tragen Sie Ihre Kontaktdaten ein und markieren Sie mehrere mögliche Termine. Die endgültige Vergabe erfolgt durch das Organisationsteam. Sie erhalten im Anschluss eine Rückmeldung.</p>
+      <p>Sie möchten einen Abend ausrichten. Das freut uns. Tragen Sie bitte Ihre Kontaktdaten ein und wählen Sie mehrere mögliche Termine im Dezember. Die endgültige Vergabe erfolgt durch das Organisationsteam. Sie erhalten im Anschluss eine Rückmeldung.</p>
       <form id="hostForm" novalidate>
         <div>
           <label for="name">Name oder Gruppe</label>
@@ -379,23 +201,41 @@
             <input id="tel" name="tel" type="tel" autocomplete="tel" required placeholder="z. B. 0151 12345678">
           </div>
         </div>
-        <div>
-          <label>Wunschtermine im Advent</label>
-          <div id="termChoices" class="choices" aria-live="polite"></div>
-          <div class="help">Bitte wählen Sie mehrere mögliche Abende. Die Treffen beginnen um 18 Uhr und dauern etwa 20 bis 30 Minuten.</div>
+
+        <div class="grid cols-2">
+          <div>
+            <label for="street">Straße und Hausnummer</label>
+            <input id="street" name="street" type="text" required placeholder="z. B. Musterstraße 5">
+          </div>
+          <div>
+            <label for="city">PLZ Ort</label>
+            <input id="city" name="city" type="text" required placeholder="z. B. 37235 Hessisch Lichtenau">
+          </div>
         </div>
+
+        <div>
+          <label>Wunschtermine im Dezember 2025</label>
+          <div class="actions">
+            <button type="button" id="openPicker" class="secondary">Wunschtermine auswählen</button>
+          </div>
+          <div class="help">Zeitraum von Montag, 1. Dezember 2025, bis Dienstag, 23. Dezember 2025. Mehrfachauswahl ist möglich.</div>
+          <div id="wishesPreview" class="preview-chips"></div>
+        </div>
+
         <div>
           <label for="note">Bemerkungen optional</label>
           <textarea id="note" name="note" placeholder="Ideen, Hinweise oder Besonderheiten"></textarea>
         </div>
+
         <div class="actions">
           <button type="submit" id="sendBtn">Anmeldung senden</button>
-          <button type="reset" class="secondary">Eingaben zurücksetzen</button>
+          <button type="reset" class="secondary" id="resetBtn">Eingaben zurücksetzen</button>
           <span id="formMsg" role="status" aria-live="polite"></span>
         </div>
       </form>
     </section>
 
+    <!-- INFORMATION -->
     <section id="info" class="card" aria-labelledby="info-title">
       <h3 id="info-title">Was ist ein lebendiger Adventskalender</h3>
       <p>An jedem Abend im Advent öffnet sich um 18 Uhr ein Türchen in Form eines Fensters, eines Hauses, eines Gartens oder eines Hofes. Gastgeberinnen und Gastgeber laden für etwa 30 Minuten zu einer adventlichen Begegnung ein. Gemeinschaft und Vorfreude stehen im Mittelpunkt.</p>
@@ -405,24 +245,76 @@
         <p>Zum Auftakt eröffnen wir am Samstag, 30. November, um 18 Uhr an der Stadtkirche die Krippe im Freien. Danach trifft sich die Stadtgemeinschaft jeden Abend an einem anderen Ort. Gruppen, Familien, Vereine, Kirchengemeinden oder Einzelpersonen können einen Abend übernehmen. Auf Wunsch stellen wir Materialien und Gestaltungsideen bereit.</p>
       </details>
     </section>
+  </main>
 
-    <section id="admin" class="card admin" aria-labelledby="admin-title">
-      <h3 id="admin-title">Admin Bereich</h3>
-      <p class="help">Nur für das Organisationsteam. Anmeldung per E Mail und Passwort. Nach erfolgreichem Login erscheinen Anmeldungen und die Terminliste. Schreiben in der Termine Liste ist nur für angemeldete Personen erlaubt.</p>
-      <form id="adminLogin" class="actions" autocomplete="on">
-        <input type="email" id="admEmail" placeholder="Admin E Mail" required>
-        <input type="password" id="admPass" placeholder="Passwort" required>
-        <button type="button" id="btnLogin">Anmelden</button>
-        <button type="button" id="btnLogout" class="secondary" hidden>Abmelden</button>
-        <span id="authMsg" class="muted" aria-live="polite"></span>
-      </form>
+  <!-- Fussbereich mit kleinem Link -->
+  <footer>
+    <span class="footlink" id="openLegal">Impressum und Datenschutz</span>
+  </footer>
 
-      <div id="adminArea" hidden>
+  <!-- Dialog: Impressum und Datenschutz, mit verstecktem Admin Zugang -->
+  <dialog id="dlgLegal">
+    <div class="dlg-body">
+      <div class="dlg-head">
+        <h3 class="dlg-title">Impressum und Datenschutz</h3>
+      </div>
+      <div class="dlg-scroll">
+        <p><strong>Impressum</strong></p>
+        <p>Ev. Kirchengemeinde Hessisch Lichtenau<br>
+        Mühlweg 21, 37235 Hessisch Lichtenau<br>
+        Telefon 05602 2403<br>
+        E Mail hessischlichtenau.gemeindebuero@ekkw.de</p>
+        <p>Die Ev. Kirchengemeinde Hessisch Lichtenau ist eine Körperschaft des öffentlichen Rechts. Vertretungsberechtigt ist der Kirchenvorstand.</p>
+        <p><strong>Verantwortlich nach §18 MStV</strong><br>
+        Pfarrerin Anja Peters, Mühlweg 21, 37235 Hessisch Lichtenau</p>
+        <p><strong>Datenschutz</strong></p>
+        <p>Es werden keine Tracking Dienste oder Cookies eingesetzt. Technisch notwendige Protokolle des Hosting Providers werden nur kurzzeitig gespeichert. Die lokale Speicherung von Sprache und Wiedergabegeschwindigkeit erfolgt ausschließlich im Browser und kann jederzeit gelöscht werden.</p>
+        <p>Rechte nach DSGVO. Auskunft, Berichtigung, Löschung, Einschränkung, Widerspruch und Datenübertragbarkeit. Beschwerden bei der Aufsichtsbehörde sind möglich.</p>
+
+        <hr>
+        <p class="muted">Nur für das Organisationsteam</p>
+        <p><span class="link-as-btn" id="openAdminLogin">Admin</span></p>
+      </div>
+      <div class="dlg-foot">
+        <button type="button" class="secondary" data-close="dlgLegal">Schließen</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Dialog: Admin Login -->
+  <dialog id="dlgAdminLogin">
+    <div class="dlg-body">
+      <div class="dlg-head">
+        <h3 class="dlg-title">Admin Anmeldung</h3>
+      </div>
+      <div class="dlg-scroll">
+        <form id="adminLogin" class="grid">
+          <input type="email" id="admEmail" placeholder="Admin E Mail" required>
+          <input type="password" id="admPass" placeholder="Passwort" required>
+          <div class="actions">
+            <button type="button" id="btnLogin">Anmelden</button>
+            <span id="authMsg" class="muted" aria-live="polite"></span>
+          </div>
+        </form>
+      </div>
+      <div class="dlg-foot">
+        <button type="button" class="secondary" data-close="dlgAdminLogin">Schließen</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Dialog: Admin Panel -->
+  <dialog id="dlgAdminPanel">
+    <div class="dlg-body">
+      <div class="dlg-head">
+        <h3 class="dlg-title">Admin Bereich</h3>
+      </div>
+      <div class="dlg-scroll">
         <h4>Anmeldungen</h4>
         <table class="table" id="tblAnmeldungen" aria-describedby="anmeldHelp">
           <thead>
             <tr>
-              <th>Name</th><th>E Mail</th><th>Telefon</th><th>Wünsche</th><th>Bemerkung</th><th>Aktion</th>
+              <th>Name</th><th>E Mail</th><th>Telefon</th><th>Adresse</th><th>Wünsche</th><th>Bemerkung</th><th>Aktion</th>
             </tr>
           </thead>
           <tbody></tbody>
@@ -440,37 +332,31 @@
           <tbody></tbody>
         </table>
       </div>
-    </section>
-
-  </main>
-
-  <footer id="impressum">
-    <div class="footcard">
-      <h4>Impressum</h4>
-      <p class="small">
-        Ev. Kirchengemeinde Hessisch Lichtenau<br>
-        Mühlweg 21, 37235 Hessisch Lichtenau<br>
-        Telefon 05602 2403<br>
-        E Mail hessischlichtenau.gemeindebuero@ekkw.de
-      </p>
-      <p class="small">
-        Die Ev. Kirchengemeinde Hessisch Lichtenau ist eine Körperschaft des öffentlichen Rechts. Vertretungsberechtigt ist der Kirchenvorstand.
-      </p>
-      <p class="small">
-        Verantwortlich nach §18 MStV<br>
-        Pfarrerin Anja Peters, Mühlweg 21, 37235 Hessisch Lichtenau
-      </p>
-
-      <h4>Datenschutz</h4>
-      <p class="small">
-        Es werden keine Tracking Dienste oder Cookies eingesetzt. Technisch notwendige Protokolle des Hosting Providers werden nur kurzzeitig gespeichert. Die lokale Speicherung von Sprache und Wiedergabegeschwindigkeit erfolgt ausschließlich im Browser und kann jederzeit gelöscht werden.
-      </p>
-      <p class="small">
-        Rechte nach DSGVO. Auskunft, Berichtigung, Löschung, Einschränkung, Widerspruch und Datenübertragbarkeit. Beschwerden bei der Aufsichtsbehörde sind möglich.
-      </p>
+      <div class="dlg-foot">
+        <button type="button" id="btnLogout" class="secondary">Abmelden</button>
+        <button type="button" class="secondary" data-close="dlgAdminPanel">Schließen</button>
+      </div>
     </div>
-  </footer>
+  </dialog>
 
+  <!-- Dialog: Termin Auswahlfenster -->
+  <dialog id="dlgPicker">
+    <div class="dlg-body">
+      <div class="dlg-head">
+        <h3 class="dlg-title">Wunschtermine im Dezember 2025</h3>
+      </div>
+      <div class="dlg-scroll">
+        <p class="muted">Bitte wählen Sie alle passenden Abende. Die Treffen beginnen um 18 Uhr und dauern etwa 20 bis 30 Minuten.</p>
+        <div id="pickerGrid" class="picker-grid"></div>
+      </div>
+      <div class="dlg-foot">
+        <button type="button" class="secondary" data-close="dlgPicker">Abbrechen</button>
+        <button type="button" id="pickerOk">Auswahl übernehmen</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Firebase und App Logik -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-analytics.js";
@@ -493,32 +379,26 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    const $ = sel => document.querySelector(sel);
+    const $  = sel => document.querySelector(sel);
     const $$ = sel => Array.from(document.querySelectorAll(sel));
 
-    const startDate = new Date(new Date().getFullYear(), 10, 30);
-    const endDate   = new Date(new Date().getFullYear(), 11, 23);
+    // Advent 2025
     const WDAY = ["So","Mo","Di","Mi","Do","Fr","Sa"];
+    const rangeStart = new Date(2025, 10, 30); // 30.11.2025
+    const rangeEnd   = new Date(2025, 11, 23); // 23.12.2025
 
-    function ymd(d){
-      const y = d.getFullYear();
-      const m = String(d.getMonth()+1).padStart(2,"0");
-      const day = String(d.getDate()).padStart(2,"0");
-      return `${y}-${m}-${day}`;
-    }
-    function deDate(d){
-      return `${String(d.getDate()).padStart(2,"0")}.${String(d.getMonth()+1).padStart(2,"0")}.${d.getFullYear()}`;
-    }
+    function ymd(d){ const y=d.getFullYear(), m=String(d.getMonth()+1).padStart(2,"0"), day=String(d.getDate()).padStart(2,"0"); return `${y}-${m}-${day}`; }
+    function deDate(d){ return `${String(d.getDate()).padStart(2,"0")}.${String(d.getMonth()+1).padStart(2,"0")}.${d.getFullYear()}`; }
     function allDates(){
-      const out=[];
-      let d=new Date(startDate);
-      while(d<=endDate){
-        out.push(new Date(d));
-        d.setDate(d.getDate()+1);
-      }
+      const out=[]; let d=new Date(rangeStart);
+      while(d<=rangeEnd){ out.push(new Date(d)); d.setDate(d.getDate()+1); }
       return out;
     }
+    function dec2025Dates(){
+      const out=[]; for(let i=1;i<=23;i++){ out.push(new Date(2025,11,i)); } return out;
+    }
 
+    // Wetter für Hessisch Lichtenau um 18 Uhr
     async function loadWeather(){
       try{
         const now = new Date();
@@ -531,77 +411,51 @@
         const res = await fetch(url.toString());
         const data = await res.json();
         const idx = data.hourly.time.findIndex(t => t.startsWith(ymd(now)) && t.endsWith("18:00"));
-        let text = "Keine Daten verfügbar";
-        let meta = "";
-        let temp = "–";
+        let text = "Keine Daten verfügbar", meta = "", temp = "–";
         if(idx >= 0){
           const t = Math.round(data.hourly.temperature_2m[idx]);
           const p = data.hourly.precipitation_probability[idx];
           const code = data.hourly.weathercode[idx];
           const map = new Map([
-            [[0],"Klarer Himmel"],
-            [[1,2,3],"Leicht bewölkt"],
-            [[45,48],"Nebel"],
-            [[51,53,55],"Nieselregen"],
-            [[61,63,65],"Regen"],
-            [[66,67],"Gefrierender Regen"],
-            [[71,73,75],"Schnee"],
-            [[77],"Schneekörner"],
-            [[80,81,82],"Regenschauer"],
-            [[85,86],"Schneeschauer"],
-            [[95],"Gewitter"],
-            [[96,99],"Gewitter mit Hagel"]
+            [[0],"Klarer Himmel"], [[1,2,3],"Leicht bewölkt"], [[45,48],"Nebel"],
+            [[51,53,55],"Nieselregen"], [[61,63,65],"Regen"], [[66,67],"Gefrierender Regen"],
+            [[71,73,75],"Schnee"], [[77],"Schneekörner"], [[80,81,82],"Regenschauer"],
+            [[85,86],"Schneeschauer"], [[95],"Gewitter"], [[96,99],"Gewitter mit Hagel"]
           ]);
           let desc = "Wetter";
-          for(const [codes, dsc] of map){
-            if(codes.includes(code)){ desc = dsc; break; }
-          }
-          temp = `${t}°C`;
-          text = `${desc} um 18 Uhr`;
-          meta = `Niederschlagswahrscheinlichkeit ${p} Prozent`;
+          for(const [codes, dsc] of map){ if(codes.includes(code)){ desc = dsc; break; } }
+          temp = `${t}°C`; text = `${desc} um 18 Uhr`; meta = `Niederschlagswahrscheinlichkeit ${p} Prozent`;
         }
-        $("#wTemp").textContent = temp;
-        $("#wText").textContent = text;
-        $("#wMeta").textContent = meta;
+        $("#wTemp").textContent = temp; $("#wText").textContent = text; $("#wMeta").textContent = meta;
       }catch(err){
-        $("#wText").textContent = "Wetter konnte nicht geladen werden";
-        $("#wMeta").textContent = "";
+        $("#wText").textContent = "Wetter konnte nicht geladen werden"; $("#wMeta").textContent = "";
       }
     }
 
+    // Termine laden und rendern
     async function loadEventsAndRender(){
       const dates = allDates();
-      let events = new Map();
+      const events = new Map();
       try{
         const q = query(collection(db,"events"), orderBy("datum","asc"));
         const snap = await getDocs(q);
-        snap.forEach(docu => {
-          const e = docu.data();
-          if(e && e.datum){
-            events.set(e.datum, { id: docu.id, ...e });
-          }
-        });
+        snap.forEach(d => { const e=d.data(); if(e && e.datum){ events.set(e.datum, { id:d.id, ...e }); } });
       }catch(err){}
 
-      const list = $("#terminListe");
-      list.innerHTML = "";
+      const list = $("#terminListe"); list.innerHTML = "";
       dates.forEach(d=>{
         const key = ymd(d);
-        const item = document.createElement("div");
-        item.className = "item";
-        const day = document.createElement("div");
-        day.className = "day";
+        const item = document.createElement("div"); item.className = "item";
+        const day = document.createElement("div"); day.className = "day";
         day.innerHTML = `<div class="wd">${WDAY[d.getDay()]}</div><div class="date">${String(d.getDate()).padStart(2,"0")}.${String(d.getMonth()+1).padStart(2,"0")}</div>`;
-        const meta = document.createElement("div");
-        meta.className = "meta";
+        const meta = document.createElement("div"); meta.className = "meta";
         const e = events.get(key);
         if(e && e.hostName){
           meta.innerHTML = `<div class="host">${e.hostName}</div><div class="addr">${e.hostAdresse || ""}</div>${e.info ? `<div class="badge">${e.info}</div>` : ""}`;
         }else{
           meta.innerHTML = `<div class="host muted">Noch frei</div><div class="badge free">Anmeldung möglich</div>`;
         }
-        item.append(day, meta);
-        list.appendChild(item);
+        item.append(day, meta); list.appendChild(item);
       });
 
       const today = new Date();
@@ -619,46 +473,67 @@
       }
     }
 
-    function renderChoices(){
-      const box = $("#termChoices");
-      box.innerHTML = "";
-      allDates().forEach(d=>{
-        const id = `c-${ymd(d)}`;
-        const wrap = document.createElement("label");
-        wrap.className = "choice";
-        wrap.innerHTML = `<input type="checkbox" value="${ymd(d)}" id="${id}"><span>${WDAY[d.getDay()]}, ${deDate(d)}</span>`;
-        box.appendChild(wrap);
+    // Auswahlfenster für Wunschtermine
+    const selected = new Set();
+    function openPicker(){
+      const grid = $("#pickerGrid"); grid.innerHTML = "";
+      dec2025Dates().forEach(d=>{
+        const key = ymd(d);
+        const el = document.createElement("div");
+        el.className = "pick" + (selected.has(key) ? " sel" : "");
+        el.dataset.key = key;
+        el.innerHTML = `<div class="d">${String(d.getDate()).padStart(2,"0")}.</div><div class="m">Dez ${d.getFullYear()}</div><div class="wd">${WDAY[d.getDay()]}</div>`;
+        el.addEventListener("click", ()=>{
+          if(selected.has(key)){ selected.delete(key); el.classList.remove("sel"); }
+          else{ selected.add(key); el.classList.add("sel"); }
+        });
+        grid.appendChild(el);
+      });
+      $("#dlgPicker").showModal();
+    }
+    function updatePreview(){
+      const prev = $("#wishesPreview"); prev.innerHTML = "";
+      Array.from(selected).sort().forEach(k=>{
+        const d = new Date(k);
+        const chip = document.createElement("span");
+        chip.className = "chip"; chip.textContent = `${WDAY[d.getDay()]}, ${String(d.getDate()).padStart(2,"0")}.12.${d.getFullYear()}`;
+        prev.appendChild(chip);
       });
     }
 
+    // Formular senden
     $("#hostForm").addEventListener("submit", async ev=>{
       ev.preventDefault();
-      const msg = $("#formMsg");
-      msg.textContent = "";
+      const msg = $("#formMsg"); msg.textContent = "";
       const name = $("#name").value.trim();
       const email = $("#email").value.trim();
       const tel = $("#tel").value.trim();
+      const street = $("#street").value.trim();
+      const city = $("#city").value.trim();
       const note = $("#note").value.trim();
-      const wishes = $$("#termChoices input[type=checkbox]:checked").map(i=>i.value);
-      if(!name || !email || !tel){
+      const wishes = Array.from(selected).sort();
+
+      if(!name || !email || !tel || !street || !city){
         msg.textContent = "Bitte füllen Sie alle Pflichtfelder aus";
-        msg.className = "error";
-        return;
+        msg.className = "error"; return;
       }
       if(wishes.length === 0){
         msg.textContent = "Bitte wählen Sie mindestens einen möglichen Termin";
-        msg.className = "error";
-        return;
+        msg.className = "error"; return;
       }
       $("#sendBtn").disabled = true;
       try{
         await addDoc(collection(db,"anmeldungen"), {
-          name, email, telefon: tel, wuensche: wishes, bemerkung: note || "", createdAt: new Date().toISOString()
+          name, email, telefon: tel,
+          adresse: `${street}, ${city}`,
+          wuensche: wishes,
+          bemerkung: note || "",
+          createdAt: new Date().toISOString()
         });
         msg.textContent = "Vielen Dank. Ihre Anmeldung ist eingegangen";
         msg.className = "success";
         ev.target.reset();
-        renderChoices();
+        selected.clear(); updatePreview();
       }catch(err){
         msg.textContent = "Die Anmeldung konnte nicht gespeichert werden";
         msg.className = "error";
@@ -666,7 +541,25 @@
         $("#sendBtn").disabled = false;
       }
     });
+    $("#resetBtn").addEventListener("click", ()=>{
+      selected.clear(); updatePreview();
+    });
 
+    // Dialogsteuerung
+    $("#openLegal").addEventListener("click", ()=> $("#dlgLegal").showModal());
+    $("#openAdminLogin").addEventListener("click", ()=>{
+      $("#dlgAdminLogin").showModal();
+    });
+    $("#openPicker").addEventListener("click", openPicker);
+    $("#pickerOk").addEventListener("click", ()=>{
+      $("#dlgPicker").close();
+      updatePreview();
+    });
+    $$("[data-close]").forEach(btn=>{
+      btn.addEventListener("click", ()=> document.getElementById(btn.getAttribute("data-close")).close());
+    });
+
+    // Admin Login und Panel
     $("#btnLogin").addEventListener("click", async ()=>{
       const e = $("#admEmail").value.trim();
       const p = $("#admPass").value;
@@ -679,27 +572,23 @@
     });
     $("#btnLogout").addEventListener("click", async ()=>{
       await signOut(auth);
+      $("#dlgAdminPanel").close();
     });
 
     onAuthStateChanged(auth, async user=>{
-      const area = $("#adminArea");
-      const btnOut = $("#btnLogout");
-      const msg = $("#authMsg");
       if(user){
-        msg.textContent = "Angemeldet";
-        btnOut.hidden = false;
-        area.hidden = false;
+        $("#authMsg").textContent = "Angemeldet";
+        $("#dlgAdminLogin").close();
         await adminLoad();
+        $("#dlgAdminPanel").showModal();
       }else{
-        msg.textContent = "Abgemeldet";
-        btnOut.hidden = true;
-        area.hidden = true;
+        $("#authMsg").textContent = "Abgemeldet";
       }
     });
 
     async function adminLoad(){
-      const bodyA = $("#tblAnmeldungen tbody");
-      bodyA.innerHTML = "";
+      // Anmeldungen
+      const bodyA = $("#tblAnmeldungen tbody"); bodyA.innerHTML = "";
       try{
         const snap = await getDocs(collection(db,"anmeldungen"));
         snap.forEach(d=>{
@@ -709,6 +598,7 @@
             <td>${escapeHtml(a.name||"")}</td>
             <td>${escapeHtml(a.email||"")}</td>
             <td>${escapeHtml(a.telefon||"")}</td>
+            <td>${escapeHtml(a.adresse||"")}</td>
             <td>${Array.isArray(a.wuensche)? a.wuensche.join(", ") : ""}</td>
             <td>${escapeHtml(a.bemerkung||"")}</td>
             <td><button class="warn" data-del="${d.id}">Löschen</button></td>
@@ -717,7 +607,7 @@
         });
       }catch(e){
         const tr = document.createElement("tr");
-        tr.innerHTML = `<td colspan="6" class="center">Anmeldungen konnten nicht geladen werden</td>`;
+        tr.innerHTML = `<td colspan="7" class="center">Anmeldungen konnten nicht geladen werden</td>`;
         bodyA.appendChild(tr);
       }
       bodyA.querySelectorAll("button[data-del]").forEach(btn=>{
@@ -729,15 +619,13 @@
         });
       });
 
-      const bodyE = $("#tblEvents tbody");
-      bodyE.innerHTML = "";
+      // Events Tabelle
+      const bodyE = $("#tblEvents tbody"); bodyE.innerHTML = "";
       const dates = allDates();
       const map = new Map();
       try{
         const snap = await getDocs(collection(db,"events"));
-        snap.forEach(d=>{
-          map.set(d.id, { id:d.id, ...d.data() });
-        });
+        snap.forEach(d=>{ map.set(d.id, { id:d.id, ...d.data() }); });
       }catch(e){}
       for(const d of dates){
         const id = ymd(d);
@@ -745,7 +633,7 @@
         const tr = document.createElement("tr");
         tr.innerHTML = `
           <td>${deDate(new Date(id))}</td>
-          <td>${["So","Mo","Di","Mi","Do","Fr","Sa"][new Date(id).getDay()]}</td>
+          <td>${WDAY[new Date(id).getDay()]}</td>
           <td><input type="text" value="${escapeAttr(e.hostName||"")}" data-f="hostName"></td>
           <td><input type="text" value="${escapeAttr(e.hostAdresse||"")}" data-f="hostAdresse"></td>
           <td><input type="text" value="${escapeAttr(e.info||"")}" data-f="info"></td>
@@ -757,7 +645,7 @@
         btn.addEventListener("click", async ()=>{
           const row = btn.closest("tr");
           const inputs = row.querySelectorAll("input[data-f]");
-          const payload = { datum: btn.dataset.save };
+          const payload = { datum: btn.dataset.save, wochentag: WDAY[new Date(btn.dataset.save).getDay()] };
           inputs.forEach(i=> payload[i.dataset.f] = i.value.trim());
           try{
             await setDoc(doc(db,"events", btn.dataset.save), payload);
@@ -772,13 +660,14 @@
       });
     }
 
-    function escapeHtml(s){ return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&gt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]); }
+    function escapeHtml(s){
+      return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+    }
     function escapeAttr(s){ return escapeHtml(s); }
 
-    renderChoices();
+    // Start
     await loadEventsAndRender();
     await loadWeather();
-
   </script>
 
   <!--
