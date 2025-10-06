@@ -1,0 +1,802 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lebendiger Adventskalender Hessisch Lichtenau</title>
+  <meta name="description" content="Informationen, Termine und Anmeldung zum Lebendigen Adventskalender in Hessisch Lichtenau.">
+  <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+  <style>
+    :root{
+      --burgundy:#7b1e36;
+      --burgundy-dark:#5f162a;
+      --cream:#f8efe9;
+      --paper:#fff8f1;
+      --gold:#d9b36c;
+      --forest:#0d3b2e;
+      --ink:#2b2b2b;
+      --muted:#6b7280;
+      --ok:#146c43;
+      --danger:#a61b1b;
+      --card:#ffffff;
+      --shadow: 0 10px 20px rgba(0,0,0,.08), 0 6px 6px rgba(0,0,0,.06);
+      --radius:18px;
+    }
+    html,body{
+      margin:0;
+      padding:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      color:var(--ink);
+      background:linear-gradient(180deg, var(--burgundy) 0%, var(--burgundy-dark) 40%, var(--paper) 40%, var(--paper) 100%);
+    }
+    header{
+      color:var(--cream);
+      padding:48px 20px 28px;
+      text-align:center;
+      position:relative;
+      overflow:hidden;
+    }
+    header .brand{
+      max-width:1200px;
+      margin:0 auto;
+    }
+    h1{
+      margin:0 0 8px;
+      font-size:clamp(28px, 5vw, 48px);
+      letter-spacing:.5px;
+    }
+    .subtitle{
+      font-size:clamp(14px, 2.4vw, 18px);
+      opacity:.95;
+      max-width:900px;
+      margin:0 auto;
+      line-height:1.5;
+    }
+    nav{
+      display:flex;
+      gap:12px;
+      justify-content:center;
+      flex-wrap:wrap;
+      margin-top:22px;
+    }
+    nav a{
+      display:inline-block;
+      text-decoration:none;
+      color:var(--burgundy);
+      background:var(--gold);
+      padding:10px 14px;
+      border-radius:999px;
+      font-weight:600;
+      box-shadow:var(--shadow);
+    }
+    main{
+      max-width:1100px;
+      margin:-36px auto 60px;
+      padding:0 16px;
+    }
+    .card{
+      background:var(--card);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:20px;
+      margin-bottom:18px;
+    }
+    .today{
+      display:grid;
+      gap:16px;
+    }
+    .today h2{
+      margin:0 0 6px;
+      font-size:22px;
+      color:var(--forest);
+    }
+    .today .row{
+      display:grid;
+      gap:14px;
+    }
+    .today .info{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+    .today .pill{
+      display:inline-block;
+      padding:6px 10px;
+      background:var(--paper);
+      border:1px solid #efe2d6;
+      border-radius:999px;
+      font-size:13px;
+      color:var(--muted);
+    }
+    .today .title{
+      font-size:20px;
+      font-weight:700;
+    }
+    .today .addr{
+      font-size:16px;
+    }
+    .weather{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      padding:12px;
+      border:1px dashed #e6d7c6;
+      border-radius:14px;
+      background:#fffbf6;
+    }
+    .weather .big{
+      font-size:28px;
+      font-weight:700;
+      color:var(--burgundy-dark);
+    }
+    .weather small{
+      color:var(--muted);
+    }
+    .grid{
+      display:grid;
+      gap:16px;
+    }
+    @media(min-width:850px){
+      .today .row{
+        grid-template-columns:2fr 1.2fr;
+        align-items:stretch;
+      }
+      .grid.cols-2{ grid-template-columns:1fr 1fr; }
+    }
+    h3{
+      margin:4px 0 12px;
+      font-size:20px;
+      color:var(--forest);
+    }
+    .list{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .item{
+      display:flex;
+      gap:12px;
+      align-items:flex-start;
+      border:1px solid #eee5da;
+      padding:14px;
+      border-radius:14px;
+      background:#fffefe;
+    }
+    .day{
+      min-width:92px;
+      text-align:center;
+      background:var(--burgundy);
+      color:var(--cream);
+      padding:8px 10px;
+      border-radius:10px;
+      line-height:1.2;
+      box-shadow:var(--shadow);
+    }
+    .day .date{
+      font-size:18px;
+      font-weight:800;
+    }
+    .day .wd{
+      font-size:12px;
+      opacity:.95;
+    }
+    .meta{
+      flex:1;
+    }
+    .meta .host{
+      font-weight:700;
+      font-size:16px;
+    }
+    .meta .addr{
+      color:#444;
+      margin-top:2px;
+    }
+    .badge{
+      display:inline-block;
+      font-size:12px;
+      padding:4px 8px;
+      border-radius:999px;
+      background:#eef2ff;
+      color:#334155;
+      margin-top:6px;
+    }
+    .free{ background:#fff1f1; color:#7a1d1d; }
+    form{
+      display:grid;
+      gap:12px;
+    }
+    label{
+      font-weight:600;
+    }
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    textarea,
+    select{
+      width:100%;
+      padding:12px 14px;
+      border-radius:12px;
+      border:1px solid #e5e7eb;
+      background:#fff;
+      font-size:16px;
+    }
+    textarea{ min-height:110px; resize:vertical; }
+    .help{ color:var(--muted); font-size:14px; }
+    .choices{
+      display:grid;
+      gap:8px;
+      grid-template-columns:repeat(auto-fill, minmax(160px, 1fr));
+    }
+    .choice{
+      border:1px solid #e5e7eb;
+      border-radius:12px;
+      padding:10px 12px;
+      background:#fff;
+      display:flex;
+      gap:8px;
+      align-items:center;
+    }
+    .actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    button{
+      border:none;
+      padding:12px 16px;
+      border-radius:12px;
+      background:var(--forest);
+      color:#fff;
+      font-weight:700;
+      cursor:pointer;
+      box-shadow:var(--shadow);
+    }
+    button.secondary{ background:var(--burgundy); }
+    button.warn{ background:var(--danger); }
+    .success{ color:var(--ok); font-weight:600; }
+    .error{ color:var(--danger); font-weight:600; }
+    details{
+      background:#fffdf9;
+      border:1px solid #f0e6d9;
+      padding:14px;
+      border-radius:12px;
+    }
+    footer{
+      max-width:1100px;
+      margin:30px auto 80px;
+      padding:0 16px;
+      color:#222;
+    }
+    footer .footcard{
+      background:#ffffff;
+      border:1px solid #eee5da;
+      border-radius:16px;
+      padding:18px;
+      box-shadow:var(--shadow);
+    }
+    footer h4{ margin:0 0 10px; color:var(--burgundy-dark); }
+    .small{ font-size:14px; color:#394150; line-height:1.6; }
+    .logo{
+      width:84px; height:84px;
+      border-radius:12px;
+      object-fit:cover;
+      border:3px solid var(--gold);
+      box-shadow:var(--shadow);
+      background:#fff;
+    }
+    .head-flex{
+      display:flex; align-items:center; justify-content:center; gap:14px; margin-bottom:10px;
+    }
+    .visually-hidden{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+    .admin{
+      background:#f6fbff;
+      border:1px solid #dbeafe;
+      border-radius:16px;
+      padding:16px;
+    }
+    .table{
+      width:100%;
+      border-collapse:collapse;
+      margin-top:10px;
+      font-size:14px;
+      background:#fff;
+      border-radius:12px;
+      overflow:hidden;
+      box-shadow:var(--shadow);
+    }
+    .table th, .table td{
+      padding:10px 12px;
+      border-bottom:1px solid #f0f0f0;
+      vertical-align:top;
+    }
+    .table th{ background:#f9fafb; text-align:left; color:#374151; }
+    .muted{ color:#6b7280; }
+    .center{ text-align:center; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand">
+      <div class="head-flex">
+        <img src="logo.png" alt="Logo" class="logo" id="siteLogo">
+        <div>
+          <h1>Lebendiger Adventskalender</h1>
+          <div class="subtitle">Hessisch Lichtenau. Vom ersten Advent bis kurz vor Heiligabend. Tägliche Begegnungen um 18 Uhr mit Licht, Musik, Geschichten und guten Gesprächen.</div>
+        </div>
+      </div>
+      <nav aria-label="Hauptnavigation">
+        <a href="#heute">Heute</a>
+        <a href="#termine">Termine</a>
+        <a href="#anmeldung">Gastgeber werden</a>
+        <a href="#info">Information</a>
+        <a href="#impressum">Impressum und Datenschutz</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section id="heute" class="card today" aria-labelledby="heute-title">
+      <h2 id="heute-title">Heute um 18 Uhr</h2>
+      <div class="row">
+        <div class="info">
+          <span class="pill" id="heuteDatum">Datum wird geladen</span>
+          <div class="title" id="heuteTitel">Es liegt noch keine Angabe vor</div>
+          <div class="addr" id="heuteAdresse"></div>
+          <div class="help" id="heuteHinweis"></div>
+        </div>
+        <div class="weather" id="weatherBox" aria-live="polite">
+          <div class="big" id="wTemp">–</div>
+          <div>
+            <div id="wText">Wetter für 18 Uhr wird geladen</div>
+            <small id="wMeta"></small>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="termine" class="card" aria-labelledby="termine-title">
+      <h3 id="termine-title">Alle Termine</h3>
+      <p class="help">Zeitraum von Samstag, 30. November, bis Montag, 23. Dezember. Beginn jeweils um 18 Uhr. Änderungen sind möglich.</p>
+      <div class="list" id="terminListe" role="list"></div>
+    </section>
+
+    <section id="anmeldung" class="card" aria-labelledby="anmeldung-title">
+      <h3 id="anmeldung-title">Gastgeber werden</h3>
+      <p>Sie möchten einen Abend ausrichten. Das freut uns. Tragen Sie Ihre Kontaktdaten ein und markieren Sie mehrere mögliche Termine. Die endgültige Vergabe erfolgt durch das Organisationsteam. Sie erhalten im Anschluss eine Rückmeldung.</p>
+      <form id="hostForm" novalidate>
+        <div>
+          <label for="name">Name oder Gruppe</label>
+          <input id="name" name="name" type="text" autocomplete="name" required placeholder="z. B. Familie Müller oder Gesangverein Heimatklang">
+        </div>
+        <div class="grid cols-2">
+          <div>
+            <label for="email">E Mail</label>
+            <input id="email" name="email" type="email" autocomplete="email" required placeholder="beispiel@mail.de">
+          </div>
+          <div>
+            <label for="tel">Telefon</label>
+            <input id="tel" name="tel" type="tel" autocomplete="tel" required placeholder="z. B. 0151 12345678">
+          </div>
+        </div>
+        <div>
+          <label>Wunschtermine im Advent</label>
+          <div id="termChoices" class="choices" aria-live="polite"></div>
+          <div class="help">Bitte wählen Sie mehrere mögliche Abende. Die Treffen beginnen um 18 Uhr und dauern etwa 20 bis 30 Minuten.</div>
+        </div>
+        <div>
+          <label for="note">Bemerkungen optional</label>
+          <textarea id="note" name="note" placeholder="Ideen, Hinweise oder Besonderheiten"></textarea>
+        </div>
+        <div class="actions">
+          <button type="submit" id="sendBtn">Anmeldung senden</button>
+          <button type="reset" class="secondary">Eingaben zurücksetzen</button>
+          <span id="formMsg" role="status" aria-live="polite"></span>
+        </div>
+      </form>
+    </section>
+
+    <section id="info" class="card" aria-labelledby="info-title">
+      <h3 id="info-title">Was ist ein lebendiger Adventskalender</h3>
+      <p>An jedem Abend im Advent öffnet sich um 18 Uhr ein Türchen in Form eines Fensters, eines Hauses, eines Gartens oder eines Hofes. Gastgeberinnen und Gastgeber laden für etwa 30 Minuten zu einer adventlichen Begegnung ein. Gemeinschaft und Vorfreude stehen im Mittelpunkt.</p>
+      <p>Die Gestaltung kann vielfältig sein. Möglich sind eine kurze Geschichte oder ein Impuls, gemeinsames Singen von Weihnachtsliedern, leise Musik im Hintergrund oder ein offenes Zusammensein bei Kerzenschein. Wer möchte, kann mit Plätzchen, Tee oder einem Becher Glühwein bewirten. Gäste bringen nach Möglichkeit eine eigene Tasse mit.</p>
+      <details>
+        <summary>Organisation und nächste Schritte</summary>
+        <p>Zum Auftakt eröffnen wir am Samstag, 30. November, um 18 Uhr an der Stadtkirche die Krippe im Freien. Danach trifft sich die Stadtgemeinschaft jeden Abend an einem anderen Ort. Gruppen, Familien, Vereine, Kirchengemeinden oder Einzelpersonen können einen Abend übernehmen. Auf Wunsch stellen wir Materialien und Gestaltungsideen bereit.</p>
+      </details>
+    </section>
+
+    <section id="admin" class="card admin" aria-labelledby="admin-title">
+      <h3 id="admin-title">Admin Bereich</h3>
+      <p class="help">Nur für das Organisationsteam. Anmeldung per E Mail und Passwort. Nach erfolgreichem Login erscheinen Anmeldungen und die Terminliste. Schreiben in der Termine Liste ist nur für angemeldete Personen erlaubt.</p>
+      <form id="adminLogin" class="actions" autocomplete="on">
+        <input type="email" id="admEmail" placeholder="Admin E Mail" required>
+        <input type="password" id="admPass" placeholder="Passwort" required>
+        <button type="button" id="btnLogin">Anmelden</button>
+        <button type="button" id="btnLogout" class="secondary" hidden>Abmelden</button>
+        <span id="authMsg" class="muted" aria-live="polite"></span>
+      </form>
+
+      <div id="adminArea" hidden>
+        <h4>Anmeldungen</h4>
+        <table class="table" id="tblAnmeldungen" aria-describedby="anmeldHelp">
+          <thead>
+            <tr>
+              <th>Name</th><th>E Mail</th><th>Telefon</th><th>Wünsche</th><th>Bemerkung</th><th>Aktion</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <p id="anmeldHelp" class="muted">Mit einem Klick auf Löschen entfernen Sie einen Eintrag.</p>
+
+        <h4>Termine pflegen</h4>
+        <p class="muted">Tragen Sie Gastgeber und Adresse ein und speichern Sie den Eintrag. Die öffentliche Liste liest aus dieser Sammlung.</p>
+        <table class="table" id="tblEvents">
+          <thead>
+            <tr>
+              <th>Datum</th><th>Wochentag</th><th>Gastgeber</th><th>Adresse</th><th>Notiz</th><th>Aktion</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <footer id="impressum">
+    <div class="footcard">
+      <h4>Impressum</h4>
+      <p class="small">
+        Ev. Kirchengemeinde Hessisch Lichtenau<br>
+        Mühlweg 21, 37235 Hessisch Lichtenau<br>
+        Telefon 05602 2403<br>
+        E Mail hessischlichtenau.gemeindebuero@ekkw.de
+      </p>
+      <p class="small">
+        Die Ev. Kirchengemeinde Hessisch Lichtenau ist eine Körperschaft des öffentlichen Rechts. Vertretungsberechtigt ist der Kirchenvorstand.
+      </p>
+      <p class="small">
+        Verantwortlich nach §18 MStV<br>
+        Pfarrerin Anja Peters, Mühlweg 21, 37235 Hessisch Lichtenau
+      </p>
+
+      <h4>Datenschutz</h4>
+      <p class="small">
+        Es werden keine Tracking Dienste oder Cookies eingesetzt. Technisch notwendige Protokolle des Hosting Providers werden nur kurzzeitig gespeichert. Die lokale Speicherung von Sprache und Wiedergabegeschwindigkeit erfolgt ausschließlich im Browser und kann jederzeit gelöscht werden.
+      </p>
+      <p class="small">
+        Rechte nach DSGVO. Auskunft, Berichtigung, Löschung, Einschränkung, Widerspruch und Datenübertragbarkeit. Beschwerden bei der Aufsichtsbehörde sind möglich.
+      </p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-analytics.js";
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+    import { getFirestore, collection, addDoc, getDocs, setDoc, doc, deleteDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCZuvHUy6xMN6WIrHUQBpxuobZkQRKB20s",
+      authDomain: "adventskalender-90bb1.firebaseapp.com",
+      projectId: "adventskalender-90bb1",
+      storageBucket: "adventskalender-90bb1.firebasestorage.app",
+      messagingSenderId: "816945632051",
+      appId: "1:816945632051:web:817e7a3d8945c3a65aa446",
+      measurementId: "G-GYH086SXWE"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    try { getAnalytics(app); } catch(e){}
+
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const $ = sel => document.querySelector(sel);
+    const $$ = sel => Array.from(document.querySelectorAll(sel));
+
+    const startDate = new Date(new Date().getFullYear(), 10, 30);
+    const endDate   = new Date(new Date().getFullYear(), 11, 23);
+    const WDAY = ["So","Mo","Di","Mi","Do","Fr","Sa"];
+
+    function ymd(d){
+      const y = d.getFullYear();
+      const m = String(d.getMonth()+1).padStart(2,"0");
+      const day = String(d.getDate()).padStart(2,"0");
+      return `${y}-${m}-${day}`;
+    }
+    function deDate(d){
+      return `${String(d.getDate()).padStart(2,"0")}.${String(d.getMonth()+1).padStart(2,"0")}.${d.getFullYear()}`;
+    }
+    function allDates(){
+      const out=[];
+      let d=new Date(startDate);
+      while(d<=endDate){
+        out.push(new Date(d));
+        d.setDate(d.getDate()+1);
+      }
+      return out;
+    }
+
+    async function loadWeather(){
+      try{
+        const now = new Date();
+        const url = new URL("https://api.open-meteo.com/v1/forecast");
+        url.searchParams.set("latitude","51.195");
+        url.searchParams.set("longitude","9.713");
+        url.searchParams.set("hourly","temperature_2m,precipitation_probability,weathercode");
+        url.searchParams.set("timezone","Europe/Berlin");
+        url.searchParams.set("forecast_days","2");
+        const res = await fetch(url.toString());
+        const data = await res.json();
+        const idx = data.hourly.time.findIndex(t => t.startsWith(ymd(now)) && t.endsWith("18:00"));
+        let text = "Keine Daten verfügbar";
+        let meta = "";
+        let temp = "–";
+        if(idx >= 0){
+          const t = Math.round(data.hourly.temperature_2m[idx]);
+          const p = data.hourly.precipitation_probability[idx];
+          const code = data.hourly.weathercode[idx];
+          const map = new Map([
+            [[0],"Klarer Himmel"],
+            [[1,2,3],"Leicht bewölkt"],
+            [[45,48],"Nebel"],
+            [[51,53,55],"Nieselregen"],
+            [[61,63,65],"Regen"],
+            [[66,67],"Gefrierender Regen"],
+            [[71,73,75],"Schnee"],
+            [[77],"Schneekörner"],
+            [[80,81,82],"Regenschauer"],
+            [[85,86],"Schneeschauer"],
+            [[95],"Gewitter"],
+            [[96,99],"Gewitter mit Hagel"]
+          ]);
+          let desc = "Wetter";
+          for(const [codes, dsc] of map){
+            if(codes.includes(code)){ desc = dsc; break; }
+          }
+          temp = `${t}°C`;
+          text = `${desc} um 18 Uhr`;
+          meta = `Niederschlagswahrscheinlichkeit ${p} Prozent`;
+        }
+        $("#wTemp").textContent = temp;
+        $("#wText").textContent = text;
+        $("#wMeta").textContent = meta;
+      }catch(err){
+        $("#wText").textContent = "Wetter konnte nicht geladen werden";
+        $("#wMeta").textContent = "";
+      }
+    }
+
+    async function loadEventsAndRender(){
+      const dates = allDates();
+      let events = new Map();
+      try{
+        const q = query(collection(db,"events"), orderBy("datum","asc"));
+        const snap = await getDocs(q);
+        snap.forEach(docu => {
+          const e = docu.data();
+          if(e && e.datum){
+            events.set(e.datum, { id: docu.id, ...e });
+          }
+        });
+      }catch(err){}
+
+      const list = $("#terminListe");
+      list.innerHTML = "";
+      dates.forEach(d=>{
+        const key = ymd(d);
+        const item = document.createElement("div");
+        item.className = "item";
+        const day = document.createElement("div");
+        day.className = "day";
+        day.innerHTML = `<div class="wd">${WDAY[d.getDay()]}</div><div class="date">${String(d.getDate()).padStart(2,"0")}.${String(d.getMonth()+1).padStart(2,"0")}</div>`;
+        const meta = document.createElement("div");
+        meta.className = "meta";
+        const e = events.get(key);
+        if(e && e.hostName){
+          meta.innerHTML = `<div class="host">${e.hostName}</div><div class="addr">${e.hostAdresse || ""}</div>${e.info ? `<div class="badge">${e.info}</div>` : ""}`;
+        }else{
+          meta.innerHTML = `<div class="host muted">Noch frei</div><div class="badge free">Anmeldung möglich</div>`;
+        }
+        item.append(day, meta);
+        list.appendChild(item);
+      });
+
+      const today = new Date();
+      const key = ymd(today);
+      const e = events.get(key);
+      $("#heuteDatum").textContent = `${WDAY[today.getDay()]}, ${deDate(today)}`;
+      if(e && e.hostName){
+        $("#heuteTitel").textContent = e.hostName;
+        $("#heuteAdresse").textContent = e.hostAdresse || "";
+        $("#heuteHinweis").textContent = e.info ? e.info : "";
+      }else{
+        $("#heuteTitel").textContent = "Heute liegt keine Gastgeber Angabe vor";
+        $("#heuteAdresse").textContent = "Sobald ein Ort feststeht, erscheint er hier";
+        $("#heuteHinweis").textContent = "";
+      }
+    }
+
+    function renderChoices(){
+      const box = $("#termChoices");
+      box.innerHTML = "";
+      allDates().forEach(d=>{
+        const id = `c-${ymd(d)}`;
+        const wrap = document.createElement("label");
+        wrap.className = "choice";
+        wrap.innerHTML = `<input type="checkbox" value="${ymd(d)}" id="${id}"><span>${WDAY[d.getDay()]}, ${deDate(d)}</span>`;
+        box.appendChild(wrap);
+      });
+    }
+
+    $("#hostForm").addEventListener("submit", async ev=>{
+      ev.preventDefault();
+      const msg = $("#formMsg");
+      msg.textContent = "";
+      const name = $("#name").value.trim();
+      const email = $("#email").value.trim();
+      const tel = $("#tel").value.trim();
+      const note = $("#note").value.trim();
+      const wishes = $$("#termChoices input[type=checkbox]:checked").map(i=>i.value);
+      if(!name || !email || !tel){
+        msg.textContent = "Bitte füllen Sie alle Pflichtfelder aus";
+        msg.className = "error";
+        return;
+      }
+      if(wishes.length === 0){
+        msg.textContent = "Bitte wählen Sie mindestens einen möglichen Termin";
+        msg.className = "error";
+        return;
+      }
+      $("#sendBtn").disabled = true;
+      try{
+        await addDoc(collection(db,"anmeldungen"), {
+          name, email, telefon: tel, wuensche: wishes, bemerkung: note || "", createdAt: new Date().toISOString()
+        });
+        msg.textContent = "Vielen Dank. Ihre Anmeldung ist eingegangen";
+        msg.className = "success";
+        ev.target.reset();
+        renderChoices();
+      }catch(err){
+        msg.textContent = "Die Anmeldung konnte nicht gespeichert werden";
+        msg.className = "error";
+      }finally{
+        $("#sendBtn").disabled = false;
+      }
+    });
+
+    $("#btnLogin").addEventListener("click", async ()=>{
+      const e = $("#admEmail").value.trim();
+      const p = $("#admPass").value;
+      $("#authMsg").textContent = "";
+      try{
+        await signInWithEmailAndPassword(auth, e, p);
+      }catch(err){
+        $("#authMsg").textContent = "Anmeldung nicht möglich";
+      }
+    });
+    $("#btnLogout").addEventListener("click", async ()=>{
+      await signOut(auth);
+    });
+
+    onAuthStateChanged(auth, async user=>{
+      const area = $("#adminArea");
+      const btnOut = $("#btnLogout");
+      const msg = $("#authMsg");
+      if(user){
+        msg.textContent = "Angemeldet";
+        btnOut.hidden = false;
+        area.hidden = false;
+        await adminLoad();
+      }else{
+        msg.textContent = "Abgemeldet";
+        btnOut.hidden = true;
+        area.hidden = true;
+      }
+    });
+
+    async function adminLoad(){
+      const bodyA = $("#tblAnmeldungen tbody");
+      bodyA.innerHTML = "";
+      try{
+        const snap = await getDocs(collection(db,"anmeldungen"));
+        snap.forEach(d=>{
+          const a = d.data();
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${escapeHtml(a.name||"")}</td>
+            <td>${escapeHtml(a.email||"")}</td>
+            <td>${escapeHtml(a.telefon||"")}</td>
+            <td>${Array.isArray(a.wuensche)? a.wuensche.join(", ") : ""}</td>
+            <td>${escapeHtml(a.bemerkung||"")}</td>
+            <td><button class="warn" data-del="${d.id}">Löschen</button></td>
+          `;
+          bodyA.appendChild(tr);
+        });
+      }catch(e){
+        const tr = document.createElement("tr");
+        tr.innerHTML = `<td colspan="6" class="center">Anmeldungen konnten nicht geladen werden</td>`;
+        bodyA.appendChild(tr);
+      }
+      bodyA.querySelectorAll("button[data-del]").forEach(btn=>{
+        btn.addEventListener("click", async ()=>{
+          if(confirm("Diesen Eintrag wirklich löschen")){
+            await deleteDoc(doc(db,"anmeldungen", btn.dataset.del));
+            adminLoad();
+          }
+        });
+      });
+
+      const bodyE = $("#tblEvents tbody");
+      bodyE.innerHTML = "";
+      const dates = allDates();
+      const map = new Map();
+      try{
+        const snap = await getDocs(collection(db,"events"));
+        snap.forEach(d=>{
+          map.set(d.id, { id:d.id, ...d.data() });
+        });
+      }catch(e){}
+      for(const d of dates){
+        const id = ymd(d);
+        const e = map.get(id) || { datum: id, hostName:"", hostAdresse:"", info:"" };
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${deDate(new Date(id))}</td>
+          <td>${["So","Mo","Di","Mi","Do","Fr","Sa"][new Date(id).getDay()]}</td>
+          <td><input type="text" value="${escapeAttr(e.hostName||"")}" data-f="hostName"></td>
+          <td><input type="text" value="${escapeAttr(e.hostAdresse||"")}" data-f="hostAdresse"></td>
+          <td><input type="text" value="${escapeAttr(e.info||"")}" data-f="info"></td>
+          <td><button data-save="${id}">Speichern</button></td>
+        `;
+        bodyE.appendChild(tr);
+      }
+      bodyE.querySelectorAll("button[data-save]").forEach(btn=>{
+        btn.addEventListener("click", async ()=>{
+          const row = btn.closest("tr");
+          const inputs = row.querySelectorAll("input[data-f]");
+          const payload = { datum: btn.dataset.save };
+          inputs.forEach(i=> payload[i.dataset.f] = i.value.trim());
+          try{
+            await setDoc(doc(db,"events", btn.dataset.save), payload);
+            btn.textContent = "Gespeichert";
+            btn.disabled = true;
+            setTimeout(()=>{ btn.textContent = "Speichern"; btn.disabled = false; }, 900);
+            loadEventsAndRender();
+          }catch(e){
+            alert("Speichern nicht möglich");
+          }
+        });
+      });
+    }
+
+    function escapeHtml(s){ return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&gt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]); }
+    function escapeAttr(s){ return escapeHtml(s); }
+
+    renderChoices();
+    await loadEventsAndRender();
+    await loadWeather();
+
+  </script>
+
+  <!--
+  Firestore Regeln vor dem Start setzen
+
+  rules_version = '2';
+  service cloud.firestore {
+    match /databases/{database}/documents {
+      match /events/{doc} {
+        allow read: if true;
+        allow write: if request.auth != null;
+      }
+      match /anmeldungen/{doc} {
+        allow create: if true;
+        allow read, update, delete: if request.auth != null;
+      }
+    }
+  }
+  -->
+</body>
+</html>
