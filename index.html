@@ -36,6 +36,7 @@
     nav a{ display:inline-block; text-decoration:none; color:var(--burgundy); background:var(--gold); padding:10px 14px; border-radius:999px; font-weight:600; box-shadow:var(--shadow); }
     main{ max-width:1100px; margin:-12px auto 60px; padding:0 16px; }
     .card{ background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:20px; margin-bottom:18px; }
+
     .today{ display:grid; gap:16px; }
     .today h2{ margin:0 0 6px; font-size:22px; color:var(--forest); }
     .today .row{ display:grid; gap:14px; }
@@ -46,6 +47,7 @@
     .weather{ display:flex; align-items:center; gap:14px; padding:12px; border:1px dashed #e6d7c6; border-radius:14px; background:#fffbf6; }
     .weather .big{ font-size:28px; font-weight:700; color:var(--burgundy-dark); min-width:64px; text-align:center; }
     .weather small{ color:var(--muted); }
+
     .grid{ display:grid; gap:16px; }
     @media(min-width:850px){
       .today .row{ grid-template-columns:2fr 1.2fr; align-items:stretch; }
@@ -63,6 +65,7 @@
     .badge{ display:inline-block; font-size:12px; padding:4px 8px; border-radius:999px; background:#eef2ff; color:#334155; margin-top:6px; }
     .free{ background:#fff1f1; color:#7a1d1d; }
     .changed{ background:#fff7cc; color:#7a5600; }
+
     form{ display:grid; gap:12px; }
     label{ font-weight:600; }
     input[type="text"], input[type="email"], input[type="tel"], textarea{
@@ -76,9 +79,12 @@
     button.warn{ background:var(--danger); }
     .success{ color:var(--ok); font-weight:600; }
     .error{ color:var(--danger); font-weight:600; }
+
     details{ background:#fffdf9; border:1px solid #f0e6d9; padding:14px; border-radius:12px; }
+
     footer{ max-width:1100px; margin:30px auto 80px; padding:0 16px; color:#222; text-align:center; }
     .footlink{ font-size:14px; color:#1f2937; text-decoration:underline; cursor:pointer; }
+
     dialog{ border:none; border-radius:16px; padding:0; width:min(900px, 92vw); box-shadow:var(--shadow); }
     .dlg-body{ padding:18px; background:#ffffff; border-radius:16px; }
     .dlg-head{ padding:16px 18px 0 18px; }
@@ -88,14 +94,17 @@
     .link-as-btn{ background:#e5e7eb; color:#111827; border-radius:12px; padding:8px 12px; cursor:pointer; display:inline-block; }
     .muted{ color:#6b7280; }
     .center{ text-align:center; }
+
     .picker-grid{ display:grid; gap:10px; grid-template-columns:repeat(auto-fill, minmax(110px, 1fr)); margin-top:10px; }
     .pick{ border:1px solid #e5e7eb; border-radius:12px; padding:10px; text-align:center; cursor:pointer; user-select:none; background:#fff; }
     .pick .d{ font-weight:800; font-size:18px; }
     .pick.sel{ outline:3px solid var(--gold); background:#fffaf0; }
     .preview-chips{ display:flex; gap:8px; flex-wrap:wrap; margin-top:6px; }
     .chip{ background:#eef2ff; color:#334155; padding:4px 8px; border-radius:999px; font-size:12px; }
+
     .chip-assign{ display:inline-block; padding:4px 8px; border-radius:999px; font-size:12px; background:#f0f9ff; color:#075985; cursor:pointer; margin:2px 6px 2px 0; border:1px solid #e0f2fe; }
     .chip-assign.assigned{ background:#dcfce7; color:#065f46; border-color:#bbf7d0; }
+
     .prog-wrap{ margin:12px 0 18px; }
     .prog-label{ display:flex; justify-content:space-between; font-weight:600; margin-bottom:6px; }
     .prog-bar{ height:12px; background:#f1f5f9; border-radius:999px; overflow:hidden; }
@@ -285,7 +294,7 @@
       <div class="dlg-scroll">
 
         <div class="prog-wrap" id="progWrap" aria-live="polite">
-          <div class="prog-label"><span>Belegung 1.–23. Dezember</span><span id="progPercent">0%</span></div>
+          <div class="prog-label"><span>Belegung 1 bis 23 Dezember</span><span id="progPercent">0%</span></div>
           <div class="prog-bar"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
           <div class="muted" id="progMeta">0 von 23 Abenden vergeben</div>
         </div>
@@ -312,7 +321,7 @@
         <p class="muted">Gastgeber und Adresse bearbeiten oder einen Termin als geändert markieren.</p>
         <table class="table" id="tblEvents">
           <thead><tr><th>Datum</th><th>Wochentag</th><th>Gastgeber</th><th>Adresse</th><th>Notiz</th><th>Änderung</th><th>Aktion</th></tr></thead>
-          <tbody></tbody>
+        <tbody></tbody>
         </table>
 
         <h4>Gottesdienste am 24. Dezember</h4>
@@ -352,7 +361,7 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-analytics.js";
     import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-    import { getFirestore, collection, addDoc, getDocs, setDoc, doc, deleteDoc, query, orderBy, where, writeBatch } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, getDocs, setDoc, doc, deleteDoc, query, orderBy, writeBatch } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCZuvHUy6xMN6WIrHUQBpxuobZkQRKB20s",
@@ -378,8 +387,8 @@
     function escapeAttr(s){ return escapeHtml(s); }
 
     const selected = new Set();
-    let eventsMap = new Map();     // alle Tage außer 24.12 als Map datum -> event
-    let services = [];             // Gottesdienste am 24.12 aus Collection "events" mit isService:true
+    let eventsMap = new Map();     // alle Tage außer 24.12
+    let services = [];             // Gottesdienste am 24.12 aus Collection events mit isService:true
     let assignedEmails = new Set();
     let pendingEmails = new Set();
 
@@ -535,6 +544,7 @@
       });
 
       renderLists();
+      updateProgress();  // Fortschritt nach jedem Reload aktualisieren
     }
 
     function renderLists(){
@@ -661,7 +671,7 @@
 
       const html = `
         <!doctype html><html><head><meta charset="utf-8">
-        <title>Lebendiger Adventskalender - Übersicht</title>
+        <title>Lebendiger Adventskalender Übersicht</title>
         <style>
           @page { size: A4; margin: 16mm; }
           body{ font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; }
@@ -849,20 +859,16 @@
         }catch(e){ alert("Speichern nicht möglich"); }
       });
 
-      // Gottesdienste 24.12 in derselben Collection "events"
       await renderServiceTable();
+      updateProgress();  // Fortschritt auch nach dem Aufbau des Adminbereichs aktualisieren
     }
 
     async function renderServiceTable(){
       const bodyS = $("#tblServices tbody"); bodyS.innerHTML = "";
 
-      // vorhandene Services zeichnen
       services.forEach((s, idx)=> bodyS.appendChild(buildServiceRow(s, idx)));
-
-      // leere Eingabezeile für neuen Service
       bodyS.appendChild(buildServiceRow(null, services.length));
 
-      // Event Delegation für Speichern, Löschen, Drag and Drop
       bodyS.addEventListener("click", onServiceButtonClick);
       enableDragAndDrop(bodyS);
     }
@@ -894,7 +900,6 @@
         }
         if(act === "save-new"){
           const ref = await addDoc(collection(db,"events"), payload);
-          // Knöpfe auf "save" umstellen
           row.querySelector('[data-act="save-new"]').setAttribute("data-sid", ref.id);
           row.querySelector('[data-act="save-new"]').setAttribute("data-act","save");
           row.querySelector('[data-act="del"]').setAttribute("data-sid", ref.id);
@@ -939,13 +944,12 @@
     }
 
     function readServiceRow(row){
-      const o = {
+      return {
         gemeinde: row.querySelector('input[data-f="gemeinde"]').value.trim(),
         uhrzeit: row.querySelector('input[data-f="uhrzeit"]').value.trim(),
         adresse: row.querySelector('input[data-f="adresse"]').value.trim(),
         info: row.querySelector('input[data-f="info"]').value.trim()
       };
-      return o;
     }
 
     function validateService(p){
@@ -1003,7 +1007,6 @@
           targetRow.parentNode.insertBefore(dragRow, targetRow.nextSibling);
         }
         dragRow.classList.remove("dragging");
-        // neue Reihenfolge speichern
         await persistServiceOrder(tbody);
         await loadEventsAndServices();
         await renderServiceTable();
@@ -1029,17 +1032,23 @@
     }
 
     function updateProgress(){
+      // Zählt belegte Abende vom 1 bis 23 Dezember 2025
       const total = 23;
       let assigned = 0;
       for(let d=1; d<=23; d++){
         const key = `2025-12-${String(d).padStart(2,"0")}`;
         const e = eventsMap.get(key);
-        if(e && e.hostName) assigned++;
+        if(e && typeof e.hostName === "string" && e.hostName.trim().length > 0){
+          assigned++;
+        }
       }
       const percent = Math.round((assigned / total) * 100);
-      $("#progFill").style.width = `${percent}%`;
-      $("#progPercent").textContent = `${percent}%`;
-      $("#progMeta").textContent = `${assigned} von ${total} Abenden vergeben`;
+      const fill = document.getElementById("progFill");
+      const pct  = document.getElementById("progPercent");
+      const meta = document.getElementById("progMeta");
+      if(fill) fill.style.width = `${percent}%`;
+      if(pct)  pct.textContent  = `${percent}%`;
+      if(meta) meta.textContent = `${assigned} von ${total} Abenden vergeben`;
     }
 
     function updateEmailTextarea(){
