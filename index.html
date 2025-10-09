@@ -36,7 +36,6 @@
     nav a{ display:inline-block; text-decoration:none; color:var(--burgundy); background:var(--gold); padding:10px 14px; border-radius:999px; font-weight:600; box-shadow:var(--shadow); }
     main{ max-width:1100px; margin:-12px auto 60px; padding:0 16px; }
     .card{ background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:20px; margin-bottom:18px; }
-
     .today{ display:grid; gap:16px; }
     .today h2{ margin:0 0 6px; font-size:22px; color:var(--forest); }
     .today .row{ display:grid; gap:14px; }
@@ -47,7 +46,6 @@
     .weather{ display:flex; align-items:center; gap:14px; padding:12px; border:1px dashed #e6d7c6; border-radius:14px; background:#fffbf6; }
     .weather .big{ font-size:28px; font-weight:700; color:var(--burgundy-dark); min-width:64px; text-align:center; }
     .weather small{ color:var(--muted); }
-
     .grid{ display:grid; gap:16px; }
     @media(min-width:850px){
       .today .row{ grid-template-columns:2fr 1.2fr; align-items:stretch; }
@@ -65,7 +63,6 @@
     .badge{ display:inline-block; font-size:12px; padding:4px 8px; border-radius:999px; background:#eef2ff; color:#334155; margin-top:6px; }
     .free{ background:#fff1f1; color:#7a1d1d; }
     .changed{ background:#fff7cc; color:#7a5600; }
-
     form{ display:grid; gap:12px; }
     label{ font-weight:600; }
     input[type="text"], input[type="email"], input[type="tel"], textarea{
@@ -91,17 +88,14 @@
     .link-as-btn{ background:#e5e7eb; color:#111827; border-radius:12px; padding:8px 12px; cursor:pointer; display:inline-block; }
     .muted{ color:#6b7280; }
     .center{ text-align:center; }
-
     .picker-grid{ display:grid; gap:10px; grid-template-columns:repeat(auto-fill, minmax(110px, 1fr)); margin-top:10px; }
     .pick{ border:1px solid #e5e7eb; border-radius:12px; padding:10px; text-align:center; cursor:pointer; user-select:none; background:#fff; }
     .pick .d{ font-weight:800; font-size:18px; }
     .pick.sel{ outline:3px solid var(--gold); background:#fffaf0; }
     .preview-chips{ display:flex; gap:8px; flex-wrap:wrap; margin-top:6px; }
     .chip{ background:#eef2ff; color:#334155; padding:4px 8px; border-radius:999px; font-size:12px; }
-
     .chip-assign{ display:inline-block; padding:4px 8px; border-radius:999px; font-size:12px; background:#f0f9ff; color:#075985; cursor:pointer; margin:2px 6px 2px 0; border:1px solid #e0f2fe; }
     .chip-assign.assigned{ background:#dcfce7; color:#065f46; border-color:#bbf7d0; }
-
     .prog-wrap{ margin:12px 0 18px; }
     .prog-label{ display:flex; justify-content:space-between; font-weight:600; margin-bottom:6px; }
     .prog-bar{ height:12px; background:#f1f5f9; border-radius:999px; overflow:hidden; }
@@ -110,6 +104,12 @@
     .email-row{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
     .email-row label{ font-weight:600; }
     .email-area{ width:100%; min-height:90px; border:1px solid #e5e7eb; border-radius:12px; padding:10px; font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size:13px; }
+
+    /* Drag Handle */
+    .drag{ cursor:grab; user-select:none; font-weight:700; padding:6px 8px; border:1px solid #e5e7eb; border-radius:8px; background:#f8fafc; display:inline-block; }
+    tr.dragging{ opacity:.6; }
+    tr.drop-above{ outline:2px solid #cbd5e1; }
+    tr.drop-below{ outline:2px solid #cbd5e1; }
   </style>
 </head>
 <body>
@@ -174,6 +174,7 @@
             <input id="tel" name="tel" type="tel" autocomplete="tel" required placeholder="Zum Beispiel 0151 12345678">
           </div>
         </div>
+
         <div class="grid cols-2">
           <div>
             <label for="street">Straße und Hausnummer</label>
@@ -184,6 +185,7 @@
             <input id="city" name="city" type="text" required placeholder="Zum Beispiel 37235 Hessisch Lichtenau">
           </div>
         </div>
+
         <div>
           <label>Wunschtermine im Dezember 2025</label>
           <div class="actions">
@@ -192,10 +194,12 @@
           <div class="help">Zeitraum von Montag, 1. Dezember 2025, bis Dienstag, 23. Dezember 2025. Mehrfachauswahl ist gewünscht.</div>
           <div id="wishesPreview" class="preview-chips"></div>
         </div>
+
         <div>
           <label for="note">Bemerkungen optional</label>
           <textarea id="note" name="note" placeholder="Ideen, Hinweise oder Besonderheiten"></textarea>
         </div>
+
         <div class="actions">
           <button type="submit" id="sendBtn">Anmeldung senden</button>
           <button type="reset" class="secondary" id="resetBtn">Eingaben zurücksetzen</button>
@@ -219,6 +223,7 @@
     <span class="footlink" id="openLegal">Impressum und Datenschutz</span>
   </footer>
 
+  <!-- Rüstzeug -->
   <dialog id="dlgGear">
     <div class="dlg-body">
       <div class="dlg-head"><h3 class="dlg-title">Rüstzeug für den Abend</h3></div>
@@ -235,6 +240,7 @@
     </div>
   </dialog>
 
+  <!-- Impressum und Admin -->
   <dialog id="dlgLegal">
     <div class="dlg-body">
       <div class="dlg-head"><h3 class="dlg-title">Impressum und Datenschutz</h3></div>
@@ -254,6 +260,7 @@
     </div>
   </dialog>
 
+  <!-- Admin Login -->
   <dialog id="dlgAdminLogin">
     <div class="dlg-body">
       <div class="dlg-head"><h3 class="dlg-title">Admin Anmeldung</h3></div>
@@ -271,6 +278,7 @@
     </div>
   </dialog>
 
+  <!-- Admin Panel -->
   <dialog id="dlgAdminPanel">
     <div class="dlg-body">
       <div class="dlg-head"><h3 class="dlg-title">Admin Bereich</h3></div>
@@ -308,9 +316,9 @@
         </table>
 
         <h4>Gottesdienste am 24. Dezember</h4>
-        <p class="muted">Hier kannst du Gottesdienste anlegen, bearbeiten und löschen.</p>
+        <p class="muted">Lege die Gottesdienste an, speichere sie und sortiere sie danach per Ziehen in die gewünschte Reihenfolge.</p>
         <table class="table" id="tblServices">
-          <thead><tr><th>Gemeinde</th><th>Uhrzeit</th><th>Adresse</th><th>Notiz</th><th>Aktion</th></tr></thead>
+          <thead><tr><th></th><th>Gemeinde</th><th>Uhrzeit</th><th>Adresse</th><th>Notiz</th><th>Aktion</th></tr></thead>
           <tbody></tbody>
         </table>
         <div class="actions" style="margin-top:8px">
@@ -325,6 +333,7 @@
     </div>
   </dialog>
 
+  <!-- Termin Picker -->
   <dialog id="dlgPicker">
     <div class="dlg-body">
       <div class="dlg-head"><h3 class="dlg-title">Wunschtermine im Dezember 2025</h3></div>
@@ -343,7 +352,7 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-analytics.js";
     import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-    import { getFirestore, collection, addDoc, getDocs, setDoc, doc, deleteDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, getDocs, setDoc, doc, deleteDoc, query, orderBy, where, writeBatch } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCZuvHUy6xMN6WIrHUQBpxuobZkQRKB20s",
@@ -369,8 +378,8 @@
     function escapeAttr(s){ return escapeHtml(s); }
 
     const selected = new Set();
-    let eventsMap = new Map();
-    let services = [];
+    let eventsMap = new Map();     // alle Tage außer 24.12 als Map datum -> event
+    let services = [];             // Gottesdienste am 24.12 aus Collection "events" mit isService:true
     let assignedEmails = new Set();
     let pendingEmails = new Set();
 
@@ -395,11 +404,9 @@
       $("#btnIcs").addEventListener("click", ()=> downloadIcsFromData());
 
       $("#hostForm").addEventListener("submit", onSubmitHostForm());
-
       $("#resetBtn").addEventListener("click", ()=>{ selected.clear(); updatePreview(); });
 
       $("#btnLogin").addEventListener("click", adminLogin);
-
       $("#btnLogout").addEventListener("click", async ()=>{ await signOut(auth); $("#dlgAdminPanel").close(); });
 
       onAuthStateChanged(auth, async user=>{
@@ -420,7 +427,6 @@
       $("#btnCopyEmails").addEventListener("click", copyEmails);
       $("#includePending").addEventListener("change", updateEmailTextarea);
 
-      // Gottesdienst Neu Button
       $("#addService").addEventListener("click", ()=> appendServiceRow());
     }
 
@@ -502,21 +508,31 @@
     async function loadEventsAndServices(){
       eventsMap.clear();
       services = [];
+
       try{
         const qy = query(collection(db,"events"), orderBy("datum","asc"));
         const snap = await getDocs(qy);
-        snap.forEach(d => { const e=d.data(); if(e && e.datum){ eventsMap.set(e.datum, { id:d.id, ...e }); } });
-      }catch(err){ console.warn("Termine konnten nicht geladen werden."); }
-
-      try{
-        const srvSnap = await getDocs(collection(db,"gottesdienste"));
-        srvSnap.forEach(d=>{
-          const s = d.data();
-          if(s && s.datum === "2025-12-24"){
-            services.push({ id:d.id, ...s });
+        snap.forEach(d => {
+          const e=d.data();
+          if(!e) return;
+          if(e.datum === "2025-12-24" && e.isService){
+            services.push({ id:d.id, ...e });
+          }else if(e.datum){
+            eventsMap.set(e.datum, { id:d.id, ...e });
           }
         });
-      }catch(err){ console.warn("Gottesdienste konnten nicht geladen werden."); }
+      }catch(err){
+        console.warn("Termine konnten nicht geladen werden.");
+      }
+
+      // Sortierung der Gottesdienste: zuerst nach order, sonst nach Uhrzeit
+      services.sort((a,b)=>{
+        const oa = typeof a.order === "number" ? a.order : 9999;
+        const ob = typeof b.order === "number" ? b.order : 9999;
+        if(oa !== ob) return oa - ob;
+        const ta = parseTime(a.uhrzeit); const tb = parseTime(b.uhrzeit);
+        return ta - tb;
+      });
 
       renderLists();
     }
@@ -680,7 +696,7 @@
             const hm = parseHm(s.uhrzeit || "16:00");
             const dtStart = toIcsLocal(d, hm.h, hm.m);
             const dtEnd   = toIcsLocal(d, hm.h, hm.m + 60);
-            const uid = `GD-${s.id||Math.random().toString(36).slice(2)}@adventskalender`;
+            const uid = `GD-${s.id}@adventskalender`;
             const summary = escapeIcs("Lebendiger Adventskalender");
             const desc = escapeIcs(s.gemeinde || "Gottesdienst");
             const loc = escapeIcs(s.adresse || "");
@@ -833,60 +849,78 @@
         }catch(e){ alert("Speichern nicht möglich"); }
       });
 
-      const bodyS = $("#tblServices tbody"); bodyS.innerHTML = "";
-      // Bestehende Gottesdienste
-      services.forEach(s=> bodyS.appendChild(buildServiceRow(s)));
-
-      // Falls noch kein Eintrag existiert, eine leere Zeile anbieten
-      if(services.length === 0) bodyS.appendChild(buildServiceRow());
-
-      // Event Delegation für Speichern, Löschen
-      bodyS.addEventListener("click", async e=>{
-        const btn = e.target.closest("button[data-act]");
-        if(!btn) return;
-        const act = btn.getAttribute("data-act");
-        const id = btn.getAttribute("data-sid") || "";
-        const row = btn.closest("tr");
-
-        const payload = readServiceRow(row);
-        if(act !== "del"){
-          const v = validateService(payload);
-          if(!v.ok){ alert(v.msg); return; }
-          payload.datum = "2025-12-24";
-        }
-
-        try{
-          if(act === "save" && id){
-            await setDoc(doc(db,"gottesdienste", id), payload, { merge:true });
-            btn.textContent = "Gespeichert";
-            setTimeout(()=> btn.textContent = "Speichern", 900);
-          }
-          if(act === "save-new"){
-            const ref = await addDoc(collection(db,"gottesdienste"), payload);
-            row.querySelector('button[data-act="save-new"]').setAttribute("data-sid", ref.id);
-            row.querySelector('button[data-act="save-new"]').setAttribute("data-act","save");
-            row.querySelector('button[data-act="del"]').setAttribute("data-sid", ref.id);
-            row.classList.add("saved");
-          }
-          if(act === "del" && id){
-            if(confirm("Diesen Gottesdienst löschen")){
-              await deleteDoc(doc(db,"gottesdienste", id));
-              row.remove();
-            }
-          }
-          await loadEventsAndServices();
-          await adminLoad();
-        }catch(err){
-          console.error(err);
-          alert("Gottesdienst konnte nicht gespeichert werden");
-        }
-      });
+      // Gottesdienste 24.12 in derselben Collection "events"
+      await renderServiceTable();
     }
 
-    function buildServiceRow(s){
+    async function renderServiceTable(){
+      const bodyS = $("#tblServices tbody"); bodyS.innerHTML = "";
+
+      // vorhandene Services zeichnen
+      services.forEach((s, idx)=> bodyS.appendChild(buildServiceRow(s, idx)));
+
+      // leere Eingabezeile für neuen Service
+      bodyS.appendChild(buildServiceRow(null, services.length));
+
+      // Event Delegation für Speichern, Löschen, Drag and Drop
+      bodyS.addEventListener("click", onServiceButtonClick);
+      enableDragAndDrop(bodyS);
+    }
+
+    function onServiceButtonClick(e){
+      const btn = e.target.closest("button[data-act]");
+      if(!btn) return;
+      const act = btn.getAttribute("data-act");
+      const id = btn.getAttribute("data-sid") || "";
+      const row = btn.closest("tr");
+      saveOrDeleteService(act, id, row);
+    }
+
+    async function saveOrDeleteService(act, id, row){
+      const payload = readServiceRow(row);
+      if(act !== "del"){
+        const v = validateService(payload);
+        if(!v.ok){ alert(v.msg); return; }
+        payload.datum = "2025-12-24";
+        payload.isService = true;
+        if(typeof payload.order !== "number"){ payload.order = guessOrder(payload.uhrzeit); }
+      }
+
+      try{
+        if(act === "save" && id){
+          await setDoc(doc(db,"events", id), payload, { merge:true });
+          row.querySelector('[data-act="save"]').textContent = "Gespeichert";
+          setTimeout(()=> row.querySelector('[data-act="save"]').textContent = "Speichern", 900);
+        }
+        if(act === "save-new"){
+          const ref = await addDoc(collection(db,"events"), payload);
+          // Knöpfe auf "save" umstellen
+          row.querySelector('[data-act="save-new"]').setAttribute("data-sid", ref.id);
+          row.querySelector('[data-act="save-new"]').setAttribute("data-act","save");
+          row.querySelector('[data-act="del"]').setAttribute("data-sid", ref.id);
+        }
+        if(act === "del" && id){
+          if(confirm("Diesen Gottesdienst löschen")){
+            await deleteDoc(doc(db,"events", id));
+            row.remove();
+          }
+        }
+        await loadEventsAndServices();
+        await renderServiceTable();
+      }catch(err){
+        console.error(err);
+        alert("Gottesdienst konnte nicht gespeichert werden");
+      }
+    }
+
+    function buildServiceRow(s, idx){
       const tr = document.createElement("tr");
       const id = s && s.id ? s.id : "";
+      tr.setAttribute("draggable", s ? "true" : "false");
+      tr.dataset.sid = id;
+      tr.dataset.index = String(idx);
       tr.innerHTML = `
+        <td style="width:40px">${s ? `<span class="drag" title="Ziehen zum Sortieren">≡</span>` : ""}</td>
         <td><input type="text" value="${escapeAttr(s?.gemeinde||"")}" data-f="gemeinde" placeholder="Gemeinde oder Kirche"></td>
         <td><input type="text" value="${escapeAttr(s?.uhrzeit||"")}" data-f="uhrzeit" placeholder="z. B. 16:00"></td>
         <td><input type="text" value="${escapeAttr(s?.adresse||"")}" data-f="adresse" placeholder="Ort, Straße, Nummer"></td>
@@ -901,22 +935,97 @@
 
     function appendServiceRow(){
       const bodyS = $("#tblServices tbody");
-      bodyS.appendChild(buildServiceRow());
+      bodyS.appendChild(buildServiceRow(null, services.length));
     }
 
     function readServiceRow(row){
-      return {
+      const o = {
         gemeinde: row.querySelector('input[data-f="gemeinde"]').value.trim(),
         uhrzeit: row.querySelector('input[data-f="uhrzeit"]').value.trim(),
         adresse: row.querySelector('input[data-f="adresse"]').value.trim(),
         info: row.querySelector('input[data-f="info"]').value.trim()
       };
+      return o;
     }
 
     function validateService(p){
       if(!p.gemeinde) return { ok:false, msg:"Bitte Gemeinde angeben" };
       if(p.uhrzeit && !/^\d{1,2}:\d{2}$/.test(p.uhrzeit)) return { ok:false, msg:"Uhrzeit bitte als HH:MM eintragen" };
       return { ok:true, msg:"" };
+    }
+
+    function guessOrder(hm){
+      const t = parseTime(hm);
+      return Number.isFinite(t) ? t : 9999;
+    }
+    function parseTime(hm){
+      const m = /^(\d{1,2}):(\d{2})$/.exec(hm || "");
+      if(!m) return 9999;
+      return parseInt(m[1],10) * 60 + parseInt(m[2],10);
+    }
+
+    function enableDragAndDrop(tbody){
+      let dragRow = null;
+
+      tbody.addEventListener("dragstart", e=>{
+        const tr = e.target.closest("tr[draggable='true']");
+        if(!tr) return;
+        dragRow = tr;
+        tr.classList.add("dragging");
+        e.dataTransfer.effectAllowed = "move";
+      });
+
+      tbody.addEventListener("dragover", e=>{
+        e.preventDefault();
+        const tr = e.target.closest("tr");
+        if(!dragRow || !tr || tr === dragRow) return;
+        const rect = tr.getBoundingClientRect();
+        const before = e.clientY < rect.top + rect.height / 2;
+        tr.classList.toggle("drop-above", before);
+        tr.classList.toggle("drop-below", !before);
+      });
+
+      tbody.addEventListener("dragleave", e=>{
+        const tr = e.target.closest("tr");
+        if(tr){ tr.classList.remove("drop-above","drop-below"); }
+      });
+
+      tbody.addEventListener("drop", async e=>{
+        e.preventDefault();
+        const targetRow = e.target.closest("tr");
+        if(!dragRow || !targetRow || dragRow === targetRow) return;
+        const rect = targetRow.getBoundingClientRect();
+        const before = e.clientY < rect.top + rect.height / 2;
+        targetRow.classList.remove("drop-above","drop-below");
+        if(before){
+          targetRow.parentNode.insertBefore(dragRow, targetRow);
+        }else{
+          targetRow.parentNode.insertBefore(dragRow, targetRow.nextSibling);
+        }
+        dragRow.classList.remove("dragging");
+        // neue Reihenfolge speichern
+        await persistServiceOrder(tbody);
+        await loadEventsAndServices();
+        await renderServiceTable();
+      });
+
+      tbody.addEventListener("dragend", ()=>{
+        const rows = tbody.querySelectorAll("tr");
+        rows.forEach(r=> r.classList.remove("dragging","drop-above","drop-below"));
+        dragRow = null;
+      });
+    }
+
+    async function persistServiceOrder(tbody){
+      const rows = Array.from(tbody.querySelectorAll("tr[draggable='true']"));
+      const batch = writeBatch(db);
+      rows.forEach((tr, idx)=>{
+        const sid = tr.dataset.sid;
+        if(sid){
+          batch.set(doc(db,"events", sid), { order: idx }, { merge:true });
+        }
+      });
+      await batch.commit();
     }
 
     function updateProgress(){
@@ -955,16 +1064,6 @@
         const ok = document.execCommand ? document.execCommand("copy") : false;
         alert(ok ? "E Mail Adressen kopiert" : "Kopieren nicht möglich");
       }
-    }
-
-    function toIcsLocal(dateObj, hour, min){
-      const d2 = new Date(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate(), hour, min, 0);
-      const y = d2.getFullYear();
-      const m = String(d2.getMonth()+1).padStart(2,"0");
-      const da = String(d2.getDate()).padStart(2,"0");
-      const h = String(d2.getHours()).padStart(2,"0");
-      const mi = String(d2.getMinutes()).padStart(2,"0");
-      return `${y}${m}${da}T${h}${mi}00`;
     }
   </script>
 
