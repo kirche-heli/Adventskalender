@@ -73,7 +73,7 @@
     }
     textarea{ min-height:110px; resize:vertical; }
     .help{ color:var(--muted); font-size:14px; }
-    .actions{ display:flex; gap:10px; flex-wrap:wrap; }
+    .actions{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
     button{ border:none; padding:12px 16px; border-radius:12px; background:var(--forest); color:#fff; font-weight:700; cursor:pointer; box-shadow:var(--shadow); }
     button.secondary{ background:var(--burgundy); }
     button.warn{ background:var(--danger); }
@@ -114,11 +114,15 @@
     .email-row label{ font-weight:600; }
     .email-area{ width:100%; min-height:90px; border:1px solid #e5e7eb; border-radius:12px; padding:10px; font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size:13px; }
 
-    /* Drag Handle */
     .drag{ cursor:grab; user-select:none; font-weight:700; padding:6px 8px; border:1px solid #e5e7eb; border-radius:8px; background:#f8fafc; display:inline-block; }
     tr.dragging{ opacity:.6; }
     tr.drop-above{ outline:2px solid #cbd5e1; }
     tr.drop-below{ outline:2px solid #cbd5e1; }
+
+    /* Zustimmung */
+    .consent{ background:#fffbf6; border:1px solid #e6d7c6; padding:12px; border-radius:12px; }
+    .consent label{ font-weight:500; display:flex; align-items:flex-start; gap:8px; line-height:1.4; }
+    .consent input[type="checkbox"]{ margin-top:3px; }
   </style>
 </head>
 <body>
@@ -207,6 +211,15 @@
         <div>
           <label for="note">Bemerkungen optional</label>
           <textarea id="note" name="note" placeholder="Ideen, Hinweise oder Besonderheiten"></textarea>
+        </div>
+
+        <!-- Pflichtfeld Zustimmung -->
+        <div class="consent">
+          <label for="consent">
+            <input id="consent" name="consent" type="checkbox" required>
+            Ich stimme mit meiner Anmeldung zu, dass mein Name und meine Adresse als Gastgeberin oder Gastgeber des Lebendigen Adventskalenders veröffentlicht werden dürfen. Die Veröffentlichung kann in Aushängen, sozialen Medien, auf digitalen Kanälen, im Gemeindebrief und in Printmedien erfolgen. Diese Zustimmung ist Voraussetzung für die Anmeldung.
+          </label>
+          <div class="help">Ohne diese Zustimmung kann die Anmeldung nicht abgesendet werden.</div>
         </div>
 
         <div class="actions">
@@ -357,6 +370,19 @@
     </div>
   </dialog>
 
+  <!-- Bestätigungsdialog nach dem Absenden -->
+  <dialog id="dlgSubmitConfirm" aria-labelledby="dlgSubmitConfirmTitle">
+    <div class="dlg-body">
+      <div class="dlg-head"><h3 class="dlg-title" id="dlgSubmitConfirmTitle">Anmeldung bestätigt</h3></div>
+      <div class="dlg-scroll">
+        <p>Vielen Dank für Ihre Anmeldung. Das Organisationsteam meldet sich, sobald die Termine verteilt wurden.</p>
+      </div>
+      <div class="dlg-foot">
+        <button type="button" class="secondary" data-close="dlgSubmitConfirm">Schließen</button>
+      </div>
+    </div>
+  </dialog>
+
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-analytics.js";
@@ -387,8 +413,8 @@
     function escapeAttr(s){ return escapeHtml(s); }
 
     const selected = new Set();
-    let eventsMap = new Map();     // alle Tage außer 24.12
-    let services = [];             // Gottesdienste am 24.12 aus Collection events mit isService:true
+    let eventsMap = new Map();
+    let services = [];
     let assignedEmails = new Set();
     let pendingEmails = new Set();
 
@@ -412,8 +438,14 @@
       $("#btnPdf").addEventListener("click", ()=> downloadPdfFromData());
       $("#btnIcs").addEventListener("click", ()=> downloadIcsFromData());
 
+      // Sende Button an Zustimmung koppeln
+      const sendBtn = $("#sendBtn");
+      const consent = $("#consent");
+      function updateSendDisabled(){ sendBtn.disabled = !consent.checked; }
+      if(consent){ consent.addEventListener("change", updateSendDisabled); updateSendDisabled(); }
+
       $("#hostForm").addEventListener("submit", onSubmitHostForm());
-      $("#resetBtn").addEventListener("click", ()=>{ selected.clear(); updatePreview(); });
+      $("#resetBtn").addEventListener("click", ()=>{ selected.clear(); updatePreview(); if(consent){ consent.checked = false; updateSendDisabled(); } });
 
       $("#btnLogin").addEventListener("click", adminLogin);
       $("#btnLogout").addEventListener("click", async ()=>{ await signOut(auth); $("#dlgAdminPanel").close(); });
@@ -466,6 +498,7 @@
         const city   = $("#city").value.trim();
         const note   = $("#note").value.trim();
         const wishes = Array.from(selected).sort();
+        const consentOk = $("#consent")?.checked === true;
 
         if(!name || !email || !tel || !street || !city){
           msg.textContent = "Bitte füllen Sie alle Pflichtfelder aus"; msg.className = "error"; return;
@@ -473,18 +506,35 @@
         if(wishes.length === 0){
           msg.textContent = "Bitte wählen Sie mindestens einen möglichen Termin"; msg.className = "error"; return;
         }
+        if(!consentOk){
+          msg.textContent = "Bitte stimmen Sie der Veröffentlichung von Name und Adresse zu"; msg.className = "error"; return;
+        }
+
         const btn = $("#sendBtn"); btn.disabled = true;
         try{
           await addDoc(collection(db,"anmeldungen"), {
-            name, email, telefon: tel, adresse: `${street}, ${city}`,
-            wuensche: wishes, bemerkung: note || "", createdAt: new Date().toISOString()
+            name,
+            email,
+            telefon: tel,
+            adresse: `${street}, ${city}`,
+            wuensche: wishes,
+            bemerkung: note || "",
+            consentPublish: true,
+            consentTextVersion: "2025-10-12",
+            createdAt: new Date().toISOString()
           });
           msg.textContent = "Vielen Dank. Ihre Anmeldung ist eingegangen"; msg.className = "success";
+          // Formular zurücksetzen und Vorschau leeren
           $("#hostForm").reset(); selected.clear(); updatePreview();
+          // Zustimmungskästchen zurücksetzen und Button erneut sperren
+          const consent = $("#consent"); if(consent){ consent.checked = false; }
+          const sendBtn = $("#sendBtn"); if(sendBtn){ sendBtn.disabled = true; }
+          // Bestätigungsdialog anzeigen
+          $("#dlgSubmitConfirm").showModal();
         }catch(err){
           console.error(err);
           msg.textContent = "Die Anmeldung konnte nicht gespeichert werden"; msg.className = "error";
-        }finally{ btn.disabled = false; }
+        }finally{ btn.disabled = !$("#consent")?.checked; }
       };
     }
 
@@ -534,7 +584,6 @@
         console.warn("Termine konnten nicht geladen werden.");
       }
 
-      // Sortierung der Gottesdienste: zuerst nach order, sonst nach Uhrzeit
       services.sort((a,b)=>{
         const oa = typeof a.order === "number" ? a.order : 9999;
         const ob = typeof b.order === "number" ? b.order : 9999;
@@ -544,7 +593,7 @@
       });
 
       renderLists();
-      updateProgress();  // Fortschritt nach jedem Reload aktualisieren
+      updateProgress();
     }
 
     function renderLists(){
@@ -860,7 +909,7 @@
       });
 
       await renderServiceTable();
-      updateProgress();  // Fortschritt auch nach dem Aufbau des Adminbereichs aktualisieren
+      updateProgress();
     }
 
     async function renderServiceTable(){
@@ -1032,7 +1081,6 @@
     }
 
     function updateProgress(){
-      // Zählt belegte Abende vom 1 bis 23 Dezember 2025
       const total = 23;
       let assigned = 0;
       for(let d=1; d<=23; d++){
