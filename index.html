@@ -80,7 +80,6 @@
     input[type="text"], input[type="email"], input[type="tel"], textarea{
       width:100%; padding:12px 14px; border-radius:12px; border:1px solid #e5e7eb; background:#fff; font-size:16px;
     }
-    /* bessere Übersicht in Admin Feldern, kein horizontales Scrollen */
     .wide{ min-width:0; width:100%; }
     .ta{ min-height:80px; resize:vertical; }
     .ta-long{ min-height:110px; }
@@ -88,7 +87,7 @@
     textarea{ resize:vertical; }
     .help{ color:var(--muted); font-size:14px; }
     .actions{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
-    button{ border:none; padding:12px 16px; border-radius:12px; background:var(--forest); color:#fff; font-weight:700; cursor:pointer; box-shadow:var(--shadow); }
+    button{ border:none; padding:12px 16px; border-radius:12px; background:var(--forest); color:#fff; font-weight:700; cursor:pointer; box-shadow:var(--shadow); white-space:nowrap; }
     button.secondary{ background:var(--burgundy); }
     button.warn{ background:var(--danger); }
     .success{ color:var(--ok); font-weight:600; }
@@ -116,7 +115,7 @@
     .preview-chips{ display:flex; gap:8px; flex-wrap:wrap; margin-top:6px; }
     .chip{ background:#eef2ff; color:#334155; padding:4px 8px; border-radius:999px; font-size:12px; }
 
-    .chip-assign{ display:inline-block; padding:4px 8px; border-radius:999px; font-size:12px; background:#f0f9ff; color:#075985; cursor:pointer; margin:2px 6px 2px 0; border:1px solid #e0f2fe; }
+    .chip-assign{ display:inline-block; padding:4px 8px; border-radius:999px; font-size:12px; background:#f0f9ff; color:#075985; cursor:pointer; margin:2px 6px 2px 0; border:1px solid #e0f2fe; white-space:nowrap; }
     .chip-assign.assigned{ background:#dcfce7; color:#065f46; border-color:#bbf7d0; }
 
     .prog-wrap{ margin:12px 0 18px; }
@@ -124,10 +123,22 @@
     .prog-bar{ height:12px; background:#f1f5f9; border-radius:999px; overflow:hidden; }
     .prog-fill{ height:100%; width:0%; background:linear-gradient(90deg,#22c55e,#16a34a); transition:width .4s ease; }
 
-    /* Tabellen im Adminbereich ohne horizontales Scrollen */
-    table.table{ width:100%; border-collapse:collapse; table-layout:fixed; word-break:break-word; }
-    table.table th, table.table td{ border-top:1px solid #e5e7eb; padding:8px; vertical-align:top; white-space:normal; }
-    table.table thead th{ background:#fafafa; text-align:left; }
+    /* Admin-Tabellen klar und stabil */
+    table.table{ width:100%; border-collapse:collapse; table-layout:fixed; }
+    table.table colgroup col:nth-child(1){ width:11ch; }     /* Datum */
+    table.table colgroup col:nth-child(2){ width:7ch; }      /* Wochentag */
+    table.table colgroup col:nth-child(3){ width:16ch; }     /* Gastgeber */
+    table.table colgroup col:nth-child(4){ width:24ch; }     /* Adresse */
+    table.table colgroup col:nth-child(5){ width:10ch; }     /* Uhrzeit */
+    table.table colgroup col:nth-child(6){ width:auto; }     /* Notiz */
+    table.table colgroup col:nth-child(7){ width:14ch; }     /* Kinder Emoji */
+    table.table colgroup col:nth-child(8){ width:6ch; }      /* ♿ */
+    table.table colgroup col:nth-child(9){ width:11ch; }     /* Änderung */
+    table.table colgroup col:nth-child(10){ width:12ch; }    /* Aktion */
+    table.table th, table.table td{ border-top:1px solid #e5e7eb; padding:8px; vertical-align:top; }
+    table.table thead th{ background:#fafafa; text-align:left; white-space:nowrap; }
+    table.table td{ word-break:break-word; }
+    .t-center{ text-align:center; }
 
     /* Badge für Nachrichtenanzahl */
     .pill-count{ display:inline-flex; align-items:center; gap:6px; background:#eef2ff; color:#1e293b; padding:4px 8px; border-radius:999px; font-size:12px; }
@@ -182,7 +193,7 @@
 
     <section id="termine" class="card" aria-labelledby="termine-title">
       <h3 id="termine-title">Alle Termine</h3>
-      <p class="help">Beginn nicht immer 18 Uhr. Die Uhrzeit steht beim Datum in goldener Schrift. Das Zeichen ♿ zeigt Barrierefreiheit an.</p>
+      <p class="help">In der Regel beginnen die Abende um 18:00 Uhr. Manche Gastgeber wählen eine andere Uhrzeit. Die Treffen dauern etwa eine halbe Stunde. Das Zeichen ♿ zeigt Barrierefreiheit an.</p>
       <div class="list" id="terminListe" role="list"></div>
       <div class="actions" style="margin-top:12px">
         <button type="button" id="btnPdf" class="secondary">Übersicht als PDF</button>
@@ -378,6 +389,7 @@
 
         <h4>Nachrichten</h4>
         <table class="table" id="tblMessages">
+          <colgroup><col><col><col><col><col></colgroup>
           <thead><tr><th>Zeit</th><th>Absender</th><th>E Mail</th><th>Nachricht</th><th>Status</th></tr></thead>
           <tbody></tbody>
         </table>
@@ -395,7 +407,8 @@
         <h4>Anmeldungen zuweisen</h4>
         <p class="muted">Klicke auf einen gewünschten Termin einer Anmeldung. Vor dem Überschreiben erfolgt eine Prüfung, ob an diesem Datum bereits ein Termin besteht.</p>
         <table class="table" id="tblAnmeldungen" aria-describedby="anmeldHelp">
-          <thead><tr><th>Name und Kontakt</th><th>Adresse</th><th>Wunschtermine</th><th>Bemerkung</th><th>Barrierefrei</th><th>Aktion</th></tr></thead>
+          <colgroup><col><col><col><col><col class="t-center"><col></colgroup>
+          <thead><tr><th>Name und Kontakt</th><th>Adresse</th><th>Wunschtermine</th><th>Bemerkung</th><th>♿</th><th>Aktion</th></tr></thead>
           <tbody></tbody>
         </table>
         <p id="anmeldHelp" class="muted">Nach der Zuweisung kannst du den Antrag optional löschen.</p>
@@ -403,13 +416,21 @@
         <h4>Termine pflegen</h4>
         <p class="muted">Gastgeber, Adresse, Uhrzeit, Kinder Emoji und Barrierefreiheit bearbeiten oder einen Termin als geändert markieren.</p>
         <table class="table" id="tblEvents">
-          <thead><tr><th>Datum</th><th>Wochentag</th><th>Gastgeber</th><th>Adresse</th><th>Uhrzeit</th><th>Notiz</th><th>Kinder Emoji</th><th>♿</th><th>Änderung</th><th>Aktion</th></tr></thead>
+          <colgroup>
+            <col><col><col><col><col><col><col><col><col><col>
+          </colgroup>
+          <thead>
+            <tr>
+              <th>Datum</th><th>Wochentag</th><th>Gastgeber</th><th>Adresse</th><th>Uhrzeit</th><th>Notiz</th><th>Kinder Emoji</th><th>♿</th><th>Änderung</th><th>Aktion</th>
+            </tr>
+          </thead>
           <tbody></tbody>
         </table>
 
         <h4>Gottesdienste am 24. Dezember</h4>
         <p class="muted">Lege die Gottesdienste an, speichere sie und sortiere sie danach per Ziehen in die gewünschte Reihenfolge.</p>
         <table class="table" id="tblServices">
+          <colgroup><col style="width:40px"><col><col><col><col><col></colgroup>
           <thead><tr><th></th><th>Gemeinde</th><th>Uhrzeit</th><th>Adresse</th><th>Notiz</th><th>Aktion</th></tr></thead>
           <tbody></tbody>
         </table>
@@ -487,9 +508,9 @@
     let services = [];
     let assignedEmails = new Set();
     let pendingEmails = new Set();
+    const selected = new Set();
 
     let app, analytics, auth, db;
-    const selected = new Set();
 
     init();
 
@@ -544,7 +565,6 @@
 
       $("#addService").addEventListener("click", ()=> appendServiceRow());
 
-      // beim Öffnen des Impressums ungelesene Nachrichtenzahl laden
       updateMessageCounter();
       $("#openLegal").addEventListener("click", updateMessageCounter);
     }
@@ -722,9 +742,15 @@
         }else{
           if(e && e.hostName){
             const kids = e.kidsEmoji ? `<span title="Besonders geeignet für Kinder">${escapeHtml(e.kidsEmoji)}</span>` : "";
-            const access = e.barrierFree ? `<span title="Barrierefrei">♿</span>` : "";
+            // Info-Badge mit optionalem ♿ am Ende
+            let infoBadge = "";
+            if(e.info && e.info.trim()){
+              infoBadge = `<div class="badge">${escapeHtml(e.info)}${e.barrierFree ? " ♿" : ""}</div>`;
+            }else if(e.barrierFree){
+              infoBadge = `<div class="badge">♿</div>`;
+            }
             const changed = e.changed ? `<div class="badge changed">Hinweis: geändert</div>` : "";
-            meta.innerHTML = `<div class="host">${kids} ${access} ${escapeHtml(e.hostName)}</div><div class="addr">${escapeHtml(e.hostAdresse || "")}</div>${e.info ? `<div class="badge">${escapeHtml(e.info)}</div>` : ""}${changed}`;
+            meta.innerHTML = `<div class="host">${kids} ${escapeHtml(e.hostName)}</div><div class="addr">${escapeHtml(e.hostAdresse || "")}</div>${infoBadge}${changed}`;
           }else{
             meta.innerHTML = `<div class="host muted">Noch frei</div><div class="badge free">Anmeldung möglich</div>`;
           }
@@ -742,7 +768,9 @@
         $("#heuteAdresse").textContent = "Mehrere Orte in Hessisch Lichtenau und Umgebung";
         $("#heuteHinweis").textContent = "Zeiten und Orte finden Sie in der Terminliste";
       }else if(en && en.hostName){
-        $("#heuteTitel").textContent = `${en.barrierFree ? "♿ " : ""}${en.kidsEmoji ? en.kidsEmoji + " " : ""}${en.hostName}`;
+        // Kein ♿ im Bereich Nächster Termin
+        const titlePrefix = en.kidsEmoji ? en.kidsEmoji + " " : "";
+        $("#heuteTitel").textContent = titlePrefix + en.hostName;
         $("#heuteAdresse").textContent = en.hostAdresse || "";
         $("#heuteHinweis").textContent = en.info ? en.info : "";
       }else{
@@ -817,10 +845,11 @@
           }
         }else{
           const e = eventsMap.get(key);
-          const host = e && e.hostName ? `${e.barrierFree ? "♿ " : ""}${e.kidsEmoji ? e.kidsEmoji + " " : ""}${e.hostName}` : "Noch frei";
+          const host = e && e.hostName ? `${e.kidsEmoji ? e.kidsEmoji + " " : ""}${e.hostName}` : "Noch frei";
           const addr = e && e.hostAdresse ? e.hostAdresse : "";
           const time = e && e.uhrzeit ? e.uhrzeit : "18:00";
-          rows.push(`<tr><td>${deDate(d)} ${time} Uhr</td><td>${WDAY[d.getDay()]}</td><td>${escapeHtml(host)}</td><td>${escapeHtml(addr)}</td></tr>`);
+          const info = e && e.info ? `${e.info}${e.barrierFree ? " ♿" : ""}` : (e && e.barrierFree ? "♿" : "");
+          rows.push(`<tr><td>${deDate(d)} ${time} Uhr</td><td>${WDAY[d.getDay()]}</td><td>${escapeHtml(host)}</td><td>${escapeHtml(addr)}${info ? " — " + escapeHtml(info) : ""}</td></tr>`.replace(" — "," "));
         }
       });
 
@@ -881,10 +910,11 @@
             const dtStart = toIcsLocal(d, hm.h, hm.m);
             const dtEnd   = toIcsLocal(d, hm.h, hm.m + 30);
             const uid = `LA-${key}@adventskalender`;
-            const bf = e.barrierFree ? " barrierefrei" : "";
             const kids = e.kidsEmoji ? ` ${e.kidsEmoji}` : "";
+            const info = e.info ? ` ${e.info}` : "";
+            const bf = e.barrierFree ? " ♿" : "";
             const summary = escapeIcs("Lebendiger Adventskalender");
-            const desc = escapeIcs((e.hostName || "") + kids + bf);
+            const desc = escapeIcs((e.hostName || "") + kids + info + bf);
             const loc = escapeIcs(e.hostAdresse);
             lines.push("BEGIN:VEVENT");
             lines.push(`UID:${uid}`);
@@ -940,7 +970,7 @@
             <td class="wide">${escapeHtml(a.adresse||"")}</td>
             <td>${chips || "<span class='muted'>Keine Auswahl</span>"}</td>
             <td class="wide">${escapeHtml(a.bemerkung||"")}</td>
-            <td>${a.barrierFree ? "♿" : ""}</td>
+            <td class="t-center">${a.barrierFree ? "♿" : ""}</td>
             <td><button class="warn" data-del="${d.id}">Löschen</button></td>
           `;
           bodyA.appendChild(tr);
@@ -1012,9 +1042,9 @@
           <td><input type="text" value="${escapeAttr(e.uhrzeit||"18:00")}" data-f="uhrzeit" placeholder="z. B. 17:30"></td>
           <td><textarea class="ta-long wide" data-f="info" placeholder="Hinweise">${escapeAttr(e.info||"")}</textarea></td>
           <td><input type="text" value="${escapeAttr(e.kidsEmoji||"")}" data-f="kidsEmoji" placeholder="z. B. 🧒🎄"></td>
-          <td><label><input type="checkbox" ${e.barrierFree ? "checked" : ""} data-f="barrierFree"> ♿</label></td>
-          <td><label><input type="checkbox" ${e.changed ? "checked" : ""} data-f="changed"> markiert</label></td>
-          <td><button data-save="${id}">Speichern</button></td>
+          <td class="t-center"><label><input type="checkbox" ${e.barrierFree ? "checked" : ""} data-f="barrierFree"></label></td>
+          <td class="t-center"><label><input type="checkbox" ${e.changed ? "checked" : ""} data-f="changed"></label></td>
+          <td class="t-center"><button data-save="${id}">Speichern</button></td>
         `;
         bodyE.appendChild(tr);
       }
@@ -1064,7 +1094,7 @@
             <td>${escapeHtml(m.name||"")}</td>
             <td>${escapeHtml(m.email||"")}</td>
             <td>${escapeHtml(m.message||"")}</td>
-            <td>
+            <td class="t-center">
               ${m.read ? "<span class='muted'>gelesen</span>" : "<button data-read='"+d.id+"'>als gelesen markieren</button>"}
               <button class="warn" data-delmsg="${d.id}">löschen</button>
             </td>
@@ -1166,12 +1196,12 @@
       tr.dataset.sid = id;
       tr.dataset.index = String(idx);
       tr.innerHTML = `
-        <td style="width:40px">${s ? `<span class="drag" title="Ziehen zum Sortieren">≡</span>` : ""}</td>
+        <td>${s ? `<span class="drag" title="Ziehen zum Sortieren">≡</span>` : ""}</td>
         <td><input class="wide" type="text" value="${escapeAttr(s?.gemeinde||"")}" data-f="gemeinde" placeholder="Gemeinde oder Kirche"></td>
         <td><input type="text" value="${escapeAttr(s?.uhrzeit||"")}" data-f="uhrzeit" placeholder="z. B. 16:00"></td>
         <td><textarea class="ta wide" data-f="adresse" placeholder="Ort, Straße, Nummer">${escapeAttr(s?.adresse||"")}</textarea></td>
         <td><textarea class="ta-long wide" data-f="info" placeholder="Hinweis optional">${escapeAttr(s?.info||"")}</textarea></td>
-        <td>
+        <td class="t-center">
           <button data-sid="${id}" data-act="${id ? "save" : "save-new"}">Speichern</button>
           <button class="warn" data-sid="${id}" data-act="del">Löschen</button>
         </td>
