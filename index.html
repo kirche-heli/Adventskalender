@@ -38,7 +38,8 @@
     /* WhatsApp Hinweis oben */
     .wa-bar{ max-width:1100px; margin:0 auto; padding:0 16px 22px; }
     .wa-card{ display:flex; gap:14px; align-items:center; background:#fff9ee; color:#312e2b; border:1px solid #f2e2c9; border-radius:16px; padding:10px 12px; box-shadow:var(--shadow); }
-    .wa-card img{ width:58px; height:58px; border-radius:10px; background:#fff; }
+    .wa-card img{ width:58px; height:58px; border-radius:10px; background:#fff; transition:transform .2s ease; cursor:zoom-in; }
+    .wa-card img:hover{ transform:scale(1.06); }
     .wa-card a{ font-weight:700; color:#7a4a00; text-decoration:underline; }
 
     main{ max-width:1100px; margin:6px auto 60px; padding:0 16px; }
@@ -79,8 +80,8 @@
     input[type="text"], input[type="email"], input[type="tel"], textarea{
       width:100%; padding:12px 14px; border-radius:12px; border:1px solid #e5e7eb; background:#fff; font-size:16px;
     }
-    /* bessere Übersicht in Admin Feldern */
-    .wide{ min-width:320px; }
+    /* bessere Übersicht in Admin Feldern, kein horizontales Scrollen */
+    .wide{ min-width:0; width:100%; }
     .ta{ min-height:80px; resize:vertical; }
     .ta-long{ min-height:110px; }
 
@@ -101,9 +102,9 @@
     dialog{ border:none; border-radius:16px; padding:0; width:min(1000px, 96vw); box-shadow:var(--shadow); }
     .dlg-body{ padding:18px; background:#ffffff; border-radius:16px; }
     .dlg-head{ padding:16px 18px 0 18px; }
-    .dlg-title{ margin:0; color:var(--forest); font-size:20px; }
+    .dlg-title{ margin:0; color:var(--forest); font-size:20px; display:flex; align-items:center; gap:10px; }
     .dlg-foot{ padding:12px 18px 18px 18px; display:flex; justify-content:flex-end; gap:10px; }
-    .dlg-scroll{ max-height:68vh; overflow:auto; padding:0 18px 0 18px; }
+    .dlg-scroll{ max-height:68vh; overflow-y:auto; overflow-x:hidden; padding:0 18px 0 18px; }
     .link-as-btn{ background:#e5e7eb; color:#111827; border-radius:12px; padding:8px 12px; cursor:pointer; display:inline-block; }
     .muted{ color:#6b7280; }
     .center{ text-align:center; }
@@ -122,24 +123,15 @@
     .prog-label{ display:flex; justify-content:space-between; font-weight:600; margin-bottom:6px; }
     .prog-bar{ height:12px; background:#f1f5f9; border-radius:999px; overflow:hidden; }
     .prog-fill{ height:100%; width:0%; background:linear-gradient(90deg,#22c55e,#16a34a); transition:width .4s ease; }
-    .email-box{ display:grid; gap:8px; margin-top:10px; }
-    .email-row{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
-    .email-row label{ font-weight:600; }
-    .email-area{ width:100%; min-height:90px; border:1px solid #e5e7eb; border-radius:12px; padding:10px; font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size:13px; }
 
-    .drag{ cursor:grab; user-select:none; font-weight:700; padding:6px 8px; border:1px solid #e5e7eb; border-radius:8px; background:#f8fafc; display:inline-block; }
-    tr.dragging{ opacity:.6; }
-    tr.drop-above{ outline:2px solid #cbd5e1; }
-    tr.drop-below{ outline:2px solid #cbd5e1; }
-
-    .consent{ background:#fffbf6; border:1px solid #e6d7c6; padding:12px; border-radius:12px; }
-    .consent label{ font-weight:500; display:flex; align-items:flex-start; gap:8px; line-height:1.4; }
-    .consent input[type="checkbox"]{ margin-top:3px; }
-
-    /* Tabellen im Adminbereich */
-    table.table{ width:100%; border-collapse:collapse; }
-    table.table th, table.table td{ border-top:1px solid #e5e7eb; padding:8px; vertical-align:top; }
+    /* Tabellen im Adminbereich ohne horizontales Scrollen */
+    table.table{ width:100%; border-collapse:collapse; table-layout:fixed; word-break:break-word; }
+    table.table th, table.table td{ border-top:1px solid #e5e7eb; padding:8px; vertical-align:top; white-space:normal; }
     table.table thead th{ background:#fafafa; text-align:left; }
+
+    /* Badge für Nachrichtenanzahl */
+    .pill-count{ display:inline-flex; align-items:center; gap:6px; background:#eef2ff; color:#1e293b; padding:4px 8px; border-radius:999px; font-size:12px; }
+    .pill-count .dot{ width:8px; height:8px; border-radius:50%; background:#ef4444; }
   </style>
 </head>
 <body>
@@ -157,10 +149,10 @@
     </nav>
   </header>
 
-  <!-- WhatsApp Hinweisleiste mit QR -->
+  <!-- WhatsApp Hinweisleiste mit QR, vergrößerbar -->
   <div class="wa-bar">
     <div class="wa-card">
-      <img src="qrcode.jpg" alt="QR Code WhatsApp Kanal">
+      <img src="qrcode.jpg" alt="QR Code WhatsApp Kanal" id="qrThumb">
       <div>
         <div><strong>Alle wichtigen Infos bequem per WhatsApp</strong></div>
         <div>Jetzt Kanal abonnieren und auf dem Laufenden bleiben. <a href="https://whatsapp.com/channel/0029VbBLGb31CYoMJfdTh60w" rel="noopener">Zum WhatsApp Kanal</a></div>
@@ -190,7 +182,7 @@
 
     <section id="termine" class="card" aria-labelledby="termine-title">
       <h3 id="termine-title">Alle Termine</h3>
-      <p class="help">Zeitraum von Sonntag, 30. November, bis Mittwoch, 24. Dezember. Beginn nicht immer 18 Uhr. Die Uhrzeit steht beim Datum in goldener Schrift.</p>
+      <p class="help">Beginn nicht immer 18 Uhr. Die Uhrzeit steht beim Datum in goldener Schrift. Das Zeichen ♿ zeigt Barrierefreiheit an.</p>
       <div class="list" id="terminListe" role="list"></div>
       <div class="actions" style="margin-top:12px">
         <button type="button" id="btnPdf" class="secondary">Übersicht als PDF</button>
@@ -233,13 +225,17 @@
           <div class="actions">
             <button type="button" id="openPicker" class="secondary">Wunschtermine auswählen</button>
           </div>
-          <div class="help">Zeitraum von Montag, 1. Dezember 2025, bis Dienstag, 23. Dezember 2025. Mehrfachauswahl ist gewünscht.</div>
+          <div class="help">Mehrfachauswahl ist gewünscht.</div>
           <div id="wishesPreview" class="preview-chips"></div>
         </div>
 
         <div>
           <label for="note">Bemerkungen optional</label>
           <textarea id="note" name="note" placeholder="Ideen, Hinweise oder Besonderheiten"></textarea>
+        </div>
+
+        <div>
+          <label><input type="checkbox" id="barrierFreeHost"> Veranstaltungsort ist barrierefrei</label>
         </div>
 
         <div class="consent">
@@ -269,7 +265,7 @@
 
     <section id="kontakt" class="card" aria-labelledby="kontakt-title">
       <h3 id="kontakt-title">Kontakt</h3>
-      <p>Sie haben eine Frage oder möchten eine Nachricht schicken. Nutzen Sie gerne dieses Formular. Ihre Nachricht wird im System gespeichert und kann optional an die E Mail Adresse dominik.teminski@ekkw.de weitergeleitet werden.</p>
+      <p>Sie möchten uns eine Nachricht senden. Nutzen Sie gerne dieses Formular. Die Nachricht erscheint im internen Bereich und wird dort bearbeitet.</p>
       <form id="contactForm">
         <div class="grid cols-2">
           <div>
@@ -314,6 +310,18 @@
     </div>
   </dialog>
 
+  <!-- QR Lightbox -->
+  <dialog id="dlgQr">
+    <div class="dlg-body">
+      <div class="dlg-head"><h3 class="dlg-title">WhatsApp Kanal QR Code</h3></div>
+      <div class="dlg-scroll center">
+        <img src="qrcode.jpg" alt="QR Code groß" style="max-width:min(560px,92vw); width:100%; height:auto; border-radius:14px; box-shadow:var(--shadow)">
+        <p class="muted">Zum Schließen außerhalb klicken oder auf den Knopf unten.</p>
+      </div>
+      <div class="dlg-foot"><button type="button" class="secondary" data-close="dlgQr">Schließen</button></div>
+    </div>
+  </dialog>
+
   <!-- Impressum und Admin -->
   <dialog id="dlgLegal">
     <div class="dlg-body">
@@ -327,7 +335,10 @@
         <p>Es werden keine Tracking Dienste oder Cookies eingesetzt. Technisch notwendige Protokolle des Hosts werden nur kurz gespeichert. Die lokale Speicherung erfolgt ausschließlich im Browser und kann jederzeit gelöscht werden.</p>
         <hr>
         <p class="muted">Nur für das Organisationsteam</p>
-        <p><span class="link-as-btn" id="openAdminLogin">Admin</span></p>
+        <p style="display:flex; align-items:center; gap:10px;">
+          <span class="link-as-btn" id="openAdminLogin">Admin</span>
+          <span class="pill-count" id="msgCounter" title="Ungelesene Nachrichten"><span class="dot"></span><span id="msgCounterText">0 neu</span></span>
+        </p>
       </div>
       <div class="dlg-foot"><button type="button" class="secondary" data-close="dlgLegal">Schließen</button></div>
     </div>
@@ -354,7 +365,9 @@
   <!-- Admin Panel -->
   <dialog id="dlgAdminPanel">
     <div class="dlg-body">
-      <div class="dlg-head"><h3 class="dlg-title">Admin Bereich</h3></div>
+      <div class="dlg-head">
+        <h3 class="dlg-title">Admin Bereich</h3>
+      </div>
       <div class="dlg-scroll">
 
         <div class="prog-wrap" id="progWrap" aria-live="polite">
@@ -363,7 +376,13 @@
           <div class="muted" id="progMeta">0 von 23 Abenden vergeben</div>
         </div>
 
-        <div class="email-box">
+        <h4>Nachrichten</h4>
+        <table class="table" id="tblMessages">
+          <thead><tr><th>Zeit</th><th>Absender</th><th>E Mail</th><th>Nachricht</th><th>Status</th></tr></thead>
+          <tbody></tbody>
+        </table>
+
+        <div class="email-box" style="margin-top:16px">
           <div class="email-row">
             <label for="emailAll">E Mail Adressen der Gastgeber</label>
             <label class="muted" style="margin-left:auto"><input type="checkbox" id="includePending"> auch Anmeldungen einbeziehen</label>
@@ -376,15 +395,15 @@
         <h4>Anmeldungen zuweisen</h4>
         <p class="muted">Klicke auf einen gewünschten Termin einer Anmeldung. Vor dem Überschreiben erfolgt eine Prüfung, ob an diesem Datum bereits ein Termin besteht.</p>
         <table class="table" id="tblAnmeldungen" aria-describedby="anmeldHelp">
-          <thead><tr><th>Name und Kontakt</th><th>Adresse</th><th>Wunschtermine</th><th>Bemerkung</th><th>Aktion</th></tr></thead>
+          <thead><tr><th>Name und Kontakt</th><th>Adresse</th><th>Wunschtermine</th><th>Bemerkung</th><th>Barrierefrei</th><th>Aktion</th></tr></thead>
           <tbody></tbody>
         </table>
         <p id="anmeldHelp" class="muted">Nach der Zuweisung kannst du den Antrag optional löschen.</p>
 
         <h4>Termine pflegen</h4>
-        <p class="muted">Gastgeber, Adresse, Uhrzeit und Kinder Emoji bearbeiten oder einen Termin als geändert markieren.</p>
+        <p class="muted">Gastgeber, Adresse, Uhrzeit, Kinder Emoji und Barrierefreiheit bearbeiten oder einen Termin als geändert markieren.</p>
         <table class="table" id="tblEvents">
-          <thead><tr><th>Datum</th><th>Wochentag</th><th>Gastgeber</th><th>Adresse</th><th>Uhrzeit</th><th>Notiz</th><th>Kinder Emoji</th><th>Änderung</th><th>Aktion</th></tr></thead>
+          <thead><tr><th>Datum</th><th>Wochentag</th><th>Gastgeber</th><th>Adresse</th><th>Uhrzeit</th><th>Notiz</th><th>Kinder Emoji</th><th>♿</th><th>Änderung</th><th>Aktion</th></tr></thead>
           <tbody></tbody>
         </table>
 
@@ -438,7 +457,7 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-analytics.js";
     import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-    import { getFirestore, collection, addDoc, getDocs, setDoc, doc, deleteDoc, query, orderBy, writeBatch, getDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, getDocs, setDoc, doc, deleteDoc, query, orderBy, writeBatch, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCZuvHUy6xMN6WIrHUQBpxuobZkQRKB20s",
@@ -449,10 +468,6 @@
       appId: "1:816945632051:web:817e7a3d8945c3a65aa446",
       measurementId: "G-GYH086SXWE"
     };
-
-    /* Optionaler Mail Endpunkt. Wenn leer, erfolgt nur die Speicherung in Firestore. 
-       Wenn vorhanden, wird zusätzlich eine POST Anfrage gestellt. */
-    const EMAIL_ENDPOINT = "";
 
     const $  = s => document.querySelector(s);
     const $$ = s => Array.from(document.querySelectorAll(s));
@@ -468,13 +483,13 @@
     function escapeAttr(s){ return escapeHtml(s); }
     function parseHmToMinutes(hm){ const m=/^(\d{1,2}):(\d{2})$/.exec(hm||""); if(!m) return null; const h=Math.max(0,Math.min(23,parseInt(m[1],10))); const mi=Math.max(0,Math.min(59,parseInt(m[2],10))); return h*60+mi; }
 
-    const selected = new Set();
     let eventsMap = new Map();
     let services = [];
     let assignedEmails = new Set();
     let pendingEmails = new Set();
 
     let app, analytics, auth, db;
+    const selected = new Set();
 
     init();
 
@@ -491,12 +506,14 @@
       $("#openAdminLogin").addEventListener("click", ()=> { $("#dlgLegal").close(); $("#dlgAdminLogin").showModal(); });
       $$("[data-close]").forEach(btn=>{ btn.addEventListener("click", ()=> document.getElementById(btn.getAttribute("data-close")).close()); });
 
+      $("#qrThumb").addEventListener("click", ()=> $("#dlgQr").showModal());
+
       $("#btnPdf").addEventListener("click", ()=> downloadPdfFromData());
       $("#btnIcs").addEventListener("click", ()=> downloadIcsFromData());
 
       const sendBtn = $("#sendBtn");
       const consent = $("#consent");
-      function updateSendDisabled(){ sendBtn.disabled = !consent.checked; }
+      function updateSendDisabled(){ if(sendBtn) sendBtn.disabled = !(consent && consent.checked); }
       if(consent){ consent.addEventListener("change", updateSendDisabled); updateSendDisabled(); }
 
       $("#hostForm").addEventListener("submit", onSubmitHostForm());
@@ -526,6 +543,10 @@
       $("#includePending").addEventListener("change", updateEmailTextarea);
 
       $("#addService").addEventListener("click", ()=> appendServiceRow());
+
+      // beim Öffnen des Impressums ungelesene Nachrichtenzahl laden
+      updateMessageCounter();
+      $("#openLegal").addEventListener("click", updateMessageCounter);
     }
 
     async function adminLogin(){
@@ -554,6 +575,7 @@
         const street = $("#street").value.trim();
         const city   = $("#city").value.trim();
         const note   = $("#note").value.trim();
+        const barrierFree = $("#barrierFreeHost").checked === true;
         const wishes = Array.from(selected).sort();
         const consentOk = $("#consent")?.checked === true;
 
@@ -576,19 +598,20 @@
             adresse: `${street}, ${city}`,
             wuensche: wishes,
             bemerkung: note || "",
+            barrierFree,
             consentPublish: true,
             consentTextVersion: "2025-10-12",
             createdAt: new Date().toISOString()
           });
           msg.textContent = "Vielen Dank. Ihre Anmeldung ist eingegangen"; msg.className = "success";
           $("#hostForm").reset(); selected.clear(); updatePreview();
-          const consent = $("#consent"); if(consent){ consent.checked = false; }
-          const sendBtn = $("#sendBtn"); if(sendBtn){ sendBtn.disabled = true; }
+          if($("#consent")) $("#consent").checked = false;
+          if(btn) btn.disabled = true;
           $("#dlgSubmitConfirm").showModal();
         }catch(err){
           console.error(err);
           msg.textContent = "Die Anmeldung konnte nicht gespeichert werden"; msg.className = "error";
-        }finally{ btn.disabled = !$("#consent")?.checked; }
+        }
       };
     }
 
@@ -601,16 +624,12 @@
       const text = $("#kmsg").value.trim();
       if(!name || !mail || !text){ info.textContent = "Bitte alle Felder ausfüllen"; return; }
       try{
-        await addDoc(collection(db,"kontakt"), {
-          name, email: mail, nachricht: text, createdAt: new Date().toISOString()
+        await addDoc(collection(db,"messages"), {
+          name, email: mail, message: text, createdAt: new Date().toISOString(), read:false
         });
-        if(EMAIL_ENDPOINT){
-          try{
-            await fetch(EMAIL_ENDPOINT, { method:"POST", headers:{ "Content-Type":"application/json" }, body: JSON.stringify({ name, email: mail, message: text }) });
-          }catch(e){}
-        }
         info.textContent = "Nachricht wurde gesendet";
         $("#contactForm").reset();
+        updateMessageCounter();
       }catch(e){
         console.error(e);
         info.textContent = "Nachricht konnte nicht gesendet werden";
@@ -673,6 +692,7 @@
 
       renderLists();
       updateProgress();
+      updateEmailTextarea();
     }
 
     function renderLists(){
@@ -702,8 +722,9 @@
         }else{
           if(e && e.hostName){
             const kids = e.kidsEmoji ? `<span title="Besonders geeignet für Kinder">${escapeHtml(e.kidsEmoji)}</span>` : "";
+            const access = e.barrierFree ? `<span title="Barrierefrei">♿</span>` : "";
             const changed = e.changed ? `<div class="badge changed">Hinweis: geändert</div>` : "";
-            meta.innerHTML = `<div class="host">${kids} ${escapeHtml(e.hostName)}</div><div class="addr">${escapeHtml(e.hostAdresse || "")}</div>${e.info ? `<div class="badge">${escapeHtml(e.info)}</div>` : ""}${changed}`;
+            meta.innerHTML = `<div class="host">${kids} ${access} ${escapeHtml(e.hostName)}</div><div class="addr">${escapeHtml(e.hostAdresse || "")}</div>${e.info ? `<div class="badge">${escapeHtml(e.info)}</div>` : ""}${changed}`;
           }else{
             meta.innerHTML = `<div class="host muted">Noch frei</div><div class="badge free">Anmeldung möglich</div>`;
           }
@@ -721,7 +742,7 @@
         $("#heuteAdresse").textContent = "Mehrere Orte in Hessisch Lichtenau und Umgebung";
         $("#heuteHinweis").textContent = "Zeiten und Orte finden Sie in der Terminliste";
       }else if(en && en.hostName){
-        $("#heuteTitel").textContent = en.hostName;
+        $("#heuteTitel").textContent = `${en.barrierFree ? "♿ " : ""}${en.kidsEmoji ? en.kidsEmoji + " " : ""}${en.hostName}`;
         $("#heuteAdresse").textContent = en.hostAdresse || "";
         $("#heuteHinweis").textContent = en.info ? en.info : "";
       }else{
@@ -796,7 +817,7 @@
           }
         }else{
           const e = eventsMap.get(key);
-          const host = e && e.hostName ? e.hostName : "Noch frei";
+          const host = e && e.hostName ? `${e.barrierFree ? "♿ " : ""}${e.kidsEmoji ? e.kidsEmoji + " " : ""}${e.hostName}` : "Noch frei";
           const addr = e && e.hostAdresse ? e.hostAdresse : "";
           const time = e && e.uhrzeit ? e.uhrzeit : "18:00";
           rows.push(`<tr><td>${deDate(d)} ${time} Uhr</td><td>${WDAY[d.getDay()]}</td><td>${escapeHtml(host)}</td><td>${escapeHtml(addr)}</td></tr>`);
@@ -860,9 +881,10 @@
             const dtStart = toIcsLocal(d, hm.h, hm.m);
             const dtEnd   = toIcsLocal(d, hm.h, hm.m + 30);
             const uid = `LA-${key}@adventskalender`;
-            const summary = escapeIcs("Lebendiger Adventskalender");
+            const bf = e.barrierFree ? " barrierefrei" : "";
             const kids = e.kidsEmoji ? ` ${e.kidsEmoji}` : "";
-            const desc = escapeIcs((e.hostName || "") + kids);
+            const summary = escapeIcs("Lebendiger Adventskalender");
+            const desc = escapeIcs((e.hostName || "") + kids + bf);
             const loc = escapeIcs(e.hostAdresse);
             lines.push("BEGIN:VEVENT");
             lines.push(`UID:${uid}`);
@@ -898,6 +920,8 @@
       assignedEmails = new Set();
       pendingEmails = new Set();
 
+      await loadMessages();
+
       const bodyA = $("#tblAnmeldungen tbody"); bodyA.innerHTML = "";
       try{
         const snap = await getDocs(collection(db,"anmeldungen"));
@@ -909,20 +933,21 @@
           const chips = wishes.map(w=>{
             const dd = new Date(w);
             const label = `${String(dd.getDate()).padStart(2,"0")}.12 (${WDAY[dd.getDay()]})`;
-            return `<span class="chip-assign" data-assign="${w}" data-id="${d.id}" data-email="${escapeAttr(a.email||"")}" data-note="${escapeAttr(a.bemerkung||"")}" title="Als Termin festlegen">${label}</span>`;
+            return `<span class="chip-assign" data-assign="${w}" data-id="${d.id}" data-email="${escapeAttr(a.email||"")}" data-note="${escapeAttr(a.bemerkung||"")}" data-bf="${a.barrierFree ? "1" : "0"}" title="Als Termin festlegen">${label}</span>`;
           }).join("");
           tr.innerHTML = `
             <td><strong>${escapeHtml(a.name||"")}</strong><br><span class="muted">${escapeHtml(a.email||"")}</span><br><span class="muted">${escapeHtml(a.telefon||"")}</span></td>
             <td class="wide">${escapeHtml(a.adresse||"")}</td>
             <td>${chips || "<span class='muted'>Keine Auswahl</span>"}</td>
             <td class="wide">${escapeHtml(a.bemerkung||"")}</td>
+            <td>${a.barrierFree ? "♿" : ""}</td>
             <td><button class="warn" data-del="${d.id}">Löschen</button></td>
           `;
           bodyA.appendChild(tr);
         });
       }catch(e){
         const tr = document.createElement("tr");
-        tr.innerHTML = `<td colspan="5" class="center">Anmeldungen konnten nicht geladen werden</td>`;
+        tr.innerHTML = `<td colspan="6" class="center">Anmeldungen konnten nicht geladen werden</td>`;
         bodyA.appendChild(tr);
       }
 
@@ -934,8 +959,8 @@
           const addr = row.children[1].textContent.trim();
           const email = ch.getAttribute("data-email") || "";
           const noteFromHost = ch.getAttribute("data-note") || "";
+          const bf = ch.getAttribute("data-bf") === "1";
           try{
-            // Sicherheitsprüfung: existiert bereits ein Eintrag
             const existing = await getDoc(doc(db,"events", dateKey));
             if(existing.exists() && existing.data().hostName){
               const ok = confirm("Für dieses Datum ist bereits ein Termin eingetragen. Möchtest du wirklich überschreiben");
@@ -949,6 +974,8 @@
               hostEmail: email,
               info: noteFromHost || "Aus Anmeldung gesetzt",
               uhrzeit: "18:00",
+              kidsEmoji: "",
+              barrierFree: bf,
               changed: true
             }, { merge: true });
             ch.classList.add("assigned");
@@ -974,7 +1001,7 @@
       const map = new Map(eventsMap);
       for(const d of dates){
         const id = ymd(d);
-        const e = map.get(id) || { datum: id, hostName:"", hostAdresse:"", hostEmail:"", info:"", uhrzeit:"18:00", kidsEmoji:"", changed:false };
+        const e = map.get(id) || { datum: id, hostName:"", hostAdresse:"", hostEmail:"", info:"", uhrzeit:"18:00", kidsEmoji:"", barrierFree:false, changed:false };
         if(e.hostEmail) assignedEmails.add(e.hostEmail.trim());
         const tr = document.createElement("tr");
         tr.innerHTML = `
@@ -985,6 +1012,7 @@
           <td><input type="text" value="${escapeAttr(e.uhrzeit||"18:00")}" data-f="uhrzeit" placeholder="z. B. 17:30"></td>
           <td><textarea class="ta-long wide" data-f="info" placeholder="Hinweise">${escapeAttr(e.info||"")}</textarea></td>
           <td><input type="text" value="${escapeAttr(e.kidsEmoji||"")}" data-f="kidsEmoji" placeholder="z. B. 🧒🎄"></td>
+          <td><label><input type="checkbox" ${e.barrierFree ? "checked" : ""} data-f="barrierFree"> ♿</label></td>
           <td><label><input type="checkbox" ${e.changed ? "checked" : ""} data-f="changed"> markiert</label></td>
           <td><button data-save="${id}">Speichern</button></td>
         `;
@@ -1001,7 +1029,6 @@
           if(i.type === "checkbox"){ payload[f] = i.checked; }
           else { payload[f] = i.value.trim(); }
         });
-        // Uhrzeit validieren
         if(payload.uhrzeit && !/^\d{1,2}:\d{2}$/.test(payload.uhrzeit)){
           alert("Uhrzeit bitte als HH:MM eintragen");
           return;
@@ -1016,14 +1043,73 @@
 
       await renderServiceTable();
       updateProgress();
+      updateMessageCounter();
+    }
+
+    async function loadMessages(){
+      const body = $("#tblMessages tbody"); body.innerHTML = "";
+      try{
+        const qy = query(collection(db,"messages"), orderBy("createdAt","desc"));
+        const snap = await getDocs(qy);
+        if(snap.empty){
+          body.innerHTML = `<tr><td colspan="5" class="center">Keine Nachrichten vorhanden</td></tr>`;
+          return;
+        }
+        snap.forEach(d=>{
+          const m = d.data();
+          const tr = document.createElement("tr");
+          const when = m.createdAt ? new Date(m.createdAt).toLocaleString("de-DE") : "";
+          tr.innerHTML = `
+            <td>${escapeHtml(when)}</td>
+            <td>${escapeHtml(m.name||"")}</td>
+            <td>${escapeHtml(m.email||"")}</td>
+            <td>${escapeHtml(m.message||"")}</td>
+            <td>
+              ${m.read ? "<span class='muted'>gelesen</span>" : "<button data-read='"+d.id+"'>als gelesen markieren</button>"}
+              <button class="warn" data-delmsg="${d.id}">löschen</button>
+            </td>
+          `;
+          body.appendChild(tr);
+        });
+
+        body.addEventListener("click", async e=>{
+          const r = e.target.closest("button[data-read]");
+          const del = e.target.closest("button[data-delmsg]");
+          if(r){
+            await updateDoc(doc(db,"messages", r.dataset.read), { read:true });
+            await loadMessages();
+            updateMessageCounter();
+          }
+          if(del){
+            if(confirm("Diese Nachricht löschen")){
+              await deleteDoc(doc(db,"messages", del.dataset.delmsg));
+              await loadMessages();
+              updateMessageCounter();
+            }
+          }
+        });
+      }catch(e){
+        body.innerHTML = `<tr><td colspan="5" class="center">Nachrichten konnten nicht geladen werden</td></tr>`;
+      }
+    }
+
+    async function updateMessageCounter(){
+      try{
+        const snap = await getDocs(collection(db,"messages"));
+        let unread = 0;
+        snap.forEach(d=>{ if(d.data() && d.data().read === false) unread++; });
+        const el = $("#msgCounterText");
+        if(el) el.textContent = `${unread} neu`;
+      }catch(e){
+        const el = $("#msgCounterText");
+        if(el) el.textContent = "0 neu";
+      }
     }
 
     async function renderServiceTable(){
       const bodyS = $("#tblServices tbody"); bodyS.innerHTML = "";
-
       services.forEach((s, idx)=> bodyS.appendChild(buildServiceRow(s, idx)));
       bodyS.appendChild(buildServiceRow(null, services.length));
-
       bodyS.addEventListener("click", onServiceButtonClick);
       enableDragAndDrop(bodyS);
     }
@@ -1201,7 +1287,7 @@
     }
 
     function updateEmailTextarea(){
-      const includePending = $("#includePending").checked;
+      const includePending = $("#includePending")?.checked;
       const emails = new Set();
       for(const e of eventsMap.values()){
         if(e && e.hostEmail) emails.add(e.hostEmail.trim());
