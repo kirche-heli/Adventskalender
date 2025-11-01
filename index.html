@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Lebendiger Adventskalender Hessisch Lichtenau</title>
-<meta name="description" content="Termine, Anmeldung und Kontakt zum Lebendigen Adventskalender in Hessisch Lichtenau.">
+<meta name="description" content="Informationen, Termine, Anmeldung, Kontakt und Rüstzeug für den Lebendigen Adventskalender in Hessisch Lichtenau.">
 <style>
 :root{
   --burgundy:#7b1e36;
@@ -29,23 +29,44 @@ nav{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:18px;
 nav a{display:inline-block;text-decoration:none;color:var(--burgundy);background:var(--gold);padding:10px 14px;border-radius:999px;font-weight:600;box-shadow:var(--shadow);}
 main{max-width:1100px;margin:6px auto 60px;padding:0 16px;}
 .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;margin-bottom:18px;}
-h2{margin:0 0 8px 0;color:var(--forest);}
+h2{margin:0 0 6px 0;font-size:22px;color:var(--forest);}
 h3{margin:4px 0 12px;font-size:20px;color:var(--forest);}
 .help{color:var(--muted);font-size:14px;}
+/* Heute Box */
+.today{display:grid;gap:16px;}
+.today .row{display:grid;gap:14px;}
+.today .pill{display:inline-block;padding:6px 10px;background:var(--paper);border:1px solid #efe2d6;border-radius:999px;font-size:13px;color:var(--muted);}
+.today .title{font-size:20px;font-weight:700;}
+.today .addr{font-size:16px;}
+.weather{display:flex;align-items:center;gap:14px;padding:12px;border:1px dashed #e6d7c6;border-radius:14px;background:#fffbf6;}
+.weather .big{font-size:28px;font-weight:700;color:var(--burgundy-dark);min-width:64px;text-align:center;}
+@media(min-width:850px){.today .row{grid-template-columns:2fr 1.2fr;align-items:stretch;}}
 /* WhatsApp Kachel */
 .wa-bar{max-width:1100px;margin:0 auto 18px; padding:0 16px;}
 .wa-card{display:flex;gap:14px;align-items:center;background:#fff9ee;color:#312e2b;border:1px solid #f2e2c9;border-radius:16px;padding:10px 12px;box-shadow:var(--shadow);}
 .wa-card img{width:58px;height:58px;border-radius:10px;background:#fff;transition:transform .2s ease;cursor:zoom-in;}
 .wa-card img:hover{transform:scale(1.06);}
 .wa-card a{font-weight:700;color:#7a4a00;text-decoration:underline;}
+/* Listen */
+.list{display:flex;flex-direction:column;gap:10px;}
+.item{display:flex;gap:12px;align-items:flex-start;border:1px solid #eee5da;padding:14px;border-radius:14px;background:#fffefe;}
+.day{min-width:92px;text-align:center;background:var(--burgundy);color:var(--cream);padding:8px 10px;border-radius:10px;line-height:1.2;box-shadow:var(--shadow);}
+.day .date{font-size:18px;font-weight:800;}
+.day .wd{font-size:12px;opacity:.95;}
+.meta{flex:1;}
+.meta .host{font-weight:700;font-size:16px;}
+.meta .addr{color:#444;margin-top:2px;white-space:pre-wrap;}
+.badge{display:inline-block;font-size:12px;padding:4px 8px;border-radius:999px;background:#eef2ff;color:#334155;margin-top:6px;}
+.free{background:#fff1f1;color:#7a1d1d;}
+.changed{background:#fff7cc;color:#7a5600;}
 /* Felder modern */
 form{display:grid;gap:12px;}
 label{font-weight:600;}
 input[type="text"],input[type="email"],input[type="tel"],textarea{
-  width:100%;padding:12px 14px;border-radius:14px;border:1px solid #e6e6ea;background:#fff;box-shadow:0 1px 0 rgba(0,0,0,.02) inset;font-size:16px;transition:border .15s, box-shadow .15s;
+  width:100%;padding:12px 14px;border-radius:14px;border:1px solid #e5e6ea;background:#fff;box-shadow:0 1px 0 rgba(0,0,0,.02) inset;font-size:16px;transition:border .15s, box-shadow .15s;
 }
 input:focus,textarea:focus{outline:none;border-color:#caa56a;box-shadow:0 0 0 3px rgba(201,165,106,.18);}
-textarea{min-height:100px;resize:vertical;}
+textarea{min-height:110px;resize:vertical;}
 .grid{display:grid;gap:12px;}
 @media(min-width:850px){.grid.cols-2{grid-template-columns:1fr 1fr;}}
 .actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
@@ -54,19 +75,7 @@ button.secondary{background:var(--burgundy);}
 button.warn{background:var(--danger);}
 .success{color:var(--ok);font-weight:600;}
 .error{color:var(--danger);font-weight:600;}
-/* Terminliste öffentlich */
-.list{display:flex;flex-direction:column;gap:10px;}
-.item{display:flex;gap:12px;align-items:flex-start;border:1px solid #eee5da;padding:14px;border-radius:14px;background:#fffefe;}
-.day{min-width:110px;text-align:center;background:var(--burgundy);color:var(--cream);padding:8px 10px;border-radius:10px;line-height:1.2;box-shadow:var(--shadow);}
-.day .date{font-size:18px;font-weight:800;}
-.day .wd{font-size:12px;opacity:.95;}
-.day .time{display:block;margin-top:6px;font-size:14px;font-weight:800;color:var(--gold);}
-.meta{flex:1;}
-.meta .host{font-weight:700;font-size:16px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
-.meta .addr{color:#444;margin-top:2px;white-space:pre-wrap;}
-.badge{display:inline-block;font-size:12px;padding:4px 8px;border-radius:999px;background:#eef2ff;color:#334155;margin-top:6px;}
-.free{background:#fff1f1;color:#7a1d1d;}
-.changed{background:#fff7cc;color:#7a5600;}
+details{background:#fffdf9;border:1px solid #f0e6d9;padding:14px;border-radius:12px;}
 /* Dialoge und Tabs */
 dialog{border:none;border-radius:16px;padding:0;width:min(1100px,96vw);box-shadow:var(--shadow);}
 .dlg-body{padding:18px;background:#ffffff;border-radius:16px;}
@@ -79,11 +88,11 @@ dialog{border:none;border-radius:16px;padding:0;width:min(1100px,96vw);box-shado
 .tab-btn[aria-selected="true"]{background:var(--gold);color:#4a1a22;border-color:#b99254;}
 .tab-panel[aria-hidden="true"]{display:none;}
 /* Fortschritt nur im Admin */
-.prog-wrap{margin:0 0 14px 0;}
+.prog-wrap{margin:12px 0 18px 0;}
 .prog-label{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;font-weight:700;}
-.prog-bar{width:100%;height:10px;background:#eee;border-radius:999px;overflow:hidden;}
-.prog-fill{height:100%;background:var(--gold);width:0%;}
-/* Admintabellen ohne horizontales Scrollen */
+.prog-bar{width:100%;height:12px;background:#f1f5f9;border-radius:999px;overflow:hidden;}
+.prog-fill{height:100%;background:linear-gradient(90deg,#22c55e,#16a34a);width:0%;}
+/* Admin Tabellen ohne horizontales Scrollen */
 table.table{width:100%;border-collapse:collapse;table-layout:fixed;}
 table.table th,table.table td{border-top:1px solid #e5e7eb;padding:8px;vertical-align:top;}
 table.table thead th{background:#fafafa;text-align:left;white-space:nowrap;}
@@ -128,8 +137,11 @@ footer{max-width:1100px;margin:30px auto 80px;padding:0 16px;color:#222;text-ali
   <img src="Logo.png" alt="Lebendiger Adventskalender Hessisch Lichtenau" class="logo-banner">
   <div class="subtitle">Vom ersten Advent bis kurz vor Heiligabend. Begegnungen mit Licht, Musik, Geschichten und guten Gesprächen.</div>
   <nav aria-label="Hauptnavigation">
+    <a href="#heute">Heute</a>
     <a href="#termine">Termine</a>
     <a href="#anmeldung">Gastgeber werden</a>
+    <a href="#info">Information</a>
+    <a href="#ruestzeug" id="openGear">Rüstzeug</a>
     <a href="#kontakt">Kontakt</a>
   </nav>
 </header>
@@ -145,27 +157,54 @@ footer{max-width:1100px;margin:30px auto 80px;padding:0 16px;color:#222;text-ali
 </div>
 
 <main>
+  <!-- Heute Box -->
+  <section id="heute" class="card today" aria-labelledby="heute-title">
+    <h2 id="heute-title">Nächster Termin um 18 Uhr</h2>
+    <div class="row">
+      <div>
+        <span class="pill" id="heuteDatum">Datum wird geladen</span>
+        <div class="title" id="heuteTitel">Noch kein Eintrag ausgewählt</div>
+        <div class="addr" id="heuteAdresse"></div>
+        <div class="help" id="heuteHinweis"></div>
+      </div>
+      <div class="weather" aria-live="polite">
+        <div class="big" id="wTemp">n. a.</div>
+        <div>
+          <div id="wText">Wetter für 18 Uhr wird geladen</div>
+          <small id="wMeta"></small>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Terminliste öffentlich -->
   <section id="termine" class="card" aria-labelledby="termine-title">
     <h3 id="termine-title">Alle Termine</h3>
     <p class="help">In der Regel beginnen die Abende um 18 Uhr. Manche Gastgeber wählen eine andere Uhrzeit. Die Treffen dauern etwa eine halbe Stunde. Das Zeichen ♿ zeigt Barrierefreiheit an.</p>
     <div class="list" id="terminListe" role="list"></div>
+    <div class="actions" style="margin-top:12px">
+      <button type="button" id="btnPdf" class="secondary">Übersicht als PDF</button>
+      <button type="button" id="btnIcs">Alle Termine als Kalenderdatei</button>
+    </div>
   </section>
 
+  <!-- Gastgeber werden -->
   <section id="anmeldung" class="card" aria-labelledby="anmeldung-title">
     <h3 id="anmeldung-title">Gastgeber werden</h3>
+    <p>Sie möchten einen Abend ausrichten. Das freut uns. Tragen Sie Ihre Kontaktdaten ein und wählen Sie mehrere mögliche Termine. Die endgültige Vergabe erfolgt durch das Organisationsteam. Sie erhalten eine Rückmeldung.</p>
     <form id="hostForm" novalidate>
       <div>
         <label for="name">Name oder Gruppe</label>
-        <input id="name" type="text" required placeholder="Zum Beispiel Familie Müller oder Gesangverein Heimatklang">
+        <input id="name" type="text" autocomplete="name" required placeholder="Zum Beispiel Familie Müller oder Gesangverein Heimatklang">
       </div>
       <div class="grid cols-2">
         <div>
           <label for="email">E Mail</label>
-          <input id="email" type="email" required placeholder="beispiel@mail.de">
+          <input id="email" type="email" autocomplete="email" required placeholder="beispiel@mail.de">
         </div>
         <div>
           <label for="tel">Telefon</label>
-          <input id="tel" type="tel" required placeholder="Zum Beispiel 0151 12345678">
+          <input id="tel" type="tel" autocomplete="tel" required placeholder="Zum Beispiel 0151 12345678">
         </div>
       </div>
       <div class="grid cols-2">
@@ -179,24 +218,45 @@ footer{max-width:1100px;margin:30px auto 80px;padding:0 16px;color:#222;text-ali
         </div>
       </div>
       <div>
-        <label>Wunschtermine</label>
+        <label>Wunschtermine im Dezember</label>
         <div class="actions"><button type="button" id="openPicker" class="secondary">Wunschtermine auswählen</button></div>
-        <div id="wishesPreview"></div>
+        <div class="help">Zeitraum von Montag, 1. Dezember, bis Dienstag, 23. Dezember. Mehrfachauswahl ist erwünscht.</div>
+        <div id="wishesPreview" class="actions" style="gap:8px;flex-wrap:wrap;"></div>
       </div>
       <div>
         <label for="note">Besonderheiten optional</label>
         <textarea id="note" placeholder="Hinweise für die Organisation oder besondere Bedürfnisse"></textarea>
+      </div>
+      <div class="consent" role="group" aria-labelledby="consentTitle">
+        <div id="consentTitle" class="help" style="margin-bottom:6px;">Zustimmung zur Veröffentlichung</div>
+        <label for="consent">
+          <input id="consent" type="checkbox" required>
+          Ich stimme zu, dass mein Name und meine Adresse als Gastgeberin oder Gastgeber veröffentlicht werden dürfen. Die Veröffentlichung kann in Aushängen, digitalen Kanälen, im Gemeindebrief und in Printmedien erfolgen. Diese Zustimmung ist Voraussetzung für die Anmeldung.
+        </label>
       </div>
       <div>
         <label><input type="checkbox" id="barrierFreeHost"> Veranstaltungsort ist barrierefrei</label>
       </div>
       <div class="actions">
         <button type="submit" id="sendBtn">Anmeldung senden</button>
+        <button type="reset" class="secondary" id="resetBtn">Eingaben zurücksetzen</button>
         <span id="formMsg" role="status" aria-live="polite"></span>
       </div>
     </form>
   </section>
 
+  <!-- Info -->
+  <section id="info" class="card" aria-labelledby="info-title">
+    <h3 id="info-title">Was ist ein lebendiger Adventskalender</h3>
+    <p>An jedem Abend im Advent öffnet sich um 18 Uhr ein Türchen in Form eines Fensters, eines Hauses, eines Gartens oder eines Hofes. Gastgeberinnen und Gastgeber laden für etwa 30 Minuten zu einer adventlichen Begegnung ein. Gemeinschaft und Vorfreude stehen im Mittelpunkt.</p>
+    <p>Die Gestaltung kann vielfältig sein. Möglich sind eine kurze Geschichte oder ein Impuls, gemeinsames Singen von Weihnachtsliedern, leise Musik im Hintergrund oder ein offenes Zusammensein bei Kerzenschein. Gäste bringen nach Möglichkeit eine eigene Tasse mit.</p>
+    <details>
+      <summary>Organisation und nächste Schritte</summary>
+      <p>Zum Auftakt eröffnen wir an der Stadtkirche die Krippe im Freien. Danach trifft sich die Stadtgemeinschaft jeden Abend an einem anderen Ort. Gruppen, Familien, Vereine, Kirchengemeinden oder Einzelpersonen können einen Abend übernehmen. Auf Wunsch stellen wir Materialien und Gestaltungsideen bereit.</p>
+    </details>
+  </section>
+
+  <!-- Kontakt -->
   <section id="kontakt" class="card" aria-labelledby="kontakt-title">
     <h3 id="kontakt-title">Kontakt</h3>
     <form id="contactForm">
@@ -226,17 +286,24 @@ footer{max-width:1100px;margin:30px auto 80px;padding:0 16px;color:#222;text-ali
   <span class="footlink" id="openLegal">Impressum und Datenschutz</span>
 </footer>
 
-<dialog id="dlgQr">
+<!-- Rüstzeug -->
+<dialog id="dlgGear">
   <div class="dlg-body">
-    <div class="dlg-head"><h3 class="dlg-title">WhatsApp Kanal QR Code</h3></div>
-    <div class="dlg-scroll" style="text-align:center;">
-      <img src="qrcode.jpg" alt="QR Code groß" style="max-width:min(560px,92vw); width:100%; height:auto; border-radius:14px; box-shadow:var(--shadow)">
-      <p class="help">Zum Schließen außerhalb klicken oder auf den Knopf unten.</p>
+    <div class="dlg-head"><h3 class="dlg-title">Rüstzeug für den Abend</h3></div>
+    <div class="dlg-scroll">
+      <p>Materialien zur Vorbereitung deines Abends.</p>
+      <ul>
+        <li><a href="#" download>Vorlage Ablaufplan PDF</a></li>
+        <li><a href="#" download>Liederliste PDF</a></li>
+        <li><a href="#" download>Impulsideen PDF</a></li>
+      </ul>
+      <p class="help">Du kannst die Links später durch eigene Dateien ersetzen.</p>
     </div>
-    <div class="dlg-foot"><button type="button" class="secondary" data-close="dlgQr">Schließen</button></div>
+    <div class="dlg-foot"><button type="button" class="secondary" data-close="dlgGear">Schließen</button></div>
   </div>
 </dialog>
 
+<!-- Impressum und Admin -->
 <dialog id="dlgLegal">
   <div class="dlg-body">
     <div class="dlg-head"><h3 class="dlg-title">Impressum und Datenschutz</h3></div>
@@ -244,7 +311,6 @@ footer{max-width:1100px;margin:30px auto 80px;padding:0 16px;color:#222;text-ali
       <p><strong>Impressum</strong></p>
       <p>Ev. Kirchengemeinde Hessisch Lichtenau<br>Mühlweg 21, 37235 Hessisch Lichtenau<br>Telefon 05602 2403<br>E Mail hessischlichtenau.gemeindebuero@ekkw.de</p>
       <p>Verantwortlich nach §18 MStV. Pfarrerin Anja Peters</p>
-      <hr>
       <p><strong>Datenschutz</strong></p>
       <p>Es werden keine Tracking Dienste eingesetzt. Technisch notwendige Protokolle des Hosts werden nur kurz gespeichert. Die lokale Speicherung erfolgt ausschließlich im Browser.</p>
       <hr>
@@ -255,6 +321,7 @@ footer{max-width:1100px;margin:30px auto 80px;padding:0 16px;color:#222;text-ali
   </div>
 </dialog>
 
+<!-- Admin Login -->
 <dialog id="dlgAdminLogin">
   <div class="dlg-body">
     <div class="dlg-head"><h3 class="dlg-title">Admin Anmeldung</h3></div>
@@ -272,10 +339,12 @@ footer{max-width:1100px;margin:30px auto 80px;padding:0 16px;color:#222;text-ali
   </div>
 </dialog>
 
+<!-- Admin Panel -->
 <dialog id="dlgAdminPanel">
   <div class="dlg-body">
     <div class="dlg-head"><h3 class="dlg-title">Admin Bereich</h3></div>
     <div class="dlg-scroll">
+
       <div class="prog-wrap" id="progWrap" aria-live="polite">
         <div class="prog-label"><span>Belegung 1 bis 23 Dezember</span><span id="progPercent">0%</span></div>
         <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
@@ -303,7 +372,7 @@ footer{max-width:1100px;margin:30px auto 80px;padding:0 16px;color:#222;text-ali
           <colgroup>
             <col class="host"><col class="addr"><col class="wishes"><col class="special"><col class="bf"><col class="action">
           </colgroup>
-          <thead><tr><th>Kontakt</th><th>Adresse</th><th>Wunschtermine</th><th>Besonderheiten</th><th>♿</th><th>Aktion</th></tr></thead>
+        <thead><tr><th>Kontakt</th><th>Adresse</th><th>Wunschtermine</th><th>Besonderheiten</th><th>♿</th><th>Aktion</th></tr></thead>
           <tbody></tbody>
         </table>
       </section>
@@ -335,10 +404,14 @@ footer{max-width:1100px;margin:30px auto 80px;padding:0 16px;color:#222;text-ali
   </div>
 </dialog>
 
+<!-- Picker Wunschtermine -->
 <dialog id="dlgPicker">
   <div class="dlg-body">
-    <div class="dlg-head"><h3 class="dlg-title">Wunschtermine</h3></div>
-    <div class="dlg-scroll"><div id="pickerGrid"></div></div>
+    <div class="dlg-head"><h3 class="dlg-title">Wunschtermine im Dezember</h3></div>
+    <div class="dlg-scroll">
+      <p class="help">Bitte wähle alle passenden Abende. Beginn ist in der Regel 18 Uhr für etwa 20 bis 30 Minuten.</p>
+      <div id="pickerGrid" class="actions" style="gap:10px;flex-wrap:wrap;"></div>
+    </div>
     <div class="dlg-foot">
       <button type="button" class="secondary" data-close="dlgPicker">Abbrechen</button>
       <button type="button" id="pickerOk">Auswahl übernehmen</button>
@@ -346,10 +419,19 @@ footer{max-width:1100px;margin:30px auto 80px;padding:0 16px;color:#222;text-ali
   </div>
 </dialog>
 
+<!-- Bestätigung nach Absenden -->
+<dialog id="dlgSubmitConfirm" aria-labelledby="dlgSubmitConfirmTitle">
+  <div class="dlg-body">
+    <div class="dlg-head"><h3 class="dlg-title" id="dlgSubmitConfirmTitle">Anmeldung bestätigt</h3></div>
+    <div class="dlg-scroll"><p>Vielen Dank für Ihre Anmeldung. Das Organisationsteam meldet sich, sobald die Termine verteilt wurden.</p></div>
+    <div class="dlg-foot"><button type="button" class="secondary" data-close="dlgSubmitConfirm">Schließen</button></div>
+  </div>
+</dialog>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-import { getFirestore, collection, addDoc, getDocs, setDoc, doc, deleteDoc, query, orderBy, getDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+import { getFirestore, collection, addDoc, getDocs, setDoc, doc, deleteDoc, query, orderBy, getDoc, writeBatch } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
 /* Firebase */
 const firebaseConfig = {
@@ -364,24 +446,25 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-/* Hilfen */
-const WDAY = ["So","Mo","Di","Mi","Do","Fr","Sa"];
-const rangeStart = new Date(2025,10,30);
-const rangeEnd   = new Date(2025,11,23);
+/* Hilfsfunktionen */
 const $  = s => document.querySelector(s);
 const $$ = s => Array.from(document.querySelectorAll(s));
+const WDAY = ["So","Mo","Di","Mi","Do","Fr","Sa"];
+const rangeStart = new Date(2025,10,30);
+const rangeEnd   = new Date(2025,11,24);
 function ymd(d){ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`; }
 function deDate(d){ return `${String(d.getDate()).padStart(2,"0")}.${String(d.getMonth()+1).padStart(2,"0")}.${d.getFullYear()}`; }
 function allDates(){ const out=[]; let d=new Date(rangeStart); while(d<=rangeEnd){ out.push(new Date(d)); d.setDate(d.getDate()+1); } return out; }
+function decDates(){ const out=[]; for(let i=1;i<=23;i++){ out.push(new Date(2025,11,i)); } return out; }
 function escapeHtml(s){ return String(s||"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m])); }
 
-/* WhatsApp Dialog */
-$("#qrThumb").addEventListener("click", ()=> $("#dlgQr").showModal());
+/* UI Kleinigkeiten */
+$("#qrThumb").addEventListener("click", ()=> $("#dlgGear").open ? $("#dlgGear").close() : $("#dlgGear").showModal());
 $$( "[data-close]" ).forEach(b=> b.addEventListener("click", ()=> document.getElementById(b.getAttribute("data-close")).close()));
 $("#openLegal").addEventListener("click", ()=> $("#dlgLegal").showModal());
-$("#openAdminLogin").addEventListener("click", ()=> { $("#dlgLegal").close(); $("#dlgAdminLogin").showModal(); });
+$("#openGear").addEventListener("click", ()=> $("#dlgGear").showModal());
 
-/* Tabs */
+/* Tabs im Admin */
 function wireTabs(){
   const cfg = [["messages","tab-messages"],["anmeld","tab-anmeld"],["events","tab-events"],["services","tab-services"]];
   cfg.forEach(([key,id])=>{
@@ -397,61 +480,158 @@ function wireTabs(){
 }
 wireTabs();
 
-/* Öffentliche Terminliste */
-async function loadPublic(){
-  const events = new Map();
+/* Datencontainer */
+const selected = new Set();
+const eventsMap = new Map();
+let services = [];
+
+/* Öffentliche Terminliste und Heute Box */
+async function loadPublicAndServices(){
+  eventsMap.clear(); services = [];
   try{
     const qy = query(collection(db,"events"), orderBy("datum","asc"));
     const snap = await getDocs(qy);
-    snap.forEach(d=>{ const e=d.data(); if(e && e.datum) events.set(e.datum, { id:d.id, ...e }); });
+    snap.forEach(d=>{
+      const e=d.data();
+      if(!e) return;
+      if(e.datum==="2025-12-24" && e.isService){ services.push({id:d.id, ...e}); }
+      else if(e.datum){ eventsMap.set(e.datum, {id:d.id, ...e}); }
+    });
   }catch(e){}
+  services.sort((a,b)=>((a.order??9999)-(b.order??9999)));
+  renderPublic();
+  updateProgressBar();
+}
+function renderPublic(){
   const list = $("#terminListe"); list.innerHTML = "";
   allDates().forEach(d=>{
     const key = ymd(d);
-    const e = events.get(key);
-    const time = e && e.uhrzeit ? e.uhrzeit : "18:00";
-    const host = e && e.hostName ? e.hostName : "Noch frei";
-    const addr = e && e.hostAdresse ? e.hostAdresse : "";
-    const info = e && e.info ? `<div class="badge">${escapeHtml(e.info)}${e.barrierFree ? " ♿" : ""}</div>` : (e && e.barrierFree ? `<div class="badge">♿</div>` : "");
     const item = document.createElement("div"); item.className = "item";
-    item.innerHTML = `
-      <div class="day"><div class="wd">${WDAY[d.getDay()]}</div><div class="date">${String(d.getDate()).padStart(2,"0")}.${String(d.getMonth()+1).padStart(2,"0")}</div><span class="time">${time} Uhr</span></div>
-      <div class="meta"><div class="host">${escapeHtml(host)}</div><div class="addr">${escapeHtml(addr)}</div>${info}</div>`;
-    list.appendChild(item);
-  });
-}
-loadPublic();
+    const day = document.createElement("div"); day.className = "day";
+    day.innerHTML = `<div class="wd">${WDAY[d.getDay()]}</div><div class="date">${String(d.getDate()).padStart(2,"0")}.${String(d.getMonth()+1).padStart(2,"0")}</div>`;
+    const meta = document.createElement("div"); meta.className = "meta";
 
-/* Picker Wunschtermine */
-const selected = new Set();
+    if(key==="2025-12-24"){
+      if(services.length){
+        meta.innerHTML = `<div class="badge">Heiligabend Gottesdienste</div>` +
+          services.map(s=>{
+            const t = s.uhrzeit ? ` um ${escapeHtml(s.uhrzeit)} Uhr` : "";
+            const line = `${escapeHtml(s.gemeinde||"Gemeinde")}${t}`;
+            const addr = s.adresse ? `<div class="addr">${escapeHtml(s.adresse)}</div>` : "";
+            const info = s.info ? `<div class="badge">${escapeHtml(s.info)}</div>` : "";
+            return `<div class="host">${line}</div>${addr}${info}`;
+          }).join("<hr style='border:none;border-top:1px solid #eee5da;margin:8px 0'>");
+      }else meta.innerHTML = `<div class="host help">Gottesdienste werden ergänzt</div>`;
+    }else{
+      const e = eventsMap.get(key);
+      if(e && e.hostName){
+        const changed = e.changed ? `<div class="badge changed">Hinweis geändert</div>` : "";
+        const info = e.info ? `<div class="badge">${escapeHtml(e.info)}${e.barrierFree ? " ♿" : ""}</div>` : (e && e.barrierFree ? `<div class="badge">♿</div>` : "");
+        meta.innerHTML = `<div class="host">${escapeHtml(e.hostName)}</div><div class="addr">${escapeHtml(e.hostAdresse || "")}</div>${info}${changed}`;
+      }else{
+        meta.innerHTML = `<div class="host help">Noch frei</div><div class="badge free">Anmeldung möglich</div>`;
+      }
+    }
+    item.append(day, meta); list.appendChild(item);
+  });
+
+  const next = computeNextDate();
+  const e = eventsMap.get(next);
+  const d = new Date(next);
+  $("#heuteDatum").textContent = `${WDAY[d.getDay()]}, ${deDate(d)}`;
+  if(next==="2025-12-24"){
+    $("#heuteTitel").textContent = "Heiligabend Gottesdienste";
+    $("#heuteAdresse").textContent = "Mehrere Orte in Hessisch Lichtenau und Umgebung";
+    $("#heuteHinweis").textContent = "Zeiten und Orte in der Liste";
+  }else if(e && e.hostName){
+    $("#heuteTitel").textContent = e.hostName;
+    $("#heuteAdresse").textContent = e.hostAdresse || "";
+    $("#heuteHinweis").textContent = e.info ? e.info : "";
+  }else{
+    $("#heuteTitel").textContent = "Noch freie Vergabe";
+    $("#heuteAdresse").textContent = "Sobald ein Ort feststeht, erscheint er hier";
+    $("#heuteHinweis").textContent = "";
+  }
+}
+function computeNextDate(){
+  const today = new Date(); today.setHours(0,0,0,0);
+  for(const d of allDates()){ if(d >= today) return ymd(d); }
+  return ymd(rangeStart);
+}
+
+/* PDF und ICS */
+document.getElementById("btnPdf").addEventListener("click", ()=> downloadPdf());
+document.getElementById("btnIcs").addEventListener("click", ()=> downloadIcs());
+function downloadPdf(){
+  const rows = [];
+  allDates().forEach(d=>{
+    const key = ymd(d);
+    if(key==="2025-12-24"){
+      if(services.length){
+        services.forEach(s=>{
+          rows.push(`<tr><td>${deDate(d)}</td><td>${WDAY[d.getDay()]}</td><td>${escapeHtml(s.gemeinde||"Gemeinde")} ${escapeHtml(s.uhrzeit||"")}</td><td>${escapeHtml(s.adresse||"")}</td></tr>`);
+        });
+      }else rows.push(`<tr><td>${deDate(d)}</td><td>${WDAY[d.getDay()]}</td><td>Gottesdienste folgen</td><td></td></tr>`);
+    }else{
+      const e = eventsMap.get(key);
+      const host = e && e.hostName ? e.hostName : "Noch frei";
+      const addr = e && e.hostAdresse ? e.hostAdresse : "";
+      rows.push(`<tr><td>${deDate(d)}</td><td>${WDAY[d.getDay()]}</td><td>${escapeHtml(host)}</td><td>${escapeHtml(addr)}</td></tr>`);
+    }
+  });
+  const html = `
+  <!doctype html><html><head><meta charset="utf-8"><title>Übersicht</title>
+  <style>@page{size:A4;margin:16mm}body{font-family:system-ui,Segoe UI,Roboto,Arial}h1{font-size:18pt;margin:0 0 10pt}table{width:100%;border-collapse:collapse;font-size:11pt}th,td{border:1px solid #ddd;padding:6px 8px;vertical-align:top}th{background:#f5f5f5;text-align:left}</style>
+  </head><body><h1>Lebendiger Adventskalender Hessisch Lichtenau</h1>
+  <p>Beginn in der Regel 18 Uhr. Heiligabend zeigt die Gottesdienste.</p>
+  <table><thead><tr><th>Datum</th><th>Tag</th><th>Gastgeber oder Gottesdienst</th><th>Adresse</th></tr></thead><tbody>${rows.join("")}</tbody></table></body></html>`;
+  const w = window.open("", "_blank"); if(w){ w.document.open(); w.document.write(html); w.document.close(); }
+}
+function downloadIcs(){
+  const lines = ["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Lebendiger Adventskalender//DE","CALSCALE:GREGORIAN","X-WR-CALNAME:Lebendiger Adventskalender","X-WR-TIMEZONE:Europe/Berlin"];
+  allDates().forEach(d=>{
+    const key = ymd(d);
+    if(key==="2025-12-24"){
+      services.forEach(s=>{
+        pushEvent(d, s.gemeinde||"Gottesdienst", s.adresse||"", s.uhrzeit||"16:00", `GD-${s.id||Math.random()}`);
+      });
+    }else{
+      const e = eventsMap.get(key);
+      if(e && e.hostName && e.hostAdresse){ pushEvent(d, e.hostName, e.hostAdresse, "18:00", `LA-${key}`); }
+    }
+  });
+  lines.push("END:VCALENDAR");
+  const blob = new Blob([lines.join("\r\n")], {type:"text/calendar;charset=utf-8"});
+  const url = URL.createObjectURL(blob); const a=document.createElement("a"); a.href=url; a.download="Lebendiger-Adventskalender.ics"; document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); }, 800);
+  function pushEvent(dateObj, title, loc, hm, uid){
+    const m = /^(\d{1,2}):(\d{2})$/.exec(hm||"18:00"); const h = m?parseInt(m[1],10):18; const mi = m?parseInt(m[2],10):0;
+    const start = toIcs(dateObj,h,mi); const end = toIcs(dateObj,h,mi+30);
+    lines.push("BEGIN:VEVENT",`UID:${uid}@adventskalender`,`DTSTART;TZID=Europe/Berlin:${start}`,`DTEND;TZID=Europe/Berlin:${end}`,`SUMMARY:Lebendiger Adventskalender`,`DESCRIPTION:${String(title).replace(/([,;])/g,"\\$1")}`,`LOCATION:${String(loc).replace(/([,;])/g,"\\$1")}`,"END:VEVENT");
+  }
+  function toIcs(d,h,m){ const t=new Date(d.getFullYear(),d.getMonth(),d.getDate(),h,m,0); return `${t.getFullYear()}${String(t.getMonth()+1).padStart(2,"0")}${String(t.getDate()).padStart(2,"0")}T${String(t.getHours()).padStart(2,"0")}${String(t.getMinutes()).padStart(2,"0")}00`; }
+}
+
+/* Picker */
 function openPicker(){
   const grid = $("#pickerGrid"); grid.innerHTML = "";
-  for(let i=1;i<=23;i++){
-    const d = new Date(2025,11,i); const key = ymd(d);
+  decDates().forEach(d=>{
+    const key = ymd(d);
     const el = document.createElement("span");
     el.className = "chip-assign" + (selected.has(key) ? " assigned" : "");
-    el.textContent = `${WDAY[d.getDay()]}, ${String(i).padStart(2,"0")}.12`;
+    el.textContent = `${WDAY[d.getDay()]}, ${String(d.getDate()).padStart(2,"0")}.12`;
     el.addEventListener("click", ()=>{ if(selected.has(key)){ selected.delete(key); el.classList.remove("assigned"); } else { selected.add(key); el.classList.add("assigned"); } });
     grid.appendChild(el);
-  }
+  });
   $("#dlgPicker").showModal();
 }
 $("#openPicker").addEventListener("click", openPicker);
-$("#pickerOk").addEventListener("click", ()=>{ $("#dlgPicker").close(); const p=$("#wishesPreview"); p.innerHTML=""; Array.from(selected).sort().forEach(k=>{ const s=document.createElement("span"); s.className="chip-assign assigned"; s.textContent=k; p.appendChild(s); }); });
+$("#pickerOk").addEventListener("click", ()=>{ $("#dlgPicker").close(); const p=$("#wishesPreview"); p.innerHTML=""; Array.from(selected).sort().forEach(k=>{ const d=new Date(k); const s=document.createElement("span"); s.className="chip-assign assigned"; s.textContent=`${WDAY[d.getDay()]}, ${String(d.getDate()).padStart(2,"0")}.12`; p.appendChild(s); }); });
 
-/* Anonyme Auth für Formulare */
-async function ensureAnonAuth(){
-  if(auth.currentUser) return;
-  try{ await signInAnonymously(auth); }
-  catch(e){ /* Diagnose erfolgt beim Absenden */ }
-}
-
-/* Kontaktformular */
+/* Kontaktformular ohne Login schreiben */
 $("#contactForm").addEventListener("submit", async ev=>{
   ev.preventDefault();
   const info = $("#kmsgInfo"); info.textContent = "";
   try{
-    await ensureAnonAuth();
     const name=$("#kname").value.trim(), email=$("#kmail").value.trim(), message=$("#kmsg").value.trim();
     if(!name || !email || !message){ info.textContent = "Bitte alle Felder ausfüllen"; return; }
     await addDoc(collection(db,"messages"), { name, email, message, createdAt:new Date().toISOString(), read:false });
@@ -463,41 +643,40 @@ $("#contactForm").addEventListener("submit", async ev=>{
   }
 });
 
-/* Anmeldung */
+/* Anmeldung ohne Login schreiben */
 $("#hostForm").addEventListener("submit", async ev=>{
   ev.preventDefault();
-  const msg = $("#formMsg"); msg.textContent = "";
+  const msg = $("#formMsg"); msg.textContent = ""; msg.className = "";
   try{
-    await ensureAnonAuth();
     const name=$("#name").value.trim(), email=$("#email").value.trim(), tel=$("#tel").value.trim();
     const street=$("#street").value.trim(), city=$("#city").value.trim();
     const note=$("#note").value.trim(); const bf=$("#barrierFreeHost").checked===true;
+    const consentOk=$("#consent").checked===true;
     const wishes=Array.from(selected).sort();
-    if(!name || !email || !tel || !street || !city){ msg.textContent="Bitte alle Pflichtfelder ausfüllen"; return; }
-    if(wishes.length===0){ msg.textContent="Bitte mindestens einen Termin auswählen"; return; }
-    await addDoc(collection(db,"anmeldungen"), { name, email, telefon:tel, adresse:`${street}, ${city}`, wuensche:wishes, bemerkung:note||"", barrierFree:bf, createdAt:new Date().toISOString() });
-    msg.textContent="Vielen Dank. Ihre Anmeldung ist eingegangen";
-    $("#hostForm").reset(); selected.clear(); $("#wishesPreview").innerHTML="";
+    if(!name || !email || !tel || !street || !city){ msg.textContent="Bitte alle Pflichtfelder ausfüllen"; msg.className="error"; return; }
+    if(wishes.length===0){ msg.textContent="Bitte mindestens einen Termin auswählen"; msg.className="error"; return; }
+    if(!consentOk){ msg.textContent="Bitte der Veröffentlichung zustimmen"; msg.className="error"; return; }
+    await addDoc(collection(db,"anmeldungen"), { name, email, telefon:tel, adresse:`${street}, ${city}`, wuensche:wishes, bemerkung:note||"", consentPublish:true, barrierFree:bf, createdAt:new Date().toISOString() });
+    msg.textContent="Vielen Dank. Ihre Anmeldung ist eingegangen"; msg.className="success";
+    $("#hostForm").reset(); selected.clear(); $("#wishesPreview").innerHTML=""; $("#dlgSubmitConfirm").showModal();
   }catch(e){
     const code = e && e.code ? e.code : "unbekannt";
-    msg.textContent = "Die Anmeldung konnte nicht gespeichert werden. Fehler " + code;
+    msg.textContent = "Die Anmeldung konnte nicht gespeichert werden. Fehler " + code; msg.className = "error";
   }
 });
 
-/* Admin Login und Tabs */
+/* Admin Login */
+$("#openAdminLogin").addEventListener("click", ()=> { $("#dlgLegal").close(); $("#dlgAdminLogin").showModal(); });
 $("#btnLogin").addEventListener("click", async ()=>{
   const e = $("#admEmail").value.trim(); const p = $("#admPass").value;
   $("#authMsg").textContent = "";
-  try{ await signInWithEmailAndPassword(auth, e, p); $("#authMsg").textContent = "Angemeldet"; $("#dlgAdminLogin").close(); }
+  try{ await signInWithEmailAndPassword(auth, e, p); $("#authMsg").textContent = "Angemeldet"; $("#dlgAdminLogin").close(); await adminLoad(); $("#dlgAdminPanel").showModal(); }
   catch(err){ $("#authMsg").textContent = "Anmeldung nicht möglich"; }
 });
 $("#btnLogout").addEventListener("click", async ()=>{ await signOut(auth); $("#dlgAdminPanel").close(); });
 
 onAuthStateChanged(auth, async user=>{
-  if(user && user.email){
-    await adminLoad();
-    $("#dlgAdminPanel").showModal();
-  }
+  if(user && user.email){ await adminLoad(); $("#dlgAdminPanel").showModal(); }
 });
 
 /* Admin Daten */
@@ -508,28 +687,18 @@ async function adminLoad(){
   await renderServices();
   await updateProgressBar();
 }
-
 async function updateProgressBar(){
   const map = new Map();
-  try{
-    const qy = query(collection(db,"events"), orderBy("datum","asc"));
-    const snap = await getDocs(qy);
-    snap.forEach(d=>{ const e=d.data(); if(e && e.datum) map.set(e.datum, e); });
-  }catch(e){}
-  const total = 23;
-  let taken = 0;
-  for(const d of allDates()){
-    const key = ymd(d);
-    const e = map.get(key);
-    if(e && e.hostName) taken++;
-  }
+  try{ const qy=query(collection(db,"events"), orderBy("datum","asc")); const snap=await getDocs(qy); snap.forEach(d=>{ const e=d.data(); if(e && e.datum) map.set(e.datum,e); }); }catch(e){}
+  const total = 23; let taken = 0;
+  for(const d of allDates()){ const key=ymd(d); const e=map.get(key); if(e && e.hostName) taken++; }
   const pct = Math.round((taken/total)*100);
   $("#progPercent").textContent = pct + "%";
   $("#progFill").style.width = pct + "%";
   $("#progMeta").textContent = `${taken} von ${total} Abenden vergeben`;
 }
 
-/* Nachrichten */
+/* Nachrichten Tabelle */
 async function loadMessages(){
   const body = $("#tblMessages tbody"); body.innerHTML = "";
   try{
@@ -551,7 +720,7 @@ async function loadMessages(){
   }
 }
 
-/* Anmeldungen mit Zuweisung */
+/* Anmeldungen mit Zuweisung und Besonderheiten sichtbar */
 async function renderAnmeldungen(){
   const body = $("#tblAnmeldungen tbody"); body.innerHTML = "";
   try{
@@ -605,7 +774,7 @@ async function renderAnmeldungen(){
   };
 }
 
-/* Termine pflegen */
+/* Termine pflegen mit Notizfeld bearbeitbar */
 async function renderEvents(){
   const body = $("#tblEvents tbody"); body.innerHTML = "";
   const map = new Map();
@@ -616,6 +785,7 @@ async function renderEvents(){
   }catch(e){}
   for(const d of allDates()){
     const id = ymd(d);
+    if(id==="2025-12-24") continue;
     const e = map.get(id) || { hostName:"", hostAdresse:"", hostEmail:"", info:"", uhrzeit:"18:00", barrierFree:false, changed:false };
     const tr = document.createElement("tr");
     tr.innerHTML = `
@@ -638,22 +808,15 @@ async function renderEvents(){
     const payload = { datum: btn.dataset.save, wochentag: WDAY[new Date(btn.dataset.save).getDay()] };
     inputs.forEach(i=>{ const f=i.dataset.f; if(i.type==="checkbox"){ payload[f]=i.checked; } else { payload[f]=i.value.trim(); } });
     if(payload.uhrzeit && !/^\d{1,2}:\d{2}$/.test(payload.uhrzeit)){ alert("Uhrzeit bitte als HH:MM eintragen"); return; }
-    try{ await setDoc(doc(db,"events", btn.dataset.save), payload, { merge:true }); btn.textContent="Gespeichert"; setTimeout(()=> btn.textContent="Speichern", 900); await loadPublic(); await updateProgressBar(); }
+    try{ await setDoc(doc(db,"events", btn.dataset.save), payload, { merge:true }); btn.textContent="Gespeichert"; setTimeout(()=> btn.textContent="Speichern", 900); await loadPublicAndServices(); }
     catch(e){ alert("Speichern nicht möglich"); }
   };
 }
 
-/* Gottesdienste Heiligabend */
+/* Heiligabend Tabelle mit einfacher Sortierung */
 async function renderServices(){
   const body = $("#tblServices tbody"); body.innerHTML = "";
-  const list = [];
-  try{
-    const qy = query(collection(db,"events"), orderBy("datum","asc"));
-    const snap = await getDocs(qy);
-    snap.forEach(d=>{ const e=d.data(); if(e && e.datum==="2025-12-24" && e.isService) list.push({ id:d.id, ...e }); });
-  }catch(e){}
-  list.sort((a,b)=>((a.order??9999)-(b.order??9999)));
-  list.forEach(s=> body.appendChild(buildServiceRow(s)));
+  services.forEach((s)=> body.appendChild(buildServiceRow(s)));
   body.appendChild(buildServiceRow(null));
   body.onclick = async e=>{
     const btn = e.target.closest("button[data-act]");
@@ -671,8 +834,8 @@ async function renderServices(){
     try{
       if(act==="save-new"){ await addDoc(collection(db,"events"), payload); }
       if(act==="save"){ const id = btn.getAttribute("data-sid"); await setDoc(doc(db,"events", id), payload, { merge:true }); }
-      if(act==="del"){ const id = btn.getAttribute("data-sid"); if(id) await deleteDoc(doc(db,"events", id)); }
-      await renderServices(); await loadPublic(); await updateProgressBar();
+      if(act==="del"){ const id = btn.getAttribute("data-sid"); if(id && confirm("Diesen Gottesdienst löschen")) await deleteDoc(doc(db,"events", id)); }
+      await loadPublicAndServices(); await renderServices();
     }catch(err){ alert("Änderung nicht möglich"); }
   };
   function buildServiceRow(s){
@@ -680,10 +843,10 @@ async function renderServices(){
     const id = s?.id || "";
     tr.innerHTML = `
       <td>${id ? "≡" : ""}</td>
-      <td><input class="wide" type="text" data-f="gemeinde" value="${escapeHtml(s?.gemeinde||"")}" placeholder="Gemeinde"></td>
+      <td><input type="text" data-f="gemeinde" value="${escapeHtml(s?.gemeinde||"")}" placeholder="Gemeinde"></td>
       <td><input type="text" data-f="uhrzeit" value="${escapeHtml(s?.uhrzeit||"")}" placeholder="z. B. 16:00"></td>
-      <td><textarea class="wide" data-f="adresse" placeholder="Ort, Straße, Nummer">${escapeHtml(s?.adresse||"")}</textarea></td>
-      <td><textarea class="wide" data-f="info" placeholder="Hinweis optional">${escapeHtml(s?.info||"")}</textarea></td>
+      <td><textarea data-f="adresse" placeholder="Ort, Straße, Nummer">${escapeHtml(s?.adresse||"")}</textarea></td>
+      <td><textarea data-f="info" placeholder="Hinweis optional">${escapeHtml(s?.info||"")}</textarea></td>
       <td class="t-center">
         <button data-act="${id ? "save" : "save-new"}" data-sid="${id}">Speichern</button>
         <button class="warn" data-act="del" data-sid="${id}">Löschen</button>
@@ -691,6 +854,20 @@ async function renderServices(){
     return tr;
   }
 }
+
+/* Fortschritt im Admin */
+function updateProgressBar(){
+  let assigned = 0; const total = 23;
+  for(let d=1; d<=23; d++){ const key=`2025-12-${String(d).padStart(2,"0")}`; const e=eventsMap.get(key); if(e && e.hostName) assigned++; }
+  const pct = Math.round((assigned/total)*100);
+  $("#progPercent").textContent = pct + "%"; $("#progFill").style.width = pct + "%"; $("#progMeta").textContent = `${assigned} von ${total} Abenden vergeben`;
+}
+
+/* Admin Login öffnen */
+document.getElementById("openAdminLogin").addEventListener("click", ()=> {});
+
+/* Start */
+await loadPublicAndServices();
 </script>
 </body>
 </html>
