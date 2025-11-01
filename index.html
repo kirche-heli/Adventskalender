@@ -15,8 +15,8 @@
   --forest:#0d3b2e;
   --ink:#222;
   --muted:#6b7280;
-  --ok:#146c43;
-  --danger:#a61b1b;
+  --ok:#16a34a;
+  --danger:#b91c1c;
   --card:#ffffff;
   --shadow:0 10px 20px rgba(0,0,0,.08), 0 6px 6px rgba(0,0,0,.06);
   --radius:18px;
@@ -32,7 +32,6 @@ main{max-width:1100px;margin:6px auto 60px;padding:0 16px;}
 h2{margin:0 0 6px 0;font-size:22px;color:var(--forest);}
 h3{margin:4px 0 12px;font-size:20px;color:var(--forest);}
 .help{color:var(--muted);font-size:14px;}
-/* Heute Box */
 .today{display:grid;gap:16px;}
 .today .row{display:grid;gap:14px;}
 .today .pill{display:inline-block;padding:6px 10px;background:var(--paper);border:1px solid #efe2d6;border-radius:999px;font-size:13px;color:var(--muted);}
@@ -41,13 +40,11 @@ h3{margin:4px 0 12px;font-size:20px;color:var(--forest);}
 .weather{display:flex;align-items:center;gap:14px;padding:12px;border:1px dashed #e6d7c6;border-radius:14px;background:#fffbf6;}
 .weather .big{font-size:28px;font-weight:700;color:var(--burgundy-dark);min-width:64px;text-align:center;}
 @media(min-width:850px){.today .row{grid-template-columns:2fr 1.2fr;align-items:stretch;}}
-/* WhatsApp Kachel */
 .wa-bar{max-width:1100px;margin:0 auto 18px; padding:0 16px;}
 .wa-card{display:flex;gap:14px;align-items:center;background:#fff9ee;color:#312e2b;border:1px solid #f2e2c9;border-radius:16px;padding:10px 12px;box-shadow:var(--shadow);}
 .wa-card img{width:58px;height:58px;border-radius:10px;background:#fff;transition:transform .2s ease;cursor:zoom-in;}
 .wa-card img:hover{transform:scale(1.06);}
 .wa-card a{font-weight:700;color:#7a4a00;text-decoration:underline;}
-/* Listen */
 .list{display:flex;flex-direction:column;gap:10px;}
 .item{display:flex;gap:12px;align-items:flex-start;border:1px solid #eee5da;padding:14px;border-radius:14px;background:#fffefe;}
 .day{min-width:92px;text-align:center;background:var(--burgundy);color:var(--cream);padding:8px 10px;border-radius:10px;line-height:1.2;box-shadow:var(--shadow);}
@@ -59,7 +56,6 @@ h3{margin:4px 0 12px;font-size:20px;color:var(--forest);}
 .badge{display:inline-block;font-size:12px;padding:4px 8px;border-radius:999px;background:#eef2ff;color:#334155;margin-top:6px;}
 .free{background:#fff1f1;color:#7a1d1d;}
 .changed{background:#fff7cc;color:#7a5600;}
-/* Felder modern */
 form{display:grid;gap:12px;}
 label{font-weight:600;}
 input[type="text"],input[type="email"],input[type="tel"],textarea{
@@ -76,7 +72,6 @@ button.warn{background:var(--danger);}
 .success{color:var(--ok);font-weight:600;}
 .error{color:var(--danger);font-weight:600;}
 details{background:#fffdf9;border:1px solid #f0e6d9;padding:14px;border-radius:12px;}
-/* Dialoge und Tabs */
 dialog{border:none;border-radius:16px;padding:0;width:min(1100px,96vw);box-shadow:var(--shadow);}
 .dlg-body{padding:18px;background:#ffffff;border-radius:16px;}
 .dlg-head{padding:16px 18px 0 18px;}
@@ -87,18 +82,15 @@ dialog{border:none;border-radius:16px;padding:0;width:min(1100px,96vw);box-shado
 .tab-btn{padding:8px 12px;border-radius:10px;background:#e5e7eb;color:#111827;border:1px solid #cfd4dc;cursor:pointer;font-weight:700;}
 .tab-btn[aria-selected="true"]{background:var(--gold);color:#4a1a22;border-color:#b99254;}
 .tab-panel[aria-hidden="true"]{display:none;}
-/* Fortschritt nur im Admin */
 .prog-wrap{margin:12px 0 18px 0;}
 .prog-label{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;font-weight:700;}
 .prog-bar{width:100%;height:12px;background:#f1f5f9;border-radius:999px;overflow:hidden;}
 .prog-fill{height:100%;background:linear-gradient(90deg,#22c55e,#16a34a);width:0%;}
-/* Admin Tabellen ohne horizontales Scrollen */
 table.table{width:100%;border-collapse:collapse;table-layout:fixed;}
 table.table th,table.table td{border-top:1px solid #e5e7eb;padding:8px;vertical-align:top;}
 table.table thead th{background:#fafafa;text-align:left;white-space:nowrap;}
 table.table td{word-break:break-word;}
 .t-center{text-align:center;}
-/* Spaltenbreiten Termine so, dass alles in den Dialog passt */
 #tblEvents col.date{width:11ch;}
 #tblEvents col.wd{width:6ch;}
 #tblEvents col.host{width:20ch;}
@@ -108,16 +100,28 @@ table.table td{word-break:break-word;}
 #tblEvents col.bf{width:6ch;}
 #tblEvents col.changed{width:10ch;}
 #tblEvents col.action{width:13ch;}
-/* Anmeldungen */
 #tblAnmeldungen col.host{width:20ch;}
 #tblAnmeldungen col.addr{width:26ch;}
 #tblAnmeldungen col.wishes{width:26ch;}
 #tblAnmeldungen col.special{width:26ch;}
 #tblAnmeldungen col.bf{width:6ch;}
 #tblAnmeldungen col.action{width:12ch;}
-.chip-assign{display:inline-block;padding:4px 8px;border-radius:999px;border:1px solid #cfd4dc;background:#f8fafc;cursor:pointer;margin:2px 4px 2px 0;font-size:12px;}
+.chip-assign{display:inline-block;padding:6px 10px;border-radius:999px;border:1px solid #cfd4dc;background:#f8fafc;cursor:pointer;margin:2px 4px 2px 0;font-size:13px;user-select:none;transition:transform .06s ease;}
+.chip-assign:active{transform:scale(.98);}
 .chip-assign.assigned{background:#e6ffe6;border-color:#9ad29a;}
-/* Kartenansicht mobil */
+.chip-assign.taken{background:#fff2f2;border-color:#f0b6b6;color:#7a1d1d;cursor:not-allowed;}
+/* Picker Wochenraster */
+.picker{display:grid;gap:10px;}
+.picker .head{display:grid;grid-template-columns:repeat(7, minmax(0,1fr));gap:6px;font-weight:700;color:#334155;}
+.picker .week{display:grid;grid-template-columns:repeat(7, minmax(0,1fr));gap:6px;}
+.picker .cell{display:flex;align-items:center;justify-content:center;min-height:42px;border:1px solid #e5e7eb;border-radius:10px;background:#fff;font-size:13px;padding:4px 6px;}
+.picker .cell.empty{background:#fafafa;border-style:dashed;color:#9aa3af;}
+.picker .cell .chip-assign{margin:0;border:none;background:transparent;padding:0 6px;}
+/* Aufleuchten */
+@keyframes flashGreen{0%{box-shadow:0 0 0 0 rgba(34,197,94,.8)}100%{box-shadow:0 0 0 12px rgba(34,197,94,0)}}
+@keyframes flashRed{0%{box-shadow:0 0 0 0 rgba(239,68,68,.8)}100%{box-shadow:0 0 0 12px rgba(239,68,68,0)}}
+.pulse-green{animation:flashGreen .5s ease-out;}
+.pulse-red{animation:flashRed .5s ease-out;}
 @media(max-width:900px){
   table.table thead{display:none;}
   table.table, table.table tbody, table.table tr, table.table td{display:block;width:100%;}
@@ -126,7 +130,6 @@ table.table td{word-break:break-word;}
   table.table td::before{content:attr(data-label) ": ";font-weight:700;display:inline;}
   .t-center{text-align:left;}
 }
-/* Footer */
 footer{max-width:1100px;margin:30px auto 80px;padding:0 16px;color:#222;text-align:center;}
 .footlink{font-size:14px;color:#1f2937;text-decoration:underline;cursor:pointer;}
 </style>
@@ -157,7 +160,6 @@ footer{max-width:1100px;margin:30px auto 80px;padding:0 16px;color:#222;text-ali
 </div>
 
 <main>
-  <!-- Heute Box -->
   <section id="heute" class="card today" aria-labelledby="heute-title">
     <h2 id="heute-title">Nächster Termin um 18 Uhr</h2>
     <div class="row">
@@ -177,7 +179,6 @@ footer{max-width:1100px;margin:30px auto 80px;padding:0 16px;color:#222;text-ali
     </div>
   </section>
 
-  <!-- Terminliste öffentlich -->
   <section id="termine" class="card" aria-labelledby="termine-title">
     <h3 id="termine-title">Alle Termine</h3>
     <p class="help">In der Regel beginnen die Abende um 18 Uhr. Manche Gastgeber wählen eine andere Uhrzeit. Die Treffen dauern etwa eine halbe Stunde. Das Zeichen ♿ zeigt Barrierefreiheit an.</p>
@@ -188,7 +189,6 @@ footer{max-width:1100px;margin:30px auto 80px;padding:0 16px;color:#222;text-ali
     </div>
   </section>
 
-  <!-- Gastgeber werden -->
   <section id="anmeldung" class="card" aria-labelledby="anmeldung-title">
     <h3 id="anmeldung-title">Gastgeber werden</h3>
     <p>Sie möchten einen Abend ausrichten. Das freut uns. Tragen Sie Ihre Kontaktdaten ein und wählen Sie mehrere mögliche Termine. Die endgültige Vergabe erfolgt durch das Organisationsteam. Sie erhalten eine Rückmeldung.</p>
@@ -245,7 +245,6 @@ footer{max-width:1100px;margin:30px auto 80px;padding:0 16px;color:#222;text-ali
     </form>
   </section>
 
-  <!-- Info -->
   <section id="info" class="card" aria-labelledby="info-title">
     <h3 id="info-title">Was ist ein lebendiger Adventskalender</h3>
     <p>An jedem Abend im Advent öffnet sich um 18 Uhr ein Türchen in Form eines Fensters, eines Hauses, eines Gartens oder eines Hofes. Gastgeberinnen und Gastgeber laden für etwa 30 Minuten zu einer adventlichen Begegnung ein. Gemeinschaft und Vorfreude stehen im Mittelpunkt.</p>
@@ -256,7 +255,6 @@ footer{max-width:1100px;margin:30px auto 80px;padding:0 16px;color:#222;text-ali
     </details>
   </section>
 
-  <!-- Kontakt -->
   <section id="kontakt" class="card" aria-labelledby="kontakt-title">
     <h3 id="kontakt-title">Kontakt</h3>
     <form id="contactForm">
@@ -286,7 +284,6 @@ footer{max-width:1100px;margin:30px auto 80px;padding:0 16px;color:#222;text-ali
   <span class="footlink" id="openLegal">Impressum und Datenschutz</span>
 </footer>
 
-<!-- Rüstzeug -->
 <dialog id="dlgGear">
   <div class="dlg-body">
     <div class="dlg-head"><h3 class="dlg-title">Rüstzeug für den Abend</h3></div>
@@ -303,7 +300,6 @@ footer{max-width:1100px;margin:30px auto 80px;padding:0 16px;color:#222;text-ali
   </div>
 </dialog>
 
-<!-- Impressum und Admin -->
 <dialog id="dlgLegal">
   <div class="dlg-body">
     <div class="dlg-head"><h3 class="dlg-title">Impressum und Datenschutz</h3></div>
@@ -321,7 +317,6 @@ footer{max-width:1100px;margin:30px auto 80px;padding:0 16px;color:#222;text-ali
   </div>
 </dialog>
 
-<!-- Admin Login -->
 <dialog id="dlgAdminLogin">
   <div class="dlg-body">
     <div class="dlg-head"><h3 class="dlg-title">Admin Anmeldung</h3></div>
@@ -339,7 +334,6 @@ footer{max-width:1100px;margin:30px auto 80px;padding:0 16px;color:#222;text-ali
   </div>
 </dialog>
 
-<!-- Admin Panel -->
 <dialog id="dlgAdminPanel">
   <div class="dlg-body">
     <div class="dlg-head"><h3 class="dlg-title">Admin Bereich</h3></div>
@@ -404,13 +398,12 @@ footer{max-width:1100px;margin:30px auto 80px;padding:0 16px;color:#222;text-ali
   </div>
 </dialog>
 
-<!-- Picker Wunschtermine -->
 <dialog id="dlgPicker">
   <div class="dlg-body">
     <div class="dlg-head"><h3 class="dlg-title">Wunschtermine im Dezember</h3></div>
     <div class="dlg-scroll">
-      <p class="help">Bitte wähle alle passenden Abende. Beginn ist in der Regel 18 Uhr für etwa 20 bis 30 Minuten.</p>
-      <div id="pickerGrid" class="actions" style="gap:10px;flex-wrap:wrap;"></div>
+      <p class="help">Jede Woche steht in einer Zeile von Montag bis Sonntag. Rot markierte Tage sind bereits vergeben. Freie Tage leuchten beim Anklicken grün.</p>
+      <div id="pickerGrid" class="picker"></div>
     </div>
     <div class="dlg-foot">
       <button type="button" class="secondary" data-close="dlgPicker">Abbrechen</button>
@@ -419,7 +412,6 @@ footer{max-width:1100px;margin:30px auto 80px;padding:0 16px;color:#222;text-ali
   </div>
 </dialog>
 
-<!-- Bestätigung nach Absenden -->
 <dialog id="dlgSubmitConfirm" aria-labelledby="dlgSubmitConfirmTitle">
   <div class="dlg-body">
     <div class="dlg-head"><h3 class="dlg-title" id="dlgSubmitConfirmTitle">Anmeldung bestätigt</h3></div>
@@ -431,7 +423,7 @@ footer{max-width:1100px;margin:30px auto 80px;padding:0 16px;color:#222;text-ali
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-import { getFirestore, collection, addDoc, getDocs, setDoc, doc, deleteDoc, query, orderBy, getDoc, writeBatch } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+import { getFirestore, collection, addDoc, getDocs, setDoc, doc, deleteDoc, query, orderBy, getDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
 /* Firebase */
 const firebaseConfig = {
@@ -446,7 +438,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-/* Hilfsfunktionen */
+/* Hilfsfunktionen und Daten */
 const $  = s => document.querySelector(s);
 const $$ = s => Array.from(document.querySelectorAll(s));
 const WDAY = ["So","Mo","Di","Mi","Do","Fr","Sa"];
@@ -457,6 +449,10 @@ function deDate(d){ return `${String(d.getDate()).padStart(2,"0")}.${String(d.ge
 function allDates(){ const out=[]; let d=new Date(rangeStart); while(d<=rangeEnd){ out.push(new Date(d)); d.setDate(d.getDate()+1); } return out; }
 function decDates(){ const out=[]; for(let i=1;i<=23;i++){ out.push(new Date(2025,11,i)); } return out; }
 function escapeHtml(s){ return String(s||"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m])); }
+
+const selected = new Set();
+const eventsMap = new Map();
+let services = [];
 
 /* UI Kleinigkeiten */
 $("#qrThumb").addEventListener("click", ()=> $("#dlgGear").open ? $("#dlgGear").close() : $("#dlgGear").showModal());
@@ -480,12 +476,7 @@ function wireTabs(){
 }
 wireTabs();
 
-/* Datencontainer */
-const selected = new Set();
-const eventsMap = new Map();
-let services = [];
-
-/* Öffentliche Terminliste und Heute Box */
+/* Öffentliche Daten laden */
 async function loadPublicAndServices(){
   eventsMap.clear(); services = [];
   try{
@@ -611,23 +602,71 @@ function downloadIcs(){
   function toIcs(d,h,m){ const t=new Date(d.getFullYear(),d.getMonth(),d.getDate(),h,m,0); return `${t.getFullYear()}${String(t.getMonth()+1).padStart(2,"0")}${String(t.getDate()).padStart(2,"0")}T${String(t.getHours()).padStart(2,"0")}${String(t.getMinutes()).padStart(2,"0")}00`; }
 }
 
-/* Picker */
-function openPicker(){
+/* Picker Wochenlayout mit Status */
+function buildWeekGrid(){
   const grid = $("#pickerGrid"); grid.innerHTML = "";
-  decDates().forEach(d=>{
-    const key = ymd(d);
-    const el = document.createElement("span");
-    el.className = "chip-assign" + (selected.has(key) ? " assigned" : "");
-    el.textContent = `${WDAY[d.getDay()]}, ${String(d.getDate()).padStart(2,"0")}.12`;
-    el.addEventListener("click", ()=>{ if(selected.has(key)){ selected.delete(key); el.classList.remove("assigned"); } else { selected.add(key); el.classList.add("assigned"); } });
-    grid.appendChild(el);
-  });
+  // Kopfzeile
+  const head = document.createElement("div"); head.className="head";
+  ["Mo","Di","Mi","Do","Fr","Sa","So"].forEach(w=>{ const h=document.createElement("div"); h.textContent=w; head.appendChild(h); });
+  grid.appendChild(head);
+
+  // Dezember 2025 beginnt an einem Montag, daher keine Vorlaufzellen nötig
+  let day = 1;
+  while(day <= 23){
+    const week = document.createElement("div"); week.className="week";
+    for(let i=0;i<7;i++){
+      const cell = document.createElement("div"); cell.className="cell";
+      if(day<=23){
+        const d = new Date(2025,11,day);
+        const key = ymd(d);
+        const isTaken = !!(eventsMap.get(key)?.hostName);
+        const chip = document.createElement("span");
+        chip.className = "chip-assign" + (selected.has(key) ? " assigned" : "") + (isTaken ? " taken" : "");
+        chip.textContent = String(day).padStart(2,"0") + ".12";
+        chip.dataset.key = key;
+        chip.addEventListener("click", ()=>{
+          if(isTaken){
+            cell.classList.remove("pulse-red"); void cell.offsetWidth; cell.classList.add("pulse-red");
+            return;
+          }
+          if(selected.has(key)){
+            selected.delete(key);
+            chip.classList.remove("assigned");
+          }else{
+            selected.add(key);
+            chip.classList.add("assigned");
+            cell.classList.remove("pulse-green"); void cell.offsetWidth; cell.classList.add("pulse-green");
+          }
+        });
+        cell.appendChild(chip);
+        day++;
+      }else{
+        cell.classList.add("empty");
+        cell.textContent = "";
+      }
+      week.appendChild(cell);
+    }
+    grid.appendChild(week);
+  }
+}
+function openPicker(){
+  buildWeekGrid();
   $("#dlgPicker").showModal();
 }
 $("#openPicker").addEventListener("click", openPicker);
-$("#pickerOk").addEventListener("click", ()=>{ $("#dlgPicker").close(); const p=$("#wishesPreview"); p.innerHTML=""; Array.from(selected).sort().forEach(k=>{ const d=new Date(k); const s=document.createElement("span"); s.className="chip-assign assigned"; s.textContent=`${WDAY[d.getDay()]}, ${String(d.getDate()).padStart(2,"0")}.12`; p.appendChild(s); }); });
+$("#pickerOk").addEventListener("click", ()=>{
+  $("#dlgPicker").close();
+  const p=$("#wishesPreview"); p.innerHTML="";
+  Array.from(selected).sort().forEach(k=>{
+    const d=new Date(k);
+    const s=document.createElement("span");
+    s.className="chip-assign assigned";
+    s.textContent=`${WDAY[d.getDay()]}, ${String(d.getDate()).padStart(2,"0")}.12`;
+    p.appendChild(s);
+  });
+});
 
-/* Kontaktformular ohne Login schreiben */
+/* Kontaktformular und Anmeldung ohne Login schreiben */
 $("#contactForm").addEventListener("submit", async ev=>{
   ev.preventDefault();
   const info = $("#kmsgInfo"); info.textContent = "";
@@ -643,7 +682,6 @@ $("#contactForm").addEventListener("submit", async ev=>{
   }
 });
 
-/* Anmeldung ohne Login schreiben */
 $("#hostForm").addEventListener("submit", async ev=>{
   ev.preventDefault();
   const msg = $("#formMsg"); msg.textContent = ""; msg.className = "";
@@ -813,7 +851,7 @@ async function renderEvents(){
   };
 }
 
-/* Heiligabend Tabelle mit einfacher Sortierung */
+/* Heiligabend Tabelle */
 async function renderServices(){
   const body = $("#tblServices tbody"); body.innerHTML = "";
   services.forEach((s)=> body.appendChild(buildServiceRow(s)));
@@ -855,19 +893,13 @@ async function renderServices(){
   }
 }
 
-/* Fortschritt im Admin */
-function updateProgressBar(){
-  let assigned = 0; const total = 23;
-  for(let d=1; d<=23; d++){ const key=`2025-12-${String(d).padStart(2,"0")}`; const e=eventsMap.get(key); if(e && e.hostName) assigned++; }
-  const pct = Math.round((assigned/total)*100);
-  $("#progPercent").textContent = pct + "%"; $("#progFill").style.width = pct + "%"; $("#progMeta").textContent = `${assigned} von ${total} Abenden vergeben`;
-}
-
-/* Admin Login öffnen */
-document.getElementById("openAdminLogin").addEventListener("click", ()=> {});
-
 /* Start */
 await loadPublicAndServices();
+
+/* Admin Login Anzeige bei bestehender Session */
+onAuthStateChanged(auth, async user=>{
+  if(user && user.email){ await adminLoad(); $("#dlgAdminPanel").showModal(); }
+});
 </script>
 </body>
 </html>
