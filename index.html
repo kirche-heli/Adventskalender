@@ -63,7 +63,7 @@
     h3{ margin:4px 0 12px; font-size:20px; color:var(--forest); }
     .list{ display:flex; flex-direction:column; gap:10px; }
     .item{ display:flex; gap:12px; align-items:flex-start; border:1px solid #eee5da; padding:14px; border-radius:14px; background:#fffefe; }
-    .day{ min-width:100px; text-align:center; background:var(--burgundy); color:var(--cream); padding:8px 10px; border-radius:10px; line-height:1.2; box-shadow:var(--shadow); position:relative; }
+    .day{ min-width:110px; text-align:center; background:var(--burgundy); color:var(--cream); padding:8px 10px; border-radius:10px; line-height:1.2; box-shadow:var(--shadow); position:relative; }
     .day .date{ font-size:18px; font-weight:800; }
     .day .wd{ font-size:12px; opacity:.95; }
     .day .time{ display:block; margin-top:6px; font-size:14px; font-weight:800; color:var(--gold); }
@@ -97,7 +97,7 @@
     footer{ max-width:1100px; margin:30px auto 80px; padding:0 16px; color:#222; text-align:center; }
     .footlink{ font-size:14px; color:#1f2937; text-decoration:underline; cursor:pointer; }
 
-    dialog{ border:none; border-radius:16px; padding:0; width:min(1000px, 96vw); box-shadow:var(--shadow); }
+    dialog{ border:none; border-radius:16px; padding:0; width:min(1100px, 96vw); box-shadow:var(--shadow); }
     .dlg-body{ padding:18px; background:#ffffff; border-radius:16px; }
     .dlg-head{ padding:16px 18px 0 18px; }
     .dlg-title{ margin:0; color:var(--forest); font-size:20px; display:flex; align-items:center; gap:10px; }
@@ -107,44 +107,36 @@
     .muted{ color:#6b7280; }
     .center{ text-align:center; }
 
-    .picker-grid{ display:grid; gap:10px; grid-template-columns:repeat(auto-fill, minmax(110px, 1fr)); margin-top:10px; }
-    .pick{ border:1px solid #e5e7eb; border-radius:12px; padding:10px; text-align:center; cursor:pointer; user-select:none; background:#fff; }
-    .pick .d{ font-weight:800; font-size:18px; }
-    .pick.sel{ outline:3px solid var(--gold); background:#fffaf0; }
-    .preview-chips{ display:flex; gap:8px; flex-wrap:wrap; margin-top:6px; }
-    .chip{ background:#eef2ff; color:#334155; padding:4px 8px; border-radius:999px; font-size:12px; }
+    /* Tabs mit klarem Kontrast */
+    .tabs{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
+    .tab-btn{ padding:8px 12px; border-radius:10px; background:#e5e7eb; color:#111827; border:1px solid #cfd4dc; cursor:pointer; font-weight:700; }
+    .tab-btn[aria-selected="true"]{ background:var(--gold); color:#4a1a22; border-color:#b99254; }
 
-    .chip-assign{ display:inline-block; padding:4px 8px; border-radius:999px; font-size:12px; background:#f0f9ff; color:#075985; cursor:pointer; margin:2px 6px 2px 0; border:1px solid #e0f2fe; white-space:nowrap; }
-    .chip-assign.assigned{ background:#dcfce7; color:#065f46; border-color:#bbf7d0; }
-
-    .prog-wrap{ margin:12px 0 18px; }
-    .prog-label{ display:flex; justify-content:space-between; font-weight:600; margin-bottom:6px; }
-    .prog-bar{ height:12px; background:#f1f5f9; border-radius:999px; overflow:hidden; }
-    .prog-fill{ height:100%; width:0%; background:linear-gradient(90deg,#22c55e,#16a34a); transition:width .4s ease; }
-
+    /* Admin Tabellen */
     table.table{ width:100%; border-collapse:collapse; table-layout:fixed; }
     table.table th, table.table td{ border-top:1px solid #e5e7eb; padding:8px; vertical-align:top; }
     table.table thead th{ background:#fafafa; text-align:left; white-space:nowrap; }
     table.table td{ word-break:break-word; }
     .t-center{ text-align:center; }
 
-    /* schmale Spaltenbreite für Events ohne Kinder-Emoji */
-    table.table colgroup col.date{ width:11ch; }
-    table.table colgroup col.wd{ width:7ch; }
-    table.table colgroup col.host{ width:16ch; }
-    table.table colgroup col.addr{ width:24ch; }
-    table.table colgroup col.time{ width:10ch; }
-    table.table colgroup col.note{ width:auto; }
-    table.table colgroup col.bf{ width:6ch; }
-    table.table colgroup col.changed{ width:11ch; }
-    table.table colgroup col.action{ width:12ch; }
+    /* spaltenbreiten Termine pflegen neu und großzügig */
+    #tblEvents col.date{ width:12ch; }
+    #tblEvents col.wd{ width:6ch; }
+    #tblEvents col.host{ width:22ch; }
+    #tblEvents col.addr{ width:32ch; }
+    #tblEvents col.time{ width:8ch; }
+    #tblEvents col.note{ width:26ch; }
+    #tblEvents col.bf{ width:6ch; }
+    #tblEvents col.changed{ width:10ch; }
+    #tblEvents col.action{ width:14ch; }
 
-    /* Admin Tabs */
-    .tabs{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
-    .tab-btn{ padding:8px 12px; border-radius:10px; background:#f3f4f6; border:1px solid #e5e7eb; cursor:pointer; }
-    .tab-btn[aria-selected="true"]{ background:#e0e7ff; border-color:#c7d2fe; }
-    .tab-panel{ display:none; }
-    .tab-panel[aria-hidden="false"]{ display:block; }
+    /* Anmeldungen mit eigener Spalte Besonderheiten */
+    #tblAnmeldungen col.host{ width:20ch; }
+    #tblAnmeldungen col.addr{ width:28ch; }
+    #tblAnmeldungen col.wishes{ width:26ch; }
+    #tblAnmeldungen col.special{ width:28ch; }
+    #tblAnmeldungen col.bf{ width:6ch; }
+    #tblAnmeldungen col.action{ width:12ch; }
 
     /* Kartenansicht für sehr schmale Bildschirme */
     @media(max-width:900px){
@@ -204,7 +196,7 @@
 
     <section id="termine" class="card" aria-labelledby="termine-title">
       <h3 id="termine-title">Alle Termine</h3>
-      <p class="help">In der Regel beginnen die Abende um 18:00 Uhr. Manche Gastgeber wählen eine andere Uhrzeit. Die Treffen dauern etwa eine halbe Stunde. Das Zeichen ♿ zeigt Barrierefreiheit an.</p>
+      <p class="help">In der Regel beginnen die Abende um 18 Uhr. Manche Gastgeber wählen eine andere Uhrzeit. Die Treffen dauern etwa eine halbe Stunde. Das Zeichen ♿ zeigt Barrierefreiheit an.</p>
       <div class="list" id="terminListe" role="list"></div>
       <div class="actions" style="margin-top:12px">
         <button type="button" id="btnPdf" class="secondary">Übersicht als PDF</button>
@@ -252,8 +244,8 @@
         </div>
 
         <div>
-          <label for="note">Bemerkungen optional</label>
-          <textarea id="note" name="note" placeholder="Ideen, Hinweise oder Besonderheiten"></textarea>
+          <label for="note">Besonderheiten optional</label>
+          <textarea id="note" name="note" placeholder="Hinweise für die Organisation oder besondere Bedürfnisse"></textarea>
         </div>
 
         <div>
@@ -356,7 +348,7 @@
         <p class="muted">Nur für das Organisationsteam</p>
         <p style="display:flex; align-items:center; gap:10px;">
           <span class="link-as-btn" id="openAdminLogin">Admin</span>
-          <span class="pill-count" id="msgCounter" title="Ungelesene Nachrichten"><span class="dot"></span><span id="msgCounterText">0 neu</span></span>
+          <!-- Zähler entfernt wie gewünscht -->
         </p>
       </div>
       <div class="dlg-foot"><button type="button" class="secondary" data-close="dlgLegal">Schließen</button></div>
@@ -419,7 +411,7 @@
               <button type="button" class="secondary" id="btnCopyEmails">Adressen kopieren</button>
             </div>
             <textarea id="emailAll" class="email-area wide" readonly></textarea>
-            <div class="muted">Tipp: Im Mailprogramm im Feld BCC nutzen.</div>
+            <div class="muted">Tipp. Im Mailprogramm im Feld BCC nutzen.</div>
           </div>
         </section>
 
@@ -427,8 +419,10 @@
           <h4>Anmeldungen zuweisen</h4>
           <p class="muted">Klicke auf einen gewünschten Termin einer Anmeldung. Vor dem Überschreiben erfolgt eine Prüfung, ob an diesem Datum bereits ein Termin besteht.</p>
           <table class="table" id="tblAnmeldungen" aria-describedby="anmeldHelp">
-            <colgroup><col class="host"><col class="addr"><col class="note"><col class="bf"><col class="action"></colgroup>
-            <thead><tr><th>Name und Kontakt</th><th>Adresse</th><th>Wunschtermine</th><th>♿</th><th>Aktion</th></tr></thead>
+            <colgroup>
+              <col class="host"><col class="addr"><col class="wishes"><col class="special"><col class="bf"><col class="action">
+            </colgroup>
+            <thead><tr><th>Name und Kontakt</th><th>Adresse</th><th>Wunschtermine</th><th>Besonderheiten</th><th>♿</th><th>Aktion</th></tr></thead>
             <tbody></tbody>
           </table>
           <p id="anmeldHelp" class="muted">Nach der Zuweisung kannst du den Antrag optional löschen.</p>
@@ -436,7 +430,7 @@
 
         <section id="tab-events" class="tab-panel" role="tabpanel" aria-hidden="true">
           <h4>Termine pflegen</h4>
-          <p class="muted">Gastgeber, Adresse, Uhrzeit und Barrierefreiheit bearbeiten oder einen Termin als geändert markieren.</p>
+          <p class="muted">Gastgeber, Adresse, Uhrzeit und Notiz bearbeiten. Barrierefreiheit sowie geändert markieren nach Bedarf.</p>
           <table class="table" id="tblEvents">
             <colgroup>
               <col class="date"><col class="wd"><col class="host"><col class="addr"><col class="time"><col class="note"><col class="bf"><col class="changed"><col class="action">
@@ -543,8 +537,8 @@
       auth = getAuth(app);
       db = getFirestore(app);
 
-      // anonyme Anmeldung für öffentliche Formulare
-      try{ await signInAnonymously(auth); }catch(e){}
+      // anonyme Anmeldung früh initialisieren
+      await ensureAnonAuth();
 
       $("#openGear").addEventListener("click", ()=> $("#dlgGear").showModal());
       $("#openPicker").addEventListener("click", ()=> openPicker());
@@ -591,12 +585,9 @@
 
       $("#addService").addEventListener("click", ()=> appendServiceRow());
 
-      updateMessageCounter();
-      $("#openLegal").addEventListener("click", updateMessageCounter);
-
       // Tabs
       const tabs = [["messages","tab-messages"],["emails","tab-emails"],["anmeld","tab-anmeld"],["events","tab-events"],["services","tab-services"]];
-      tabs.forEach(([key,id],i)=>{
+      tabs.forEach(([key,id])=>{
         const btn = document.getElementById("tabbtn-"+key);
         const panel = document.getElementById(id);
         btn.addEventListener("click", ()=>{
@@ -606,6 +597,13 @@
           panel.setAttribute("aria-hidden","false");
         });
       });
+    }
+
+    async function ensureAnonAuth(){
+      if(!auth.currentUser){
+        try{ await signInAnonymously(auth); }
+        catch(e){ console.warn("Anonyme Anmeldung fehlgeschlagen", e); }
+      }
     }
 
     async function adminLogin(){
@@ -650,6 +648,7 @@
 
         const btn = $("#sendBtn"); btn.disabled = true;
         try{
+          await ensureAnonAuth();
           await addDoc(collection(db,"anmeldungen"), {
             name,
             email,
@@ -683,15 +682,16 @@
       const text = $("#kmsg").value.trim();
       if(!name || !mail || !text){ info.textContent = "Bitte alle Felder ausfüllen"; return; }
       try{
+        await ensureAnonAuth();
         await addDoc(collection(db,"messages"), {
           name, email: mail, message: text, createdAt: new Date().toISOString(), read:false
         });
         info.textContent = "Nachricht wurde gesendet";
         $("#contactForm").reset();
-        updateMessageCounter();
       }catch(e){
-        console.error(e);
-        info.textContent = "Nachricht konnte nicht gesendet werden";
+        console.error("Kontaktformular Fehler", e);
+        const code = e && e.code ? ` Fehlercode ${e.code}` : "";
+        info.textContent = "Nachricht konnte nicht gesendet werden." + code;
       }
     }
 
@@ -787,7 +787,7 @@
             }else if(e.barrierFree){
               infoBadge = `<div class="badge">♿</div>`;
             }
-            const changed = e.changed ? `<div class="badge changed">Hinweis: geändert</div>` : "";
+            const changed = e.changed ? `<div class="badge changed">Hinweis. geändert</div>` : "";
             meta.innerHTML = `<div class="host">${escapeHtml(e.hostName)}</div><div class="addr">${escapeHtml(e.hostAdresse || "")}</div>${infoBadge}${changed}`;
           }else{
             meta.innerHTML = `<div class="host muted">Noch frei</div><div class="badge free">Anmeldung möglich</div>`;
@@ -1004,6 +1004,7 @@
             <td data-label="Kontakt"><strong>${escapeHtml(a.name||"")}</strong><br><span class="muted">${escapeHtml(a.email||"")}</span><br><span class="muted">${escapeHtml(a.telefon||"")}</span></td>
             <td data-label="Adresse" class="wide">${escapeHtml(a.adresse||"")}</td>
             <td data-label="Wunschtermine">${chips || "<span class='muted'>Keine Auswahl</span>"}</td>
+            <td data-label="Besonderheiten">${escapeHtml(a.bemerkung||"")}</td>
             <td data-label="♿" class="t-center">${a.barrierFree ? "♿" : ""}</td>
             <td data-label="Aktion"><button class="warn" data-del="${d.id}">Löschen</button></td>
           `;
@@ -1011,7 +1012,7 @@
         });
       }catch(e){
         const tr = document.createElement("tr");
-        tr.innerHTML = `<td colspan="5" class="center">Anmeldungen konnten nicht geladen werden</td>`;
+        tr.innerHTML = `<td colspan="6" class="center">Anmeldungen konnten nicht geladen werden</td>`;
         bodyA.appendChild(tr);
       }
 
@@ -1021,8 +1022,8 @@
           const row = ch.closest("tr");
           const name = row.querySelector("td:first-child strong").textContent;
           const addr = row.children[1].textContent.trim();
-          const email = ch.getAttribute("data-email") || "";
           const noteFromHost = ch.getAttribute("data-note") || "";
+          const email = ch.getAttribute("data-email") || "";
           const bf = ch.getAttribute("data-bf") === "1";
           try{
             const existing = await getDoc(doc(db,"events", dateKey));
@@ -1106,7 +1107,6 @@
 
       await renderServiceTable();
       updateProgress();
-      updateMessageCounter();
     }
 
     async function loadMessages(){
@@ -1141,31 +1141,16 @@
           if(r){
             await updateDoc(doc(db,"messages", r.dataset.read), { read:true });
             await loadMessages();
-            updateMessageCounter();
           }
           if(del){
             if(confirm("Diese Nachricht löschen")){
               await deleteDoc(doc(db,"messages", del.dataset.delmsg));
               await loadMessages();
-              updateMessageCounter();
             }
           }
         });
       }catch(e){
         body.innerHTML = `<tr><td colspan="5" class="center">Nachrichten konnten nicht geladen werden</td></tr>`;
-      }
-    }
-
-    async function updateMessageCounter(){
-      try{
-        const snap = await getDocs(collection(db,"messages"));
-        let unread = 0;
-        snap.forEach(d=>{ if(d.data() && d.data().read === false) unread++; });
-        const el = $("#msgCounterText");
-        if(el) el.textContent = `${unread} neu`;
-      }catch(e){
-        const el = $("#msgCounterText");
-        if(el) el.textContent = "0 neu";
       }
     }
 
