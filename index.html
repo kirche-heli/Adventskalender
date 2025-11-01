@@ -35,7 +35,6 @@
     nav{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:18px; margin-bottom:14px; }
     nav a{ display:inline-block; text-decoration:none; color:var(--burgundy); background:var(--gold); padding:10px 14px; border-radius:999px; font-weight:600; box-shadow:var(--shadow); }
 
-    /* WhatsApp Hinweis oben */
     .wa-bar{ max-width:1100px; margin:0 auto; padding:0 16px 22px; }
     .wa-card{ display:flex; gap:14px; align-items:center; background:#fff9ee; color:#312e2b; border:1px solid #f2e2c9; border-radius:16px; padding:10px 12px; box-shadow:var(--shadow); }
     .wa-card img{ width:58px; height:58px; border-radius:10px; background:#fff; transition:transform .2s ease; cursor:zoom-in; }
@@ -51,7 +50,7 @@
     .today .info{ display:flex; flex-direction:column; gap:8px; }
     .today .pill{ display:inline-block; padding:6px 10px; background:var(--paper); border:1px solid #efe2d6; border-radius:999px; font-size:13px; color:var(--muted); }
     .today .title{ font-size:20px; font-weight:700; }
-    .today .addr{ font-size:16px; }
+    .today .addr{ font-size:16px; white-space:pre-wrap; }
     .weather{ display:flex; align-items:center; gap:14px; padding:12px; border:1px dashed #e6d7c6; border-radius:14px; background:#fffbf6; }
     .weather .big{ font-size:28px; font-weight:700; color:var(--burgundy-dark); min-width:64px; text-align:center; }
     .weather small{ color:var(--muted); }
@@ -70,7 +69,7 @@
     .day .time{ display:block; margin-top:6px; font-size:14px; font-weight:800; color:var(--gold); }
     .meta{ flex:1; }
     .meta .host{ font-weight:700; font-size:16px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
-    .meta .addr{ color:#444; margin-top:2px; }
+    .meta .addr{ color:#444; margin-top:2px; white-space:pre-wrap; }
     .badge{ display:inline-block; font-size:12px; padding:4px 8px; border-radius:999px; background:#eef2ff; color:#334155; margin-top:6px; }
     .free{ background:#fff1f1; color:#7a1d1d; }
     .changed{ background:#fff7cc; color:#7a5600; }
@@ -123,26 +122,39 @@
     .prog-bar{ height:12px; background:#f1f5f9; border-radius:999px; overflow:hidden; }
     .prog-fill{ height:100%; width:0%; background:linear-gradient(90deg,#22c55e,#16a34a); transition:width .4s ease; }
 
-    /* Admin-Tabellen klar und stabil */
     table.table{ width:100%; border-collapse:collapse; table-layout:fixed; }
-    table.table colgroup col:nth-child(1){ width:11ch; }     /* Datum */
-    table.table colgroup col:nth-child(2){ width:7ch; }      /* Wochentag */
-    table.table colgroup col:nth-child(3){ width:16ch; }     /* Gastgeber */
-    table.table colgroup col:nth-child(4){ width:24ch; }     /* Adresse */
-    table.table colgroup col:nth-child(5){ width:10ch; }     /* Uhrzeit */
-    table.table colgroup col:nth-child(6){ width:auto; }     /* Notiz */
-    table.table colgroup col:nth-child(7){ width:14ch; }     /* Kinder Emoji */
-    table.table colgroup col:nth-child(8){ width:6ch; }      /* ♿ */
-    table.table colgroup col:nth-child(9){ width:11ch; }     /* Änderung */
-    table.table colgroup col:nth-child(10){ width:12ch; }    /* Aktion */
     table.table th, table.table td{ border-top:1px solid #e5e7eb; padding:8px; vertical-align:top; }
     table.table thead th{ background:#fafafa; text-align:left; white-space:nowrap; }
     table.table td{ word-break:break-word; }
     .t-center{ text-align:center; }
 
-    /* Badge für Nachrichtenanzahl */
-    .pill-count{ display:inline-flex; align-items:center; gap:6px; background:#eef2ff; color:#1e293b; padding:4px 8px; border-radius:999px; font-size:12px; }
-    .pill-count .dot{ width:8px; height:8px; border-radius:50%; background:#ef4444; }
+    /* schmale Spaltenbreite für Events ohne Kinder-Emoji */
+    table.table colgroup col.date{ width:11ch; }
+    table.table colgroup col.wd{ width:7ch; }
+    table.table colgroup col.host{ width:16ch; }
+    table.table colgroup col.addr{ width:24ch; }
+    table.table colgroup col.time{ width:10ch; }
+    table.table colgroup col.note{ width:auto; }
+    table.table colgroup col.bf{ width:6ch; }
+    table.table colgroup col.changed{ width:11ch; }
+    table.table colgroup col.action{ width:12ch; }
+
+    /* Admin Tabs */
+    .tabs{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
+    .tab-btn{ padding:8px 12px; border-radius:10px; background:#f3f4f6; border:1px solid #e5e7eb; cursor:pointer; }
+    .tab-btn[aria-selected="true"]{ background:#e0e7ff; border-color:#c7d2fe; }
+    .tab-panel{ display:none; }
+    .tab-panel[aria-hidden="false"]{ display:block; }
+
+    /* Kartenansicht für sehr schmale Bildschirme */
+    @media(max-width:900px){
+      table.table thead{ display:none; }
+      table.table, table.table tbody, table.table tr, table.table td{ display:block; width:100%; }
+      table.table tr{ background:#fff; border:1px solid #eee5da; border-radius:12px; padding:8px; margin-bottom:10px; }
+      table.table td{ border:none; padding:6px 2px; }
+      table.table td::before{ content:attr(data-label) ": "; font-weight:700; display:inline; }
+      .t-center{ text-align:left; }
+    }
   </style>
 </head>
 <body>
@@ -160,7 +172,6 @@
     </nav>
   </header>
 
-  <!-- WhatsApp Hinweisleiste mit QR, vergrößerbar -->
   <div class="wa-bar">
     <div class="wa-card">
       <img src="qrcode.jpg" alt="QR Code WhatsApp Kanal" id="qrThumb">
@@ -304,7 +315,6 @@
     <span class="footlink" id="openLegal">Impressum und Datenschutz</span>
   </footer>
 
-  <!-- Rüstzeug -->
   <dialog id="dlgGear">
     <div class="dlg-body">
       <div class="dlg-head"><h3 class="dlg-title">Rüstzeug für den Abend</h3></div>
@@ -321,7 +331,6 @@
     </div>
   </dialog>
 
-  <!-- QR Lightbox -->
   <dialog id="dlgQr">
     <div class="dlg-body">
       <div class="dlg-head"><h3 class="dlg-title">WhatsApp Kanal QR Code</h3></div>
@@ -333,7 +342,6 @@
     </div>
   </dialog>
 
-  <!-- Impressum und Admin -->
   <dialog id="dlgLegal">
     <div class="dlg-body">
       <div class="dlg-head"><h3 class="dlg-title">Impressum und Datenschutz</h3></div>
@@ -355,7 +363,6 @@
     </div>
   </dialog>
 
-  <!-- Admin Login -->
   <dialog id="dlgAdminLogin">
     <div class="dlg-body">
       <div class="dlg-head"><h3 class="dlg-title">Admin Anmeldung</h3></div>
@@ -373,7 +380,6 @@
     </div>
   </dialog>
 
-  <!-- Admin Panel -->
   <dialog id="dlgAdminPanel">
     <div class="dlg-body">
       <div class="dlg-head">
@@ -387,56 +393,75 @@
           <div class="muted" id="progMeta">0 von 23 Abenden vergeben</div>
         </div>
 
-        <h4>Nachrichten</h4>
-        <table class="table" id="tblMessages">
-          <colgroup><col><col><col><col><col></colgroup>
-          <thead><tr><th>Zeit</th><th>Absender</th><th>E Mail</th><th>Nachricht</th><th>Status</th></tr></thead>
-          <tbody></tbody>
-        </table>
+        <div class="tabs" role="tablist" aria-label="Admin Bereiche">
+          <button class="tab-btn" role="tab" aria-selected="true" aria-controls="tab-messages" id="tabbtn-messages">Nachrichten</button>
+          <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-emails" id="tabbtn-emails">E Mails</button>
+          <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-anmeld" id="tabbtn-anmeld">Anmeldungen</button>
+          <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-events" id="tabbtn-events">Termine</button>
+          <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-services" id="tabbtn-services">Heiligabend</button>
+        </div>
 
-        <div class="email-box" style="margin-top:16px">
-          <div class="email-row">
-            <label for="emailAll">E Mail Adressen der Gastgeber</label>
-            <label class="muted" style="margin-left:auto"><input type="checkbox" id="includePending"> auch Anmeldungen einbeziehen</label>
-            <button type="button" class="secondary" id="btnCopyEmails">Adressen kopieren</button>
+        <section id="tab-messages" class="tab-panel" role="tabpanel" aria-hidden="false">
+          <h4>Nachrichten</h4>
+          <table class="table" id="tblMessages">
+            <colgroup><col><col><col><col><col></colgroup>
+            <thead><tr><th>Zeit</th><th>Absender</th><th>E Mail</th><th>Nachricht</th><th>Status</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </section>
+
+        <section id="tab-emails" class="tab-panel" role="tabpanel" aria-hidden="true">
+          <h4>E Mail Verteiler</h4>
+          <div class="email-box" style="margin-top:16px">
+            <div class="email-row">
+              <label for="emailAll">E Mail Adressen der Gastgeber</label>
+              <label class="muted" style="margin-left:auto"><input type="checkbox" id="includePending"> auch Anmeldungen einbeziehen</label>
+              <button type="button" class="secondary" id="btnCopyEmails">Adressen kopieren</button>
+            </div>
+            <textarea id="emailAll" class="email-area wide" readonly></textarea>
+            <div class="muted">Tipp: Im Mailprogramm im Feld BCC nutzen.</div>
           </div>
-          <textarea id="emailAll" class="email-area" readonly></textarea>
-          <div class="muted">Tipp: In deinem Mailprogramm im Feld BCC nutzen.</div>
-        </div>
+        </section>
 
-        <h4>Anmeldungen zuweisen</h4>
-        <p class="muted">Klicke auf einen gewünschten Termin einer Anmeldung. Vor dem Überschreiben erfolgt eine Prüfung, ob an diesem Datum bereits ein Termin besteht.</p>
-        <table class="table" id="tblAnmeldungen" aria-describedby="anmeldHelp">
-          <colgroup><col><col><col><col><col class="t-center"><col></colgroup>
-          <thead><tr><th>Name und Kontakt</th><th>Adresse</th><th>Wunschtermine</th><th>Bemerkung</th><th>♿</th><th>Aktion</th></tr></thead>
-          <tbody></tbody>
-        </table>
-        <p id="anmeldHelp" class="muted">Nach der Zuweisung kannst du den Antrag optional löschen.</p>
+        <section id="tab-anmeld" class="tab-panel" role="tabpanel" aria-hidden="true">
+          <h4>Anmeldungen zuweisen</h4>
+          <p class="muted">Klicke auf einen gewünschten Termin einer Anmeldung. Vor dem Überschreiben erfolgt eine Prüfung, ob an diesem Datum bereits ein Termin besteht.</p>
+          <table class="table" id="tblAnmeldungen" aria-describedby="anmeldHelp">
+            <colgroup><col class="host"><col class="addr"><col class="note"><col class="bf"><col class="action"></colgroup>
+            <thead><tr><th>Name und Kontakt</th><th>Adresse</th><th>Wunschtermine</th><th>♿</th><th>Aktion</th></tr></thead>
+            <tbody></tbody>
+          </table>
+          <p id="anmeldHelp" class="muted">Nach der Zuweisung kannst du den Antrag optional löschen.</p>
+        </section>
 
-        <h4>Termine pflegen</h4>
-        <p class="muted">Gastgeber, Adresse, Uhrzeit, Kinder Emoji und Barrierefreiheit bearbeiten oder einen Termin als geändert markieren.</p>
-        <table class="table" id="tblEvents">
-          <colgroup>
-            <col><col><col><col><col><col><col><col><col><col>
-          </colgroup>
-          <thead>
-            <tr>
-              <th>Datum</th><th>Wochentag</th><th>Gastgeber</th><th>Adresse</th><th>Uhrzeit</th><th>Notiz</th><th>Kinder Emoji</th><th>♿</th><th>Änderung</th><th>Aktion</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
+        <section id="tab-events" class="tab-panel" role="tabpanel" aria-hidden="true">
+          <h4>Termine pflegen</h4>
+          <p class="muted">Gastgeber, Adresse, Uhrzeit und Barrierefreiheit bearbeiten oder einen Termin als geändert markieren.</p>
+          <table class="table" id="tblEvents">
+            <colgroup>
+              <col class="date"><col class="wd"><col class="host"><col class="addr"><col class="time"><col class="note"><col class="bf"><col class="changed"><col class="action">
+            </colgroup>
+            <thead>
+              <tr>
+                <th>Datum</th><th>Wochentag</th><th>Gastgeber</th><th>Adresse</th><th>Uhrzeit</th><th>Notiz</th><th>♿</th><th>Änderung</th><th>Aktion</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </section>
 
-        <h4>Gottesdienste am 24. Dezember</h4>
-        <p class="muted">Lege die Gottesdienste an, speichere sie und sortiere sie danach per Ziehen in die gewünschte Reihenfolge.</p>
-        <table class="table" id="tblServices">
-          <colgroup><col style="width:40px"><col><col><col><col><col></colgroup>
-          <thead><tr><th></th><th>Gemeinde</th><th>Uhrzeit</th><th>Adresse</th><th>Notiz</th><th>Aktion</th></tr></thead>
-          <tbody></tbody>
-        </table>
-        <div class="actions" style="margin-top:8px">
-          <button type="button" id="addService" class="secondary">Neuen Gottesdienst hinzufügen</button>
-        </div>
+        <section id="tab-services" class="tab-panel" role="tabpanel" aria-hidden="true">
+          <h4>Gottesdienste am 24. Dezember</h4>
+          <p class="muted">Lege die Gottesdienste an, speichere sie und sortiere sie danach per Ziehen in die gewünschte Reihenfolge.</p>
+          <table class="table" id="tblServices">
+            <colgroup><col style="width:40px"><col class="host"><col class="time"><col class="addr"><col class="note"><col class="action"></colgroup>
+            <thead><tr><th></th><th>Gemeinde</th><th>Uhrzeit</th><th>Adresse</th><th>Notiz</th><th>Aktion</th></tr></thead>
+            <tbody></tbody>
+          </table>
+          <div class="actions" style="margin-top:8px">
+            <button type="button" id="addService" class="secondary">Neuen Gottesdienst hinzufügen</button>
+          </div>
+        </section>
 
       </div>
       <div class="dlg-foot">
@@ -446,7 +471,6 @@
     </div>
   </dialog>
 
-  <!-- Termin Picker -->
   <dialog id="dlgPicker">
     <div class="dlg-body">
       <div class="dlg-head"><h3 class="dlg-title">Wunschtermine im Dezember 2025</h3></div>
@@ -461,7 +485,6 @@
     </div>
   </dialog>
 
-  <!-- Bestätigungsdialog nach dem Absenden -->
   <dialog id="dlgSubmitConfirm" aria-labelledby="dlgSubmitConfirmTitle">
     <div class="dlg-body">
       <div class="dlg-head"><h3 class="dlg-title" id="dlgSubmitConfirmTitle">Anmeldung bestätigt</h3></div>
@@ -477,7 +500,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-analytics.js";
-    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
     import { getFirestore, collection, addDoc, getDocs, setDoc, doc, deleteDoc, query, orderBy, writeBatch, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -520,6 +543,9 @@
       auth = getAuth(app);
       db = getFirestore(app);
 
+      // anonyme Anmeldung für öffentliche Formulare
+      try{ await signInAnonymously(auth); }catch(e){}
+
       $("#openGear").addEventListener("click", ()=> $("#dlgGear").showModal());
       $("#openPicker").addEventListener("click", ()=> openPicker());
       $("#pickerOk").addEventListener("click", ()=>{ $("#dlgPicker").close(); updatePreview(); });
@@ -546,7 +572,7 @@
       $("#contactForm").addEventListener("submit", onSubmitContactForm);
 
       onAuthStateChanged(auth, async user=>{
-        if(user){
+        if(user && user.email){
           $("#authMsg").textContent = "Angemeldet";
           try{ $("#dlgAdminLogin").close(); }catch(e){}
           await adminLoad();
@@ -567,6 +593,19 @@
 
       updateMessageCounter();
       $("#openLegal").addEventListener("click", updateMessageCounter);
+
+      // Tabs
+      const tabs = [["messages","tab-messages"],["emails","tab-emails"],["anmeld","tab-anmeld"],["events","tab-events"],["services","tab-services"]];
+      tabs.forEach(([key,id],i)=>{
+        const btn = document.getElementById("tabbtn-"+key);
+        const panel = document.getElementById(id);
+        btn.addEventListener("click", ()=>{
+          document.querySelectorAll(".tab-btn").forEach(b=> b.setAttribute("aria-selected","false"));
+          document.querySelectorAll(".tab-panel").forEach(p=> p.setAttribute("aria-hidden","true"));
+          btn.setAttribute("aria-selected","true");
+          panel.setAttribute("aria-hidden","false");
+        });
+      });
     }
 
     async function adminLogin(){
@@ -672,6 +711,7 @@
       });
       $("#dlgPicker").showModal();
     }
+
     function updatePreview(){
       const prev = $("#wishesPreview"); prev.innerHTML = "";
       Array.from(selected).sort().forEach(k=>{
@@ -741,8 +781,6 @@
           }
         }else{
           if(e && e.hostName){
-            const kids = e.kidsEmoji ? `<span title="Besonders geeignet für Kinder">${escapeHtml(e.kidsEmoji)}</span>` : "";
-            // Info-Badge mit optionalem ♿ am Ende
             let infoBadge = "";
             if(e.info && e.info.trim()){
               infoBadge = `<div class="badge">${escapeHtml(e.info)}${e.barrierFree ? " ♿" : ""}</div>`;
@@ -750,7 +788,7 @@
               infoBadge = `<div class="badge">♿</div>`;
             }
             const changed = e.changed ? `<div class="badge changed">Hinweis: geändert</div>` : "";
-            meta.innerHTML = `<div class="host">${kids} ${escapeHtml(e.hostName)}</div><div class="addr">${escapeHtml(e.hostAdresse || "")}</div>${infoBadge}${changed}`;
+            meta.innerHTML = `<div class="host">${escapeHtml(e.hostName)}</div><div class="addr">${escapeHtml(e.hostAdresse || "")}</div>${infoBadge}${changed}`;
           }else{
             meta.innerHTML = `<div class="host muted">Noch frei</div><div class="badge free">Anmeldung möglich</div>`;
           }
@@ -768,9 +806,7 @@
         $("#heuteAdresse").textContent = "Mehrere Orte in Hessisch Lichtenau und Umgebung";
         $("#heuteHinweis").textContent = "Zeiten und Orte finden Sie in der Terminliste";
       }else if(en && en.hostName){
-        // Kein ♿ im Bereich Nächster Termin
-        const titlePrefix = en.kidsEmoji ? en.kidsEmoji + " " : "";
-        $("#heuteTitel").textContent = titlePrefix + en.hostName;
+        $("#heuteTitel").textContent = en.hostName;
         $("#heuteAdresse").textContent = en.hostAdresse || "";
         $("#heuteHinweis").textContent = en.info ? en.info : "";
       }else{
@@ -845,11 +881,11 @@
           }
         }else{
           const e = eventsMap.get(key);
-          const host = e && e.hostName ? `${e.kidsEmoji ? e.kidsEmoji + " " : ""}${e.hostName}` : "Noch frei";
+          const host = e && e.hostName ? e.hostName : "Noch frei";
           const addr = e && e.hostAdresse ? e.hostAdresse : "";
           const time = e && e.uhrzeit ? e.uhrzeit : "18:00";
           const info = e && e.info ? `${e.info}${e.barrierFree ? " ♿" : ""}` : (e && e.barrierFree ? "♿" : "");
-          rows.push(`<tr><td>${deDate(d)} ${time} Uhr</td><td>${WDAY[d.getDay()]}</td><td>${escapeHtml(host)}</td><td>${escapeHtml(addr)}${info ? " — " + escapeHtml(info) : ""}</td></tr>`.replace(" — "," "));
+          rows.push(`<tr><td>${deDate(d)} ${time} Uhr</td><td>${WDAY[d.getDay()]}</td><td>${escapeHtml(host)}</td><td>${escapeHtml(addr)} ${escapeHtml(info)}</td></tr>`);
         }
       });
 
@@ -910,11 +946,10 @@
             const dtStart = toIcsLocal(d, hm.h, hm.m);
             const dtEnd   = toIcsLocal(d, hm.h, hm.m + 30);
             const uid = `LA-${key}@adventskalender`;
-            const kids = e.kidsEmoji ? ` ${e.kidsEmoji}` : "";
             const info = e.info ? ` ${e.info}` : "";
             const bf = e.barrierFree ? " ♿" : "";
             const summary = escapeIcs("Lebendiger Adventskalender");
-            const desc = escapeIcs((e.hostName || "") + kids + info + bf);
+            const desc = escapeIcs((e.hostName || "") + info + bf);
             const loc = escapeIcs(e.hostAdresse);
             lines.push("BEGIN:VEVENT");
             lines.push(`UID:${uid}`);
@@ -966,18 +1001,17 @@
             return `<span class="chip-assign" data-assign="${w}" data-id="${d.id}" data-email="${escapeAttr(a.email||"")}" data-note="${escapeAttr(a.bemerkung||"")}" data-bf="${a.barrierFree ? "1" : "0"}" title="Als Termin festlegen">${label}</span>`;
           }).join("");
           tr.innerHTML = `
-            <td><strong>${escapeHtml(a.name||"")}</strong><br><span class="muted">${escapeHtml(a.email||"")}</span><br><span class="muted">${escapeHtml(a.telefon||"")}</span></td>
-            <td class="wide">${escapeHtml(a.adresse||"")}</td>
-            <td>${chips || "<span class='muted'>Keine Auswahl</span>"}</td>
-            <td class="wide">${escapeHtml(a.bemerkung||"")}</td>
-            <td class="t-center">${a.barrierFree ? "♿" : ""}</td>
-            <td><button class="warn" data-del="${d.id}">Löschen</button></td>
+            <td data-label="Kontakt"><strong>${escapeHtml(a.name||"")}</strong><br><span class="muted">${escapeHtml(a.email||"")}</span><br><span class="muted">${escapeHtml(a.telefon||"")}</span></td>
+            <td data-label="Adresse" class="wide">${escapeHtml(a.adresse||"")}</td>
+            <td data-label="Wunschtermine">${chips || "<span class='muted'>Keine Auswahl</span>"}</td>
+            <td data-label="♿" class="t-center">${a.barrierFree ? "♿" : ""}</td>
+            <td data-label="Aktion"><button class="warn" data-del="${d.id}">Löschen</button></td>
           `;
           bodyA.appendChild(tr);
         });
       }catch(e){
         const tr = document.createElement("tr");
-        tr.innerHTML = `<td colspan="6" class="center">Anmeldungen konnten nicht geladen werden</td>`;
+        tr.innerHTML = `<td colspan="5" class="center">Anmeldungen konnten nicht geladen werden</td>`;
         bodyA.appendChild(tr);
       }
 
@@ -1004,7 +1038,6 @@
               hostEmail: email,
               info: noteFromHost || "Aus Anmeldung gesetzt",
               uhrzeit: "18:00",
-              kidsEmoji: "",
               barrierFree: bf,
               changed: true
             }, { merge: true });
@@ -1031,23 +1064,23 @@
       const map = new Map(eventsMap);
       for(const d of dates){
         const id = ymd(d);
-        const e = map.get(id) || { datum: id, hostName:"", hostAdresse:"", hostEmail:"", info:"", uhrzeit:"18:00", kidsEmoji:"", barrierFree:false, changed:false };
+        const e = map.get(id) || { datum: id, hostName:"", hostAdresse:"", hostEmail:"", info:"", uhrzeit:"18:00", barrierFree:false, changed:false };
         if(e.hostEmail) assignedEmails.add(e.hostEmail.trim());
         const tr = document.createElement("tr");
         tr.innerHTML = `
-          <td>${deDate(new Date(id))}</td>
-          <td>${WDAY[new Date(id).getDay()]}</td>
-          <td><input class="wide" type="text" value="${escapeAttr(e.hostName||"")}" data-f="hostName"></td>
-          <td><textarea class="ta wide" data-f="hostAdresse">${escapeAttr(e.hostAdresse||"")}</textarea></td>
-          <td><input type="text" value="${escapeAttr(e.uhrzeit||"18:00")}" data-f="uhrzeit" placeholder="z. B. 17:30"></td>
-          <td><textarea class="ta-long wide" data-f="info" placeholder="Hinweise">${escapeAttr(e.info||"")}</textarea></td>
-          <td><input type="text" value="${escapeAttr(e.kidsEmoji||"")}" data-f="kidsEmoji" placeholder="z. B. 🧒🎄"></td>
-          <td class="t-center"><label><input type="checkbox" ${e.barrierFree ? "checked" : ""} data-f="barrierFree"></label></td>
-          <td class="t-center"><label><input type="checkbox" ${e.changed ? "checked" : ""} data-f="changed"></label></td>
-          <td class="t-center"><button data-save="${id}">Speichern</button></td>
+          <td data-label="Datum">${deDate(new Date(id))}</td>
+          <td data-label="Tag">${WDAY[new Date(id).getDay()]}</td>
+          <td data-label="Gastgeber"><input class="wide" type="text" value="${escapeAttr(e.hostName||"")}" data-f="hostName"></td>
+          <td data-label="Adresse"><textarea class="ta wide" data-f="hostAdresse">${escapeAttr(e.hostAdresse||"")}</textarea></td>
+          <td data-label="Uhrzeit"><input type="text" value="${escapeAttr(e.uhrzeit||"18:00")}" data-f="uhrzeit" placeholder="z. B. 17:30"></td>
+          <td data-label="Notiz"><textarea class="ta-long wide" data-f="info" placeholder="Hinweise">${escapeAttr(e.info||"")}</textarea></td>
+          <td data-label="♿" class="t-center"><label><input type="checkbox" ${e.barrierFree ? "checked" : ""} data-f="barrierFree"></label></td>
+          <td data-label="Änderung" class="t-center"><label><input type="checkbox" ${e.changed ? "checked" : ""} data-f="changed"></label></td>
+          <td data-label="Aktion" class="t-center"><button data-save="${id}">Speichern</button></td>
         `;
         bodyE.appendChild(tr);
       }
+
       bodyE.addEventListener("click", async ev=>{
         const btn = ev.target.closest("button[data-save]");
         if(!btn) return;
@@ -1090,11 +1123,11 @@
           const tr = document.createElement("tr");
           const when = m.createdAt ? new Date(m.createdAt).toLocaleString("de-DE") : "";
           tr.innerHTML = `
-            <td>${escapeHtml(when)}</td>
-            <td>${escapeHtml(m.name||"")}</td>
-            <td>${escapeHtml(m.email||"")}</td>
-            <td>${escapeHtml(m.message||"")}</td>
-            <td class="t-center">
+            <td data-label="Zeit">${escapeHtml(when)}</td>
+            <td data-label="Absender">${escapeHtml(m.name||"")}</td>
+            <td data-label="E Mail">${escapeHtml(m.email||"")}</td>
+            <td data-label="Nachricht">${escapeHtml(m.message||"")}</td>
+            <td data-label="Status" class="t-center">
               ${m.read ? "<span class='muted'>gelesen</span>" : "<button data-read='"+d.id+"'>als gelesen markieren</button>"}
               <button class="warn" data-delmsg="${d.id}">löschen</button>
             </td>
@@ -1247,99 +1280,66 @@
 
       tbody.addEventListener("dragover", e=>{
         e.preventDefault();
-        const tr = e.target.closest("tr");
-        if(!dragRow || !tr || tr === dragRow) return;
-        const rect = tr.getBoundingClientRect();
-        const before = e.clientY < rect.top + rect.height / 2;
-        tr.classList.toggle("drop-above", before);
-        tr.classList.toggle("drop-below", !before);
-      });
-
-      tbody.addEventListener("dragleave", e=>{
-        const tr = e.target.closest("tr");
-        if(tr){ tr.classList.remove("drop-above","drop-below"); }
+        const afterElement = getDragAfterElement(tbody, e.clientY);
+        const dragging = tbody.querySelector(".dragging");
+        if(!dragging) return;
+        if(afterElement == null){
+          tbody.appendChild(dragging);
+        }else{
+          tbody.insertBefore(dragging, afterElement);
+        }
       });
 
       tbody.addEventListener("drop", async e=>{
-        e.preventDefault();
-        const targetRow = e.target.closest("tr");
-        if(!dragRow || !targetRow || dragRow === targetRow) return;
-        const rect = targetRow.getBoundingClientRect();
-        const before = e.clientY < rect.top + rect.height / 2;
-        targetRow.classList.remove("drop-above","drop-below");
-        if(before){
-          targetRow.parentNode.insertBefore(dragRow, targetRow);
-        }else{
-          targetRow.parentNode.insertBefore(dragRow, targetRow.nextSibling);
-        }
-        dragRow.classList.remove("dragging");
-        await persistServiceOrder(tbody);
-        await loadEventsAndServices();
-        await renderServiceTable();
+        const rows = Array.from(tbody.querySelectorAll("tr[draggable='true']"));
+        const batch = writeBatch(getFirestore());
+        rows.forEach((tr, idx)=>{
+          const id = tr.dataset.sid;
+          const ref = doc(getFirestore(),"events", id);
+          batch.set(ref, { order: idx*10 }, { merge:true });
+        });
+        try{ await batch.commit(); }catch(err){ console.error(err); }
+        rows.forEach(r=> r.classList.remove("dragging"));
       });
 
-      tbody.addEventListener("dragend", ()=>{
-        const rows = tbody.querySelectorAll("tr");
-        rows.forEach(r=> r.classList.remove("dragging","drop-above","drop-below"));
-        dragRow = null;
-      });
-    }
+      tbody.addEventListener("dragend", ()=>{ const dr = tbody.querySelector(".dragging"); if(dr) dr.classList.remove("dragging"); });
 
-    async function persistServiceOrder(tbody){
-      const rows = Array.from(tbody.querySelectorAll("tr[draggable='true']"));
-      const batch = writeBatch(db);
-      rows.forEach((tr, idx)=>{
-        const sid = tr.dataset.sid;
-        if(sid){
-          batch.set(doc(db,"events", sid), { order: idx }, { merge:true });
-        }
-      });
-      await batch.commit();
+      function getDragAfterElement(container, y){
+        const elements = [...container.querySelectorAll("tr[draggable='true']:not(.dragging)")];
+        return elements.reduce((closest, child)=>{
+          const box = child.getBoundingClientRect();
+          const offset = y - box.top - box.height / 2;
+          if(offset < 0 && offset > closest.offset){ return { offset, element: child }; }
+          else{ return closest; }
+        }, { offset: Number.NEGATIVE_INFINITY }).element;
+      }
     }
 
     function updateProgress(){
       const total = 23;
-      let assigned = 0;
-      for(let d=1; d<=23; d++){
-        const key = `2025-12-${String(d).padStart(2,"0")}`;
+      let taken = 0;
+      for(const d of allDates()){
+        const key = ymd(d);
+        if(key === "2025-12-24") continue;
         const e = eventsMap.get(key);
-        if(e && typeof e.hostName === "string" && e.hostName.trim().length > 0){
-          assigned++;
-        }
+        if(e && e.hostName) taken++;
       }
-      const percent = Math.round((assigned / total) * 100);
-      const fill = document.getElementById("progFill");
-      const pct  = document.getElementById("progPercent");
-      const meta = document.getElementById("progMeta");
-      if(fill) fill.style.width = `${percent}%`;
-      if(pct)  pct.textContent  = `${percent}%`;
-      if(meta) meta.textContent = `${assigned} von ${total} Abenden vergeben`;
+      const pct = Math.round((taken/total)*100);
+      $("#progPercent").textContent = `${pct}%`;
+      $("#progFill").style.width = `${pct}%`;
+      $("#progMeta").textContent = `${taken} von ${total} Abenden vergeben`;
+    }
+
+    function copyEmails(){
+      const ta = $("#emailAll");
+      ta.select(); document.execCommand("copy");
     }
 
     function updateEmailTextarea(){
-      const includePending = $("#includePending")?.checked;
-      const emails = new Set();
-      for(const e of eventsMap.values()){
-        if(e && e.hostEmail) emails.add(e.hostEmail.trim());
-      }
-      if(includePending){ pendingEmails.forEach(x=> emails.add(x)); }
-      $("#emailAll").value = Array.from(emails).filter(Boolean).join(", ");
-    }
-
-    async function copyEmails(){
-      const txt = $("#emailAll").value.trim();
-      if(!txt){ alert("Keine E Mail Adressen vorhanden"); return; }
-      try{
-        await navigator.clipboard.writeText(txt);
-        alert("E Mail Adressen kopiert");
-      }catch(e){
-        const ta = $("#emailAll");
-        ta.focus(); ta.select();
-        const ok = document.execCommand ? document.execCommand("copy") : false;
-        alert(ok ? "E Mail Adressen kopiert" : "Kopieren nicht möglich");
-      }
+      const emails = new Set(assignedEmails);
+      if($("#includePending").checked){ pendingEmails.forEach(e=> emails.add(e)); }
+      $("#emailAll").value = Array.from(emails).filter(Boolean).join("; ");
     }
   </script>
-
 </body>
 </html>
