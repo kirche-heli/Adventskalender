@@ -1,905 +1,1128 @@
 <!doctype html>
 <html lang="de">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Lebendiger Adventskalender Hessisch Lichtenau</title>
-<meta name="description" content="Informationen, Termine, Anmeldung, Kontakt und Rüstzeug für den Lebendigen Adventskalender in Hessisch Lichtenau.">
-<style>
-:root{
-  --burgundy:#7b1e36;
-  --burgundy-dark:#5f162a;
-  --cream:#f8efe9;
-  --paper:#fff8f1;
-  --gold:#d9b36c;
-  --forest:#0d3b2e;
-  --ink:#222;
-  --muted:#6b7280;
-  --ok:#16a34a;
-  --danger:#b91c1c;
-  --card:#ffffff;
-  --shadow:0 10px 20px rgba(0,0,0,.08), 0 6px 6px rgba(0,0,0,.06);
-  --radius:18px;
-}
-html,body{margin:0;padding:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Arial;color:var(--ink);background:linear-gradient(180deg,var(--burgundy) 0%,var(--burgundy-dark) 40%,var(--paper) 40%,var(--paper) 100%);}
-header{color:var(--cream);padding:36px 16px 14px;text-align:center;}
-.logo-banner{display:block;margin:0 auto 8px auto;max-width:min(900px,92vw);height:auto;filter:drop-shadow(0 6px 18px rgba(0,0,0,.22));}
-.subtitle{font-size:clamp(14px,2.4vw,18px);opacity:.95;max-width:900px;margin:6px auto 0 auto;line-height:1.5;}
-nav{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:18px;margin-bottom:14px;}
-nav a{display:inline-block;text-decoration:none;color:var(--burgundy);background:var(--gold);padding:10px 14px;border-radius:999px;font-weight:600;box-shadow:var(--shadow);}
-main{max-width:1100px;margin:6px auto 60px;padding:0 16px;}
-.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;margin-bottom:18px;}
-h2{margin:0 0 6px 0;font-size:22px;color:var(--forest);}
-h3{margin:4px 0 12px;font-size:20px;color:var(--forest);}
-.help{color:var(--muted);font-size:14px;}
-.today{display:grid;gap:16px;}
-.today .row{display:grid;gap:14px;}
-.today .pill{display:inline-block;padding:6px 10px;background:var(--paper);border:1px solid #efe2d6;border-radius:999px;font-size:13px;color:var(--muted);}
-.today .title{font-size:20px;font-weight:700;}
-.today .addr{font-size:16px;}
-.weather{display:flex;align-items:center;gap:14px;padding:12px;border:1px dashed #e6d7c6;border-radius:14px;background:#fffbf6;}
-.weather .big{font-size:28px;font-weight:700;color:var(--burgundy-dark);min-width:64px;text-align:center;}
-@media(min-width:850px){.today .row{grid-template-columns:2fr 1.2fr;align-items:stretch;}}
-.wa-bar{max-width:1100px;margin:0 auto 18px; padding:0 16px;}
-.wa-card{display:flex;gap:14px;align-items:center;background:#fff9ee;color:#312e2b;border:1px solid #f2e2c9;border-radius:16px;padding:10px 12px;box-shadow:var(--shadow);}
-.wa-card img{width:58px;height:58px;border-radius:10px;background:#fff;transition:transform .2s ease;cursor:zoom-in;}
-.wa-card img:hover{transform:scale(1.06);}
-.wa-card a{font-weight:700;color:#7a4a00;text-decoration:underline;}
-.list{display:flex;flex-direction:column;gap:10px;}
-.item{display:flex;gap:12px;align-items:flex-start;border:1px solid #eee5da;padding:14px;border-radius:14px;background:#fffefe;}
-.day{min-width:92px;text-align:center;background:var(--burgundy);color:var(--cream);padding:8px 10px;border-radius:10px;line-height:1.2;box-shadow:var(--shadow);}
-.day .date{font-size:18px;font-weight:800;}
-.day .wd{font-size:12px;opacity:.95;}
-.meta{flex:1;}
-.meta .host{font-weight:700;font-size:16px;}
-.meta .addr{color:#444;margin-top:2px;white-space:pre-wrap;}
-.badge{display:inline-block;font-size:12px;padding:4px 8px;border-radius:999px;background:#eef2ff;color:#334155;margin-top:6px;}
-.free{background:#fff1f1;color:#7a1d1d;}
-.changed{background:#fff7cc;color:#7a5600;}
-form{display:grid;gap:12px;}
-label{font-weight:600;}
-input[type="text"],input[type="email"],input[type="tel"],textarea{
-  width:100%;padding:12px 14px;border-radius:14px;border:1px solid #e5e6ea;background:#fff;box-shadow:0 1px 0 rgba(0,0,0,.02) inset;font-size:16px;transition:border .15s, box-shadow .15s;
-}
-input:focus,textarea:focus{outline:none;border-color:#caa56a;box-shadow:0 0 0 3px rgba(201,165,106,.18);}
-textarea{min-height:110px;resize:vertical;}
-.grid{display:grid;gap:12px;}
-@media(min-width:850px){.grid.cols-2{grid-template-columns:1fr 1fr;}}
-.actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
-button{border:none;padding:12px 16px;border-radius:12px;background:var(--forest);color:#fff;font-weight:700;cursor:pointer;box-shadow:var(--shadow);}
-button.secondary{background:var(--burgundy);}
-button.warn{background:var(--danger);}
-.success{color:var(--ok);font-weight:600;}
-.error{color:var(--danger);font-weight:600;}
-details{background:#fffdf9;border:1px solid #f0e6d9;padding:14px;border-radius:12px;}
-dialog{border:none;border-radius:16px;padding:0;width:min(1100px,96vw);box-shadow:var(--shadow);}
-.dlg-body{padding:18px;background:#ffffff;border-radius:16px;}
-.dlg-head{padding:16px 18px 0 18px;}
-.dlg-title{margin:0;color:var(--forest);font-size:20px;display:flex;align-items:center;gap:10px;}
-.dlg-foot{padding:12px 18px 18px 18px;display:flex;justify-content:flex-end;gap:10px;}
-.dlg-scroll{max-height:68vh;overflow-y:auto;overflow-x:hidden;padding:0 18px 0 18px;}
-.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
-.tab-btn{padding:8px 12px;border-radius:10px;background:#e5e7eb;color:#111827;border:1px solid #cfd4dc;cursor:pointer;font-weight:700;}
-.tab-btn[aria-selected="true"]{background:var(--gold);color:#4a1a22;border-color:#b99254;}
-.tab-panel[aria-hidden="true"]{display:none;}
-.prog-wrap{margin:12px 0 18px 0;}
-.prog-label{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;font-weight:700;}
-.prog-bar{width:100%;height:12px;background:#f1f5f9;border-radius:999px;overflow:hidden;}
-.prog-fill{height:100%;background:linear-gradient(90deg,#22c55e,#16a34a);width:0%;}
-table.table{width:100%;border-collapse:collapse;table-layout:fixed;}
-table.table th,table.table td{border-top:1px solid #e5e7eb;padding:8px;vertical-align:top;}
-table.table thead th{background:#fafafa;text-align:left;white-space:nowrap;}
-table.table td{word-break:break-word;}
-.t-center{text-align:center;}
-#tblEvents col.date{width:11ch;}
-#tblEvents col.wd{width:6ch;}
-#tblEvents col.host{width:20ch;}
-#tblEvents col.addr{width:28ch;}
-#tblEvents col.time{width:8ch;}
-#tblEvents col.note{width:24ch;}
-#tblEvents col.bf{width:6ch;}
-#tblEvents col.changed{width:10ch;}
-#tblEvents col.action{width:13ch;}
-#tblAnmeldungen col.host{width:20ch;}
-#tblAnmeldungen col.addr{width:26ch;}
-#tblAnmeldungen col.wishes{width:26ch;}
-#tblAnmeldungen col.special{width:26ch;}
-#tblAnmeldungen col.bf{width:6ch;}
-#tblAnmeldungen col.action{width:12ch;}
-.chip-assign{display:inline-block;padding:6px 10px;border-radius:999px;border:1px solid #cfd4dc;background:#f8fafc;cursor:pointer;margin:2px 4px 2px 0;font-size:13px;user-select:none;transition:transform .06s ease;}
-.chip-assign:active{transform:scale(.98);}
-.chip-assign.assigned{background:#e6ffe6;border-color:#9ad29a;}
-.chip-assign.taken{background:#fff2f2;border-color:#f0b6b6;color:#7a1d1d;cursor:not-allowed;}
-/* Picker Wochenraster */
-.picker{display:grid;gap:10px;}
-.picker .head{display:grid;grid-template-columns:repeat(7, minmax(0,1fr));gap:6px;font-weight:700;color:#334155;}
-.picker .week{display:grid;grid-template-columns:repeat(7, minmax(0,1fr));gap:6px;}
-.picker .cell{display:flex;align-items:center;justify-content:center;min-height:42px;border:1px solid #e5e7eb;border-radius:10px;background:#fff;font-size:13px;padding:4px 6px;}
-.picker .cell.empty{background:#fafafa;border-style:dashed;color:#9aa3af;}
-.picker .cell .chip-assign{margin:0;border:none;background:transparent;padding:0 6px;}
-/* Aufleuchten */
-@keyframes flashGreen{0%{box-shadow:0 0 0 0 rgba(34,197,94,.8)}100%{box-shadow:0 0 0 12px rgba(34,197,94,0)}}
-@keyframes flashRed{0%{box-shadow:0 0 0 0 rgba(239,68,68,.8)}100%{box-shadow:0 0 0 12px rgba(239,68,68,0)}}
-.pulse-green{animation:flashGreen .5s ease-out;}
-.pulse-red{animation:flashRed .5s ease-out;}
-@media(max-width:900px){
-  table.table thead{display:none;}
-  table.table, table.table tbody, table.table tr, table.table td{display:block;width:100%;}
-  table.table tr{background:#fff;border:1px solid #eee5da;border-radius:12px;padding:8px;margin-bottom:10px;}
-  table.table td{border:none;padding:6px 2px;}
-  table.table td::before{content:attr(data-label) ": ";font-weight:700;display:inline;}
-  .t-center{text-align:left;}
-}
-footer{max-width:1100px;margin:30px auto 80px;padding:0 16px;color:#222;text-align:center;}
-.footlink{font-size:14px;color:#1f2937;text-decoration:underline;cursor:pointer;}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lebendiger Adventskalender Hessisch Lichtenau</title>
+  <meta name="description" content="Informationen, Termine und Anmeldung zum Lebendigen Adventskalender in Hessisch Lichtenau.">
+  <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+  <style>
+    :root{
+      --burgundy:#7b1e36;
+      --burgundy-dark:#5f162a;
+      --cream:#f8efe9;
+      --paper:#fff8f1;
+      --gold:#d9b36c;
+      --forest:#0d3b2e;
+      --ink:#2b2b2b;
+      --muted:#6b7280;
+      --ok:#146c43;
+      --danger:#a61b1b;
+      --card:#ffffff;
+      --shadow: 0 10px 20px rgba(0,0,0,.08), 0 6px 6px rgba(0,0,0,.06);
+      --radius:18px;
+    }
+    html,body{
+      margin:0;
+      padding:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      color:var(--ink);
+      background:linear-gradient(180deg, var(--burgundy) 0%, var(--burgundy-dark) 40%, var(--paper) 40%, var(--paper) 100%);
+    }
+    header{ color:var(--cream); padding:36px 16px 28px; text-align:center; position:relative; }
+    .logo-banner{ display:block; margin:0 auto 8px auto; max-width:min(900px, 92vw); height:auto; filter: drop-shadow(0 6px 18px rgba(0,0,0,.22)); }
+    .subtitle{ font-size:clamp(14px, 2.4vw, 18px); opacity:.95; max-width:900px; margin:6px auto 0 auto; line-height:1.5; }
+    nav{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:18px; margin-bottom:14px; }
+    nav a{ display:inline-block; text-decoration:none; color:var(--burgundy); background:var(--gold); padding:10px 14px; border-radius:999px; font-weight:600; box-shadow:var(--shadow); }
+    main{ max-width:1100px; margin:-12px auto 60px; padding:0 16px; }
+    .card{ background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:20px; margin-bottom:18px; }
+
+    .today{ display:grid; gap:16px; }
+    .today h2{ margin:0 0 6px; font-size:22px; color:var(--forest); }
+    .today .row{ display:grid; gap:14px; }
+    .today .info{ display:flex; flex-direction:column; gap:8px; }
+    .today .pill{ display:inline-block; padding:6px 10px; background:var(--paper); border:1px solid #efe2d6; border-radius:999px; font-size:13px; color:var(--muted); }
+    .today .title{ font-size:20px; font-weight:700; }
+    .today .addr{ font-size:16px; }
+    .weather{ display:flex; align-items:center; gap:14px; padding:12px; border:1px dashed #e6d7c6; border-radius:14px; background:#fffbf6; }
+    .weather .big{ font-size:28px; font-weight:700; color:var(--burgundy-dark); min-width:64px; text-align:center; }
+    .weather small{ color:var(--muted); }
+
+    .grid{ display:grid; gap:16px; }
+    @media(min-width:850px){
+      .today .row{ grid-template-columns:2fr 1.2fr; align-items:stretch; }
+      .grid.cols-2{ grid-template-columns:1fr 1fr; }
+    }
+    h3{ margin:4px 0 12px; font-size:20px; color:var(--forest); }
+    .list{ display:flex; flex-direction:column; gap:10px; }
+    .item{ display:flex; gap:12px; align-items:flex-start; border:1px solid #eee5da; padding:14px; border-radius:14px; background:#fffefe; }
+    .day{ min-width:92px; text-align:center; background:var(--burgundy); color:var(--cream); padding:8px 10px; border-radius:10px; line-height:1.2; box-shadow:var(--shadow); }
+    .day .date{ font-size:18px; font-weight:800; }
+    .day .wd{ font-size:12px; opacity:.95; }
+    .meta{ flex:1; }
+    .meta .host{ font-weight:700; font-size:16px; }
+    .meta .addr{ color:#444; margin-top:2px; }
+    .badge{ display:inline-block; font-size:12px; padding:4px 8px; border-radius:999px; background:#eef2ff; color:#334155; margin-top:6px; }
+    .free{ background:#fff1f1; color:#7a1d1d; }
+    .changed{ background:#fff7cc; color:#7a5600; }
+
+    form{ display:grid; gap:12px; }
+    label{ font-weight:600; }
+    input[type="text"], input[type="email"], input[type="tel"], textarea{
+      width:100%; padding:12px 14px; border-radius:12px; border:1px solid #e5e7eb; background:#fff; font-size:16px;
+    }
+    textarea{ min-height:110px; resize:vertical; }
+    .help{ color:var(--muted); font-size:14px; }
+    .actions{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+    button{ border:none; padding:12px 16px; border-radius:12px; background:var(--forest); color:#fff; font-weight:700; cursor:pointer; box-shadow:var(--shadow); }
+    button.secondary{ background:var(--burgundy); }
+    button.warn{ background:var(--danger); }
+    .success{ color:var(--ok); font-weight:600; }
+    .error{ color:var(--danger); font-weight:600; }
+
+    details{ background:#fffdf9; border:1px solid #f0e6d9; padding:14px; border-radius:12px; }
+
+    footer{ max-width:1100px; margin:30px auto 80px; padding:0 16px; color:#222; text-align:center; }
+    .footlink{ font-size:14px; color:#1f2937; text-decoration:underline; cursor:pointer; }
+
+    dialog{ border:none; border-radius:16px; padding:0; width:min(900px, 92vw); box-shadow:var(--shadow); }
+    .dlg-body{ padding:18px; background:#ffffff; border-radius:16px; }
+    .dlg-head{ padding:16px 18px 0 18px; }
+    .dlg-title{ margin:0; color:var(--forest); font-size:20px; }
+    .dlg-foot{ padding:12px 18px 18px 18px; display:flex; justify-content:flex-end; gap:10px; }
+    .dlg-scroll{ max-height:68vh; overflow:auto; padding:0 18px 0 18px; }
+    .link-as-btn{ background:#e5e7eb; color:#111827; border-radius:12px; padding:8px 12px; cursor:pointer; display:inline-block; }
+    .muted{ color:#6b7280; }
+    .center{ text-align:center; }
+
+    .picker-grid{ display:grid; gap:10px; grid-template-columns:repeat(auto-fill, minmax(110px, 1fr)); margin-top:10px; }
+    .pick{ border:1px solid #e5e7eb; border-radius:12px; padding:10px; text-align:center; cursor:pointer; user-select:none; background:#fff; }
+    .pick .d{ font-weight:800; font-size:18px; }
+    .pick.sel{ outline:3px solid var(--gold); background:#fffaf0; }
+    .preview-chips{ display:flex; gap:8px; flex-wrap:wrap; margin-top:6px; }
+    .chip{ background:#eef2ff; color:#334155; padding:4px 8px; border-radius:999px; font-size:12px; }
+
+    .chip-assign{ display:inline-block; padding:4px 8px; border-radius:999px; font-size:12px; background:#f0f9ff; color:#075985; cursor:pointer; margin:2px 6px 2px 0; border:1px solid #e0f2fe; }
+    .chip-assign.assigned{ background:#dcfce7; color:#065f46; border-color:#bbf7d0; }
+
+    .prog-wrap{ margin:12px 0 18px; }
+    .prog-label{ display:flex; justify-content:space-between; font-weight:600; margin-bottom:6px; }
+    .prog-bar{ height:12px; background:#f1f5f9; border-radius:999px; overflow:hidden; }
+    .prog-fill{ height:100%; width:0%; background:linear-gradient(90deg,#22c55e,#16a34a); transition:width .4s ease; }
+    .email-box{ display:grid; gap:8px; margin-top:10px; }
+    .email-row{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+    .email-row label{ font-weight:600; }
+    .email-area{ width:100%; min-height:90px; border:1px solid #e5e7eb; border-radius:12px; padding:10px; font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size:13px; }
+
+    .drag{ cursor:grab; user-select:none; font-weight:700; padding:6px 8px; border:1px solid #e5e7eb; border-radius:8px; background:#f8fafc; display:inline-block; }
+    tr.dragging{ opacity:.6; }
+    tr.drop-above{ outline:2px solid #cbd5e1; }
+    tr.drop-below{ outline:2px solid #cbd5e1; }
+
+    /* Zustimmung */
+    .consent{ background:#fffbf6; border:1px solid #e6d7c6; padding:12px; border-radius:12px; }
+    .consent label{ font-weight:500; display:flex; align-items:flex-start; gap:8px; line-height:1.4; }
+    .consent input[type="checkbox"]{ margin-top:3px; }
+  </style>
 </head>
 <body>
 
-<header>
-  <img src="Logo.png" alt="Lebendiger Adventskalender Hessisch Lichtenau" class="logo-banner">
-  <div class="subtitle">Vom ersten Advent bis kurz vor Heiligabend. Begegnungen mit Licht, Musik, Geschichten und guten Gesprächen.</div>
-  <nav aria-label="Hauptnavigation">
-    <a href="#heute">Heute</a>
-    <a href="#termine">Termine</a>
-    <a href="#anmeldung">Gastgeber werden</a>
-    <a href="#info">Information</a>
-    <a href="#ruestzeug" id="openGear">Rüstzeug</a>
-    <a href="#kontakt">Kontakt</a>
-  </nav>
-</header>
+  <header>
+    <img src="Logo.png" alt="Lebendiger Adventskalender Hessisch Lichtenau" class="logo-banner">
+    <div class="subtitle">Vom ersten Advent bis kurz vor Heiligabend. Tägliche Begegnungen um 18 Uhr mit Licht, Musik, Geschichten und guten Gesprächen.</div>
+    <nav aria-label="Hauptnavigation">
+      <a href="#heute">Heute</a>
+      <a href="#termine">Termine</a>
+      <a href="#anmeldung">Gastgeber werden</a>
+      <a href="#info">Information</a>
+      <a href="#ruestzeug" id="openGear">Rüstzeug</a>
+    </nav>
+  </header>
 
-<div class="wa-bar">
-  <div class="wa-card">
-    <img src="qrcode.jpg" alt="QR Code WhatsApp Kanal" id="qrThumb">
-    <div>
-      <div><strong>Alle wichtigen Infos bequem per WhatsApp</strong></div>
-      <div>Jetzt Kanal abonnieren und auf dem Laufenden bleiben. <a href="https://whatsapp.com/channel/0029VbBLGb31CYoMJfdTh60w" rel="noopener">Zum WhatsApp Kanal</a></div>
-    </div>
-  </div>
-</div>
-
-<main>
-  <section id="heute" class="card today" aria-labelledby="heute-title">
-    <h2 id="heute-title">Nächster Termin um 18 Uhr</h2>
-    <div class="row">
-      <div>
-        <span class="pill" id="heuteDatum">Datum wird geladen</span>
-        <div class="title" id="heuteTitel">Noch kein Eintrag ausgewählt</div>
-        <div class="addr" id="heuteAdresse"></div>
-        <div class="help" id="heuteHinweis"></div>
-      </div>
-      <div class="weather" aria-live="polite">
-        <div class="big" id="wTemp">n. a.</div>
-        <div>
-          <div id="wText">Wetter für 18 Uhr wird geladen</div>
-          <small id="wMeta"></small>
+  <main>
+    <section id="heute" class="card today" aria-labelledby="heute-title">
+      <h2 id="heute-title">Nächster Termin um 18 Uhr</h2>
+      <div class="row">
+        <div class="info">
+          <span class="pill" id="heuteDatum">Datum wird geladen</span>
+          <div class="title" id="heuteTitel">Noch kein Eintrag ausgewählt</div>
+          <div class="addr" id="heuteAdresse"></div>
+          <div class="help" id="heuteHinweis"></div>
+        </div>
+        <div class="weather" aria-live="polite">
+          <div class="big" id="wTemp">n. a.</div>
+          <div>
+            <div id="wText">Wetter für 18 Uhr wird geladen</div>
+            <small id="wMeta"></small>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section id="termine" class="card" aria-labelledby="termine-title">
-    <h3 id="termine-title">Alle Termine</h3>
-    <p class="help">In der Regel beginnen die Abende um 18 Uhr. Manche Gastgeber wählen eine andere Uhrzeit. Die Treffen dauern etwa eine halbe Stunde. Das Zeichen ♿ zeigt Barrierefreiheit an.</p>
-    <div class="list" id="terminListe" role="list"></div>
-    <div class="actions" style="margin-top:12px">
-      <button type="button" id="btnPdf" class="secondary">Übersicht als PDF</button>
-      <button type="button" id="btnIcs">Alle Termine als Kalenderdatei</button>
-    </div>
-  </section>
-
-  <section id="anmeldung" class="card" aria-labelledby="anmeldung-title">
-    <h3 id="anmeldung-title">Gastgeber werden</h3>
-    <p>Sie möchten einen Abend ausrichten. Das freut uns. Tragen Sie Ihre Kontaktdaten ein und wählen Sie mehrere mögliche Termine. Die endgültige Vergabe erfolgt durch das Organisationsteam. Sie erhalten eine Rückmeldung.</p>
-    <form id="hostForm" novalidate>
-      <div>
-        <label for="name">Name oder Gruppe</label>
-        <input id="name" type="text" autocomplete="name" required placeholder="Zum Beispiel Familie Müller oder Gesangverein Heimatklang">
+    <section id="termine" class="card" aria-labelledby="termine-title">
+      <h3 id="termine-title">Alle Termine</h3>
+      <p class="help">Zeitraum von Sonntag, 30. November, bis Mittwoch, 24. Dezember. Beginn jeweils um 18 Uhr. Am 24. Dezember erscheinen die Gottesdienste der beteiligten Gemeinden.</p>
+      <div class="list" id="terminListe" role="list"></div>
+      <div class="actions" style="margin-top:12px">
+        <button type="button" id="btnPdf" class="secondary">Übersicht als PDF</button>
+        <button type="button" id="btnIcs">Alle Termine als Kalenderdatei</button>
       </div>
-      <div class="grid cols-2">
+    </section>
+
+    <section id="anmeldung" class="card" aria-labelledby="anmeldung-title">
+      <h3 id="anmeldung-title">Gastgeber werden</h3>
+      <p>Sie möchten einen Abend ausrichten. Das freut uns. Tragen Sie bitte Ihre Kontaktdaten ein und wählen Sie mehrere mögliche Termine im Dezember. Die endgültige Vergabe erfolgt durch das Organisationsteam. Sie erhalten im Anschluss eine Rückmeldung.</p>
+      <form id="hostForm" novalidate>
         <div>
-          <label for="email">E Mail</label>
-          <input id="email" type="email" autocomplete="email" required placeholder="beispiel@mail.de">
+          <label for="name">Name oder Gruppe</label>
+          <input id="name" name="name" type="text" autocomplete="name" required placeholder="Zum Beispiel Familie Müller oder Gesangverein Heimatklang">
         </div>
+        <div class="grid cols-2">
+          <div>
+            <label for="email">E Mail</label>
+            <input id="email" name="email" type="email" autocomplete="email" required placeholder="beispiel@mail.de">
+          </div>
+          <div>
+            <label for="tel">Telefon</label>
+            <input id="tel" name="tel" type="tel" autocomplete="tel" required placeholder="Zum Beispiel 0151 12345678">
+          </div>
+        </div>
+
+        <div class="grid cols-2">
+          <div>
+            <label for="street">Straße und Hausnummer</label>
+            <input id="street" name="street" type="text" required placeholder="Zum Beispiel Musterstraße 5">
+          </div>
+          <div>
+            <label for="city">PLZ Ort</label>
+            <input id="city" name="city" type="text" required placeholder="Zum Beispiel 37235 Hessisch Lichtenau">
+          </div>
+        </div>
+
         <div>
-          <label for="tel">Telefon</label>
-          <input id="tel" type="tel" autocomplete="tel" required placeholder="Zum Beispiel 0151 12345678">
+          <label>Wunschtermine im Dezember 2025</label>
+          <div class="actions">
+            <button type="button" id="openPicker" class="secondary">Wunschtermine auswählen</button>
+          </div>
+          <div class="help">Zeitraum von Montag, 1. Dezember 2025, bis Dienstag, 23. Dezember 2025. Mehrfachauswahl ist gewünscht.</div>
+          <div id="wishesPreview" class="preview-chips"></div>
         </div>
-      </div>
-      <div class="grid cols-2">
+
         <div>
-          <label for="street">Straße und Hausnummer</label>
-          <input id="street" type="text" required placeholder="Zum Beispiel Musterstraße 5">
+          <label for="note">Bemerkungen optional</label>
+          <textarea id="note" name="note" placeholder="Ideen, Hinweise oder Besonderheiten"></textarea>
         </div>
-        <div>
-          <label for="city">PLZ Ort</label>
-          <input id="city" type="text" required placeholder="Zum Beispiel 37235 Hessisch Lichtenau">
+
+        <!-- Pflichtfeld Zustimmung -->
+        <div class="consent">
+          <label for="consent">
+            <input id="consent" name="consent" type="checkbox" required>
+            Ich stimme mit meiner Anmeldung zu, dass mein Name und meine Adresse als Gastgeberin oder Gastgeber des Lebendigen Adventskalenders veröffentlicht werden dürfen. Die Veröffentlichung kann in Aushängen, sozialen Medien, auf digitalen Kanälen, im Gemeindebrief und in Printmedien erfolgen. Diese Zustimmung ist Voraussetzung für die Anmeldung.
+          </label>
+          <div class="help">Ohne diese Zustimmung kann die Anmeldung nicht abgesendet werden.</div>
         </div>
-      </div>
-      <div>
-        <label>Wunschtermine im Dezember</label>
-        <div class="actions"><button type="button" id="openPicker" class="secondary">Wunschtermine auswählen</button></div>
-        <div class="help">Zeitraum von Montag, 1. Dezember, bis Dienstag, 23. Dezember. Mehrfachauswahl ist erwünscht.</div>
-        <div id="wishesPreview" class="actions" style="gap:8px;flex-wrap:wrap;"></div>
-      </div>
-      <div>
-        <label for="note">Besonderheiten optional</label>
-        <textarea id="note" placeholder="Hinweise für die Organisation oder besondere Bedürfnisse"></textarea>
-      </div>
-      <div class="consent" role="group" aria-labelledby="consentTitle">
-        <div id="consentTitle" class="help" style="margin-bottom:6px;">Zustimmung zur Veröffentlichung</div>
-        <label for="consent">
-          <input id="consent" type="checkbox" required>
-          Ich stimme zu, dass mein Name und meine Adresse als Gastgeberin oder Gastgeber veröffentlicht werden dürfen. Die Veröffentlichung kann in Aushängen, digitalen Kanälen, im Gemeindebrief und in Printmedien erfolgen. Diese Zustimmung ist Voraussetzung für die Anmeldung.
-        </label>
-      </div>
-      <div>
-        <label><input type="checkbox" id="barrierFreeHost"> Veranstaltungsort ist barrierefrei</label>
-      </div>
-      <div class="actions">
-        <button type="submit" id="sendBtn">Anmeldung senden</button>
-        <button type="reset" class="secondary" id="resetBtn">Eingaben zurücksetzen</button>
-        <span id="formMsg" role="status" aria-live="polite"></span>
-      </div>
-    </form>
-  </section>
 
-  <section id="info" class="card" aria-labelledby="info-title">
-    <h3 id="info-title">Was ist ein lebendiger Adventskalender</h3>
-    <p>An jedem Abend im Advent öffnet sich um 18 Uhr ein Türchen in Form eines Fensters, eines Hauses, eines Gartens oder eines Hofes. Gastgeberinnen und Gastgeber laden für etwa 30 Minuten zu einer adventlichen Begegnung ein. Gemeinschaft und Vorfreude stehen im Mittelpunkt.</p>
-    <p>Die Gestaltung kann vielfältig sein. Möglich sind eine kurze Geschichte oder ein Impuls, gemeinsames Singen von Weihnachtsliedern, leise Musik im Hintergrund oder ein offenes Zusammensein bei Kerzenschein. Gäste bringen nach Möglichkeit eine eigene Tasse mit.</p>
-    <details>
-      <summary>Organisation und nächste Schritte</summary>
-      <p>Zum Auftakt eröffnen wir an der Stadtkirche die Krippe im Freien. Danach trifft sich die Stadtgemeinschaft jeden Abend an einem anderen Ort. Gruppen, Familien, Vereine, Kirchengemeinden oder Einzelpersonen können einen Abend übernehmen. Auf Wunsch stellen wir Materialien und Gestaltungsideen bereit.</p>
-    </details>
-  </section>
-
-  <section id="kontakt" class="card" aria-labelledby="kontakt-title">
-    <h3 id="kontakt-title">Kontakt</h3>
-    <form id="contactForm">
-      <div class="grid cols-2">
-        <div>
-          <label for="kname">Ihr Name</label>
-          <input id="kname" type="text" required>
-        </div>
-        <div>
-          <label for="kmail">Ihre E Mail</label>
-          <input id="kmail" type="email" required>
-        </div>
-      </div>
-      <div>
-        <label for="kmsg">Ihre Nachricht</label>
-        <textarea id="kmsg" required placeholder="Ihr Anliegen"></textarea>
-      </div>
-      <div class="actions">
-        <button type="submit">Nachricht senden</button>
-        <span id="kmsgInfo" class="help" aria-live="polite"></span>
-      </div>
-    </form>
-  </section>
-</main>
-
-<footer>
-  <span class="footlink" id="openLegal">Impressum und Datenschutz</span>
-</footer>
-
-<dialog id="dlgGear">
-  <div class="dlg-body">
-    <div class="dlg-head"><h3 class="dlg-title">Rüstzeug für den Abend</h3></div>
-    <div class="dlg-scroll">
-      <p>Materialien zur Vorbereitung deines Abends.</p>
-      <ul>
-        <li><a href="#" download>Vorlage Ablaufplan PDF</a></li>
-        <li><a href="#" download>Liederliste PDF</a></li>
-        <li><a href="#" download>Impulsideen PDF</a></li>
-      </ul>
-      <p class="help">Du kannst die Links später durch eigene Dateien ersetzen.</p>
-    </div>
-    <div class="dlg-foot"><button type="button" class="secondary" data-close="dlgGear">Schließen</button></div>
-  </div>
-</dialog>
-
-<dialog id="dlgLegal">
-  <div class="dlg-body">
-    <div class="dlg-head"><h3 class="dlg-title">Impressum und Datenschutz</h3></div>
-    <div class="dlg-scroll">
-      <p><strong>Impressum</strong></p>
-      <p>Ev. Kirchengemeinde Hessisch Lichtenau<br>Mühlweg 21, 37235 Hessisch Lichtenau<br>Telefon 05602 2403<br>E Mail hessischlichtenau.gemeindebuero@ekkw.de</p>
-      <p>Verantwortlich nach §18 MStV. Pfarrerin Anja Peters</p>
-      <p><strong>Datenschutz</strong></p>
-      <p>Es werden keine Tracking Dienste eingesetzt. Technisch notwendige Protokolle des Hosts werden nur kurz gespeichert. Die lokale Speicherung erfolgt ausschließlich im Browser.</p>
-      <hr>
-      <p class="help">Nur für das Organisationsteam</p>
-      <p><span class="tab-btn" id="openAdminLogin">Admin</span></p>
-    </div>
-    <div class="dlg-foot"><button type="button" class="secondary" data-close="dlgLegal">Schließen</button></div>
-  </div>
-</dialog>
-
-<dialog id="dlgAdminLogin">
-  <div class="dlg-body">
-    <div class="dlg-head"><h3 class="dlg-title">Admin Anmeldung</h3></div>
-    <div class="dlg-scroll">
-      <form class="grid">
-        <input type="email" id="admEmail" placeholder="Admin E Mail" required>
-        <input type="password" id="admPass" placeholder="Passwort" required>
         <div class="actions">
-          <button type="button" id="btnLogin">Anmelden</button>
-          <span id="authMsg" class="help" aria-live="polite"></span>
+          <button type="submit" id="sendBtn">Anmeldung senden</button>
+          <button type="reset" class="secondary" id="resetBtn">Eingaben zurücksetzen</button>
+          <span id="formMsg" role="status" aria-live="polite"></span>
         </div>
       </form>
+    </section>
+
+    <section id="info" class="card" aria-labelledby="info-title">
+      <h3 id="info-title">Was ist ein lebendiger Adventskalender</h3>
+      <p>An jedem Abend im Advent öffnet sich um 18 Uhr ein Türchen in Form eines Fensters, eines Hauses, eines Gartens oder eines Hofes. Gastgeberinnen und Gastgeber laden für etwa 30 Minuten zu einer adventlichen Begegnung ein. Gemeinschaft und Vorfreude stehen im Mittelpunkt.</p>
+      <p>Die Gestaltung kann vielfältig sein. Möglich sind eine kurze Geschichte oder ein Impuls, gemeinsames Singen von Weihnachtsliedern, leise Musik im Hintergrund oder ein offenes Zusammensein bei Kerzenschein. Wer möchte, kann mit Plätzchen, Tee oder einem Becher Glühwein bewirten. Gäste bringen nach Möglichkeit eine eigene Tasse mit.</p>
+      <details>
+        <summary>Organisation und nächste Schritte</summary>
+        <p>Zum Auftakt eröffnen wir am Sonntag, 30. November, um 18 Uhr an der Stadtkirche die Krippe im Freien. Danach trifft sich die Stadtgemeinschaft jeden Abend an einem anderen Ort. Gruppen, Familien, Vereine, Kirchengemeinden oder Einzelpersonen können einen Abend übernehmen. Auf Wunsch stellen wir Materialien und Gestaltungsideen bereit.</p>
+      </details>
+    </section>
+  </main>
+
+  <footer>
+    <span class="footlink" id="openLegal">Impressum und Datenschutz</span>
+  </footer>
+
+  <!-- Rüstzeug -->
+  <dialog id="dlgGear">
+    <div class="dlg-body">
+      <div class="dlg-head"><h3 class="dlg-title">Rüstzeug für den Abend</h3></div>
+      <div class="dlg-scroll">
+        <p>Hier findest du Materialien zur Vorbereitung deines Abends.</p>
+        <ul>
+          <li><a href="#" download>Vorlage Ablaufplan PDF</a></li>
+          <li><a href="#" download>Liederliste PDF</a></li>
+          <li><a href="#" download>Impulsideen PDF</a></li>
+        </ul>
+        <p class="muted">Du kannst die Links später durch eigene Dateien ersetzen.</p>
+      </div>
+      <div class="dlg-foot"><button type="button" class="secondary" data-close="dlgGear">Schließen</button></div>
     </div>
-    <div class="dlg-foot"><button type="button" class="secondary" data-close="dlgAdminLogin">Schließen</button></div>
-  </div>
-</dialog>
+  </dialog>
 
-<dialog id="dlgAdminPanel">
-  <div class="dlg-body">
-    <div class="dlg-head"><h3 class="dlg-title">Admin Bereich</h3></div>
-    <div class="dlg-scroll">
-
-      <div class="prog-wrap" id="progWrap" aria-live="polite">
-        <div class="prog-label"><span>Belegung 1 bis 23 Dezember</span><span id="progPercent">0%</span></div>
-        <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
-        <div class="help" id="progMeta">0 von 23 Abenden vergeben</div>
+  <!-- Impressum und Admin -->
+  <dialog id="dlgLegal">
+    <div class="dlg-body">
+      <div class="dlg-head"><h3 class="dlg-title">Impressum und Datenschutz</h3></div>
+      <div class="dlg-scroll">
+        <p><strong>Impressum</strong></p>
+        <p>Ev. Kirchengemeinde Hessisch Lichtenau<br>Mühlweg 21, 37235 Hessisch Lichtenau<br>Telefon 05602 2403<br>E Mail hessischlichtenau.gemeindebuero@ekkw.de</p>
+        <p>Die Ev. Kirchengemeinde Hessisch Lichtenau ist eine Körperschaft des öffentlichen Rechts. Vertretungsberechtigt ist der Kirchenvorstand.</p>
+        <p><strong>Verantwortlich nach §18 MStV</strong><br>Pfarrerin Anja Peters, Mühlweg 21, 37235 Hessisch Lichtenau</p>
+        <p><strong>Datenschutz</strong></p>
+        <p>Es werden keine Tracking Dienste oder Cookies eingesetzt. Technisch notwendige Protokolle des Hosts werden nur kurz gespeichert. Die lokale Speicherung von Sprache und Wiedergabegeschwindigkeit erfolgt ausschließlich im Browser und kann jederzeit gelöscht werden.</p>
+        <p>Rechte nach DSGVO. Auskunft, Berichtigung, Löschung, Einschränkung, Widerspruch und Datenübertragbarkeit. Beschwerden bei der Aufsichtsbehörde sind möglich.</p>
+        <hr>
+        <p class="muted">Nur für das Organisationsteam</p>
+        <p><span class="link-as-btn" id="openAdminLogin">Admin</span></p>
       </div>
+      <div class="dlg-foot"><button type="button" class="secondary" data-close="dlgLegal">Schließen</button></div>
+    </div>
+  </dialog>
 
-      <div class="tabs" role="tablist" aria-label="Admin Bereiche">
-        <button class="tab-btn" role="tab" aria-selected="true" aria-controls="tab-messages" id="tabbtn-messages">Nachrichten</button>
-        <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-anmeld" id="tabbtn-anmeld">Anmeldungen</button>
-        <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-events" id="tabbtn-events">Termine</button>
-        <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-services" id="tabbtn-services">Heiligabend</button>
+  <!-- Admin Login -->
+  <dialog id="dlgAdminLogin">
+    <div class="dlg-body">
+      <div class="dlg-head"><h3 class="dlg-title">Admin Anmeldung</h3></div>
+      <div class="dlg-scroll">
+        <form id="adminLogin" class="grid">
+          <input type="email" id="admEmail" placeholder="Admin E Mail" required>
+          <input type="password" id="admPass" placeholder="Passwort" required>
+          <div class="actions">
+            <button type="button" id="btnLogin">Anmelden</button>
+            <span id="authMsg" class="muted" aria-live="polite"></span>
+          </div>
+        </form>
       </div>
+      <div class="dlg-foot"><button type="button" class="secondary" data-close="dlgAdminLogin">Schließen</button></div>
+    </div>
+  </dialog>
 
-      <section id="tab-messages" class="tab-panel" role="tabpanel" aria-hidden="false">
-        <h4>Nachrichten</h4>
-        <table class="table" id="tblMessages">
-          <thead><tr><th>Zeit</th><th>Absender</th><th>E Mail</th><th>Nachricht</th><th>Status</th></tr></thead>
-          <tbody></tbody>
-        </table>
-      </section>
+  <!-- Admin Panel -->
+  <dialog id="dlgAdminPanel">
+    <div class="dlg-body">
+      <div class="dlg-head"><h3 class="dlg-title">Admin Bereich</h3></div>
+      <div class="dlg-scroll">
 
-      <section id="tab-anmeld" class="tab-panel" role="tabpanel" aria-hidden="true">
+        <div class="prog-wrap" id="progWrap" aria-live="polite">
+          <div class="prog-label"><span>Belegung 1 bis 23 Dezember</span><span id="progPercent">0%</span></div>
+          <div class="prog-bar"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+          <div class="muted" id="progMeta">0 von 23 Abenden vergeben</div>
+        </div>
+
+        <div class="email-box">
+          <div class="email-row">
+            <label for="emailAll">E Mail Adressen der Gastgeber</label>
+            <label class="muted" style="margin-left:auto"><input type="checkbox" id="includePending"> auch Anmeldungen einbeziehen</label>
+            <button type="button" class="secondary" id="btnCopyEmails">Adressen kopieren</button>
+          </div>
+          <textarea id="emailAll" class="email-area" readonly></textarea>
+          <div class="muted">Tipp: In deinem Mailprogramm im Feld BCC nutzen.</div>
+        </div>
+
         <h4>Anmeldungen zuweisen</h4>
-        <table class="table" id="tblAnmeldungen">
-          <colgroup>
-            <col class="host"><col class="addr"><col class="wishes"><col class="special"><col class="bf"><col class="action">
-          </colgroup>
-        <thead><tr><th>Kontakt</th><th>Adresse</th><th>Wunschtermine</th><th>Besonderheiten</th><th>♿</th><th>Aktion</th></tr></thead>
+        <p class="muted">Klicke auf einen gewünschten Termin einer Anmeldung, um ihn sofort als endgültigen Termin zu setzen.</p>
+        <table class="table" id="tblAnmeldungen" aria-describedby="anmeldHelp">
+          <thead><tr><th>Name und Kontakt</th><th>Adresse</th><th>Wunschtermine</th><th>Bemerkung</th><th>Aktion</th></tr></thead>
           <tbody></tbody>
         </table>
-      </section>
+        <p id="anmeldHelp" class="muted">Nach der Zuweisung kannst du den Antrag optional löschen.</p>
 
-      <section id="tab-events" class="tab-panel" role="tabpanel" aria-hidden="true">
         <h4>Termine pflegen</h4>
+        <p class="muted">Gastgeber und Adresse bearbeiten oder einen Termin als geändert markieren.</p>
         <table class="table" id="tblEvents">
-          <colgroup>
-            <col class="date"><col class="wd"><col class="host"><col class="addr"><col class="time"><col class="note"><col class="bf"><col class="changed"><col class="action">
-          </colgroup>
-          <thead><tr><th>Datum</th><th>Tag</th><th>Gastgeber</th><th>Adresse</th><th>Uhrzeit</th><th>Notiz</th><th>♿</th><th>Änderung</th><th>Aktion</th></tr></thead>
-          <tbody></tbody>
+          <thead><tr><th>Datum</th><th>Wochentag</th><th>Gastgeber</th><th>Adresse</th><th>Notiz</th><th>Änderung</th><th>Aktion</th></tr></thead>
+        <tbody></tbody>
         </table>
-      </section>
 
-      <section id="tab-services" class="tab-panel" role="tabpanel" aria-hidden="true">
         <h4>Gottesdienste am 24. Dezember</h4>
+        <p class="muted">Lege die Gottesdienste an, speichere sie und sortiere sie danach per Ziehen in die gewünschte Reihenfolge.</p>
         <table class="table" id="tblServices">
           <thead><tr><th></th><th>Gemeinde</th><th>Uhrzeit</th><th>Adresse</th><th>Notiz</th><th>Aktion</th></tr></thead>
           <tbody></tbody>
         </table>
-        <div class="actions" style="margin-top:8px"><button type="button" id="addService" class="secondary">Neuen Gottesdienst hinzufügen</button></div>
-      </section>
+        <div class="actions" style="margin-top:8px">
+          <button type="button" id="addService" class="secondary">Neuen Gottesdienst hinzufügen</button>
+        </div>
+
+      </div>
+      <div class="dlg-foot">
+        <button type="button" id="btnLogout" class="secondary">Abmelden</button>
+        <button type="button" class="secondary" data-close="dlgAdminPanel">Schließen</button>
+      </div>
     </div>
-    <div class="dlg-foot">
-      <button type="button" id="btnLogout" class="secondary">Abmelden</button>
-      <button type="button" class="secondary" data-close="dlgAdminPanel">Schließen</button>
+  </dialog>
+
+  <!-- Termin Picker -->
+  <dialog id="dlgPicker">
+    <div class="dlg-body">
+      <div class="dlg-head"><h3 class="dlg-title">Wunschtermine im Dezember 2025</h3></div>
+      <div class="dlg-scroll">
+        <p class="muted">Bitte wähle alle passenden Abende. Beginn ist jeweils 18 Uhr für etwa 20 bis 30 Minuten.</p>
+        <div id="pickerGrid" class="picker-grid"></div>
+      </div>
+      <div class="dlg-foot">
+        <button type="button" class="secondary" data-close="dlgPicker">Abbrechen</button>
+        <button type="button" id="pickerOk">Auswahl übernehmen</button>
+      </div>
     </div>
-  </div>
-</dialog>
+  </dialog>
 
-<dialog id="dlgPicker">
-  <div class="dlg-body">
-    <div class="dlg-head"><h3 class="dlg-title">Wunschtermine im Dezember</h3></div>
-    <div class="dlg-scroll">
-      <p class="help">Jede Woche steht in einer Zeile von Montag bis Sonntag. Rot markierte Tage sind bereits vergeben. Freie Tage leuchten beim Anklicken grün.</p>
-      <div id="pickerGrid" class="picker"></div>
+  <!-- Bestätigungsdialog nach dem Absenden -->
+  <dialog id="dlgSubmitConfirm" aria-labelledby="dlgSubmitConfirmTitle">
+    <div class="dlg-body">
+      <div class="dlg-head"><h3 class="dlg-title" id="dlgSubmitConfirmTitle">Anmeldung bestätigt</h3></div>
+      <div class="dlg-scroll">
+        <p>Vielen Dank für Ihre Anmeldung. Das Organisationsteam meldet sich, sobald die Termine verteilt wurden.</p>
+      </div>
+      <div class="dlg-foot">
+        <button type="button" class="secondary" data-close="dlgSubmitConfirm">Schließen</button>
+      </div>
     </div>
-    <div class="dlg-foot">
-      <button type="button" class="secondary" data-close="dlgPicker">Abbrechen</button>
-      <button type="button" id="pickerOk">Auswahl übernehmen</button>
-    </div>
-  </div>
-</dialog>
+  </dialog>
 
-<dialog id="dlgSubmitConfirm" aria-labelledby="dlgSubmitConfirmTitle">
-  <div class="dlg-body">
-    <div class="dlg-head"><h3 class="dlg-title" id="dlgSubmitConfirmTitle">Anmeldung bestätigt</h3></div>
-    <div class="dlg-scroll"><p>Vielen Dank für Ihre Anmeldung. Das Organisationsteam meldet sich, sobald die Termine verteilt wurden.</p></div>
-    <div class="dlg-foot"><button type="button" class="secondary" data-close="dlgSubmitConfirm">Schließen</button></div>
-  </div>
-</dialog>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-analytics.js";
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+    import { getFirestore, collection, addDoc, getDocs, setDoc, doc, deleteDoc, query, orderBy, writeBatch } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-import { getFirestore, collection, addDoc, getDocs, setDoc, doc, deleteDoc, query, orderBy, getDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
-
-/* Firebase */
-const firebaseConfig = {
-  apiKey: "AIzaSyCZuvHUy6xMN6WIrHUQBpxuobZkQRKB20s",
-  authDomain: "adventskalender-90bb1.firebaseapp.com",
-  projectId: "adventskalender-90bb1",
-  storageBucket: "adventskalender-90bb1.firebasestorage.app",
-  messagingSenderId: "816945632051",
-  appId: "1:816945632051:web:817e7a3d8945c3a65aa446"
-};
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-
-/* Hilfsfunktionen und Daten */
-const $  = s => document.querySelector(s);
-const $$ = s => Array.from(document.querySelectorAll(s));
-const WDAY = ["So","Mo","Di","Mi","Do","Fr","Sa"];
-const rangeStart = new Date(2025,10,30);
-const rangeEnd   = new Date(2025,11,24);
-function ymd(d){ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`; }
-function deDate(d){ return `${String(d.getDate()).padStart(2,"0")}.${String(d.getMonth()+1).padStart(2,"0")}.${d.getFullYear()}`; }
-function allDates(){ const out=[]; let d=new Date(rangeStart); while(d<=rangeEnd){ out.push(new Date(d)); d.setDate(d.getDate()+1); } return out; }
-function decDates(){ const out=[]; for(let i=1;i<=23;i++){ out.push(new Date(2025,11,i)); } return out; }
-function escapeHtml(s){ return String(s||"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m])); }
-
-const selected = new Set();
-const eventsMap = new Map();
-let services = [];
-
-/* UI Kleinigkeiten */
-$("#qrThumb").addEventListener("click", ()=> $("#dlgGear").open ? $("#dlgGear").close() : $("#dlgGear").showModal());
-$$( "[data-close]" ).forEach(b=> b.addEventListener("click", ()=> document.getElementById(b.getAttribute("data-close")).close()));
-$("#openLegal").addEventListener("click", ()=> $("#dlgLegal").showModal());
-$("#openGear").addEventListener("click", ()=> $("#dlgGear").showModal());
-
-/* Tabs im Admin */
-function wireTabs(){
-  const cfg = [["messages","tab-messages"],["anmeld","tab-anmeld"],["events","tab-events"],["services","tab-services"]];
-  cfg.forEach(([key,id])=>{
-    const btn = document.getElementById("tabbtn-"+key);
-    const panel = document.getElementById(id);
-    btn.addEventListener("click", ()=>{
-      document.querySelectorAll(".tab-btn").forEach(b=> b.setAttribute("aria-selected","false"));
-      document.querySelectorAll(".tab-panel").forEach(p=> p.setAttribute("aria-hidden","true"));
-      btn.setAttribute("aria-selected","true");
-      panel.setAttribute("aria-hidden","false");
-    });
-  });
-}
-wireTabs();
-
-/* Öffentliche Daten laden */
-async function loadPublicAndServices(){
-  eventsMap.clear(); services = [];
-  try{
-    const qy = query(collection(db,"events"), orderBy("datum","asc"));
-    const snap = await getDocs(qy);
-    snap.forEach(d=>{
-      const e=d.data();
-      if(!e) return;
-      if(e.datum==="2025-12-24" && e.isService){ services.push({id:d.id, ...e}); }
-      else if(e.datum){ eventsMap.set(e.datum, {id:d.id, ...e}); }
-    });
-  }catch(e){}
-  services.sort((a,b)=>((a.order??9999)-(b.order??9999)));
-  renderPublic();
-  updateProgressBar();
-}
-function renderPublic(){
-  const list = $("#terminListe"); list.innerHTML = "";
-  allDates().forEach(d=>{
-    const key = ymd(d);
-    const item = document.createElement("div"); item.className = "item";
-    const day = document.createElement("div"); day.className = "day";
-    day.innerHTML = `<div class="wd">${WDAY[d.getDay()]}</div><div class="date">${String(d.getDate()).padStart(2,"0")}.${String(d.getMonth()+1).padStart(2,"0")}</div>`;
-    const meta = document.createElement("div"); meta.className = "meta";
-
-    if(key==="2025-12-24"){
-      if(services.length){
-        meta.innerHTML = `<div class="badge">Heiligabend Gottesdienste</div>` +
-          services.map(s=>{
-            const t = s.uhrzeit ? ` um ${escapeHtml(s.uhrzeit)} Uhr` : "";
-            const line = `${escapeHtml(s.gemeinde||"Gemeinde")}${t}`;
-            const addr = s.adresse ? `<div class="addr">${escapeHtml(s.adresse)}</div>` : "";
-            const info = s.info ? `<div class="badge">${escapeHtml(s.info)}</div>` : "";
-            return `<div class="host">${line}</div>${addr}${info}`;
-          }).join("<hr style='border:none;border-top:1px solid #eee5da;margin:8px 0'>");
-      }else meta.innerHTML = `<div class="host help">Gottesdienste werden ergänzt</div>`;
-    }else{
-      const e = eventsMap.get(key);
-      if(e && e.hostName){
-        const changed = e.changed ? `<div class="badge changed">Hinweis geändert</div>` : "";
-        const info = e.info ? `<div class="badge">${escapeHtml(e.info)}${e.barrierFree ? " ♿" : ""}</div>` : (e && e.barrierFree ? `<div class="badge">♿</div>` : "");
-        meta.innerHTML = `<div class="host">${escapeHtml(e.hostName)}</div><div class="addr">${escapeHtml(e.hostAdresse || "")}</div>${info}${changed}`;
-      }else{
-        meta.innerHTML = `<div class="host help">Noch frei</div><div class="badge free">Anmeldung möglich</div>`;
-      }
-    }
-    item.append(day, meta); list.appendChild(item);
-  });
-
-  const next = computeNextDate();
-  const e = eventsMap.get(next);
-  const d = new Date(next);
-  $("#heuteDatum").textContent = `${WDAY[d.getDay()]}, ${deDate(d)}`;
-  if(next==="2025-12-24"){
-    $("#heuteTitel").textContent = "Heiligabend Gottesdienste";
-    $("#heuteAdresse").textContent = "Mehrere Orte in Hessisch Lichtenau und Umgebung";
-    $("#heuteHinweis").textContent = "Zeiten und Orte in der Liste";
-  }else if(e && e.hostName){
-    $("#heuteTitel").textContent = e.hostName;
-    $("#heuteAdresse").textContent = e.hostAdresse || "";
-    $("#heuteHinweis").textContent = e.info ? e.info : "";
-  }else{
-    $("#heuteTitel").textContent = "Noch freie Vergabe";
-    $("#heuteAdresse").textContent = "Sobald ein Ort feststeht, erscheint er hier";
-    $("#heuteHinweis").textContent = "";
-  }
-}
-function computeNextDate(){
-  const today = new Date(); today.setHours(0,0,0,0);
-  for(const d of allDates()){ if(d >= today) return ymd(d); }
-  return ymd(rangeStart);
-}
-
-/* PDF und ICS */
-document.getElementById("btnPdf").addEventListener("click", ()=> downloadPdf());
-document.getElementById("btnIcs").addEventListener("click", ()=> downloadIcs());
-function downloadPdf(){
-  const rows = [];
-  allDates().forEach(d=>{
-    const key = ymd(d);
-    if(key==="2025-12-24"){
-      if(services.length){
-        services.forEach(s=>{
-          rows.push(`<tr><td>${deDate(d)}</td><td>${WDAY[d.getDay()]}</td><td>${escapeHtml(s.gemeinde||"Gemeinde")} ${escapeHtml(s.uhrzeit||"")}</td><td>${escapeHtml(s.adresse||"")}</td></tr>`);
-        });
-      }else rows.push(`<tr><td>${deDate(d)}</td><td>${WDAY[d.getDay()]}</td><td>Gottesdienste folgen</td><td></td></tr>`);
-    }else{
-      const e = eventsMap.get(key);
-      const host = e && e.hostName ? e.hostName : "Noch frei";
-      const addr = e && e.hostAdresse ? e.hostAdresse : "";
-      rows.push(`<tr><td>${deDate(d)}</td><td>${WDAY[d.getDay()]}</td><td>${escapeHtml(host)}</td><td>${escapeHtml(addr)}</td></tr>`);
-    }
-  });
-  const html = `
-  <!doctype html><html><head><meta charset="utf-8"><title>Übersicht</title>
-  <style>@page{size:A4;margin:16mm}body{font-family:system-ui,Segoe UI,Roboto,Arial}h1{font-size:18pt;margin:0 0 10pt}table{width:100%;border-collapse:collapse;font-size:11pt}th,td{border:1px solid #ddd;padding:6px 8px;vertical-align:top}th{background:#f5f5f5;text-align:left}</style>
-  </head><body><h1>Lebendiger Adventskalender Hessisch Lichtenau</h1>
-  <p>Beginn in der Regel 18 Uhr. Heiligabend zeigt die Gottesdienste.</p>
-  <table><thead><tr><th>Datum</th><th>Tag</th><th>Gastgeber oder Gottesdienst</th><th>Adresse</th></tr></thead><tbody>${rows.join("")}</tbody></table></body></html>`;
-  const w = window.open("", "_blank"); if(w){ w.document.open(); w.document.write(html); w.document.close(); }
-}
-function downloadIcs(){
-  const lines = ["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Lebendiger Adventskalender//DE","CALSCALE:GREGORIAN","X-WR-CALNAME:Lebendiger Adventskalender","X-WR-TIMEZONE:Europe/Berlin"];
-  allDates().forEach(d=>{
-    const key = ymd(d);
-    if(key==="2025-12-24"){
-      services.forEach(s=>{
-        pushEvent(d, s.gemeinde||"Gottesdienst", s.adresse||"", s.uhrzeit||"16:00", `GD-${s.id||Math.random()}`);
-      });
-    }else{
-      const e = eventsMap.get(key);
-      if(e && e.hostName && e.hostAdresse){ pushEvent(d, e.hostName, e.hostAdresse, "18:00", `LA-${key}`); }
-    }
-  });
-  lines.push("END:VCALENDAR");
-  const blob = new Blob([lines.join("\r\n")], {type:"text/calendar;charset=utf-8"});
-  const url = URL.createObjectURL(blob); const a=document.createElement("a"); a.href=url; a.download="Lebendiger-Adventskalender.ics"; document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); }, 800);
-  function pushEvent(dateObj, title, loc, hm, uid){
-    const m = /^(\d{1,2}):(\d{2})$/.exec(hm||"18:00"); const h = m?parseInt(m[1],10):18; const mi = m?parseInt(m[2],10):0;
-    const start = toIcs(dateObj,h,mi); const end = toIcs(dateObj,h,mi+30);
-    lines.push("BEGIN:VEVENT",`UID:${uid}@adventskalender`,`DTSTART;TZID=Europe/Berlin:${start}`,`DTEND;TZID=Europe/Berlin:${end}`,`SUMMARY:Lebendiger Adventskalender`,`DESCRIPTION:${String(title).replace(/([,;])/g,"\\$1")}`,`LOCATION:${String(loc).replace(/([,;])/g,"\\$1")}`,"END:VEVENT");
-  }
-  function toIcs(d,h,m){ const t=new Date(d.getFullYear(),d.getMonth(),d.getDate(),h,m,0); return `${t.getFullYear()}${String(t.getMonth()+1).padStart(2,"0")}${String(t.getDate()).padStart(2,"0")}T${String(t.getHours()).padStart(2,"0")}${String(t.getMinutes()).padStart(2,"0")}00`; }
-}
-
-/* Picker Wochenlayout mit Status */
-function buildWeekGrid(){
-  const grid = $("#pickerGrid"); grid.innerHTML = "";
-  // Kopfzeile
-  const head = document.createElement("div"); head.className="head";
-  ["Mo","Di","Mi","Do","Fr","Sa","So"].forEach(w=>{ const h=document.createElement("div"); h.textContent=w; head.appendChild(h); });
-  grid.appendChild(head);
-
-  // Dezember 2025 beginnt an einem Montag, daher keine Vorlaufzellen nötig
-  let day = 1;
-  while(day <= 23){
-    const week = document.createElement("div"); week.className="week";
-    for(let i=0;i<7;i++){
-      const cell = document.createElement("div"); cell.className="cell";
-      if(day<=23){
-        const d = new Date(2025,11,day);
-        const key = ymd(d);
-        const isTaken = !!(eventsMap.get(key)?.hostName);
-        const chip = document.createElement("span");
-        chip.className = "chip-assign" + (selected.has(key) ? " assigned" : "") + (isTaken ? " taken" : "");
-        chip.textContent = String(day).padStart(2,"0") + ".12";
-        chip.dataset.key = key;
-        chip.addEventListener("click", ()=>{
-          if(isTaken){
-            cell.classList.remove("pulse-red"); void cell.offsetWidth; cell.classList.add("pulse-red");
-            return;
-          }
-          if(selected.has(key)){
-            selected.delete(key);
-            chip.classList.remove("assigned");
-          }else{
-            selected.add(key);
-            chip.classList.add("assigned");
-            cell.classList.remove("pulse-green"); void cell.offsetWidth; cell.classList.add("pulse-green");
-          }
-        });
-        cell.appendChild(chip);
-        day++;
-      }else{
-        cell.classList.add("empty");
-        cell.textContent = "";
-      }
-      week.appendChild(cell);
-    }
-    grid.appendChild(week);
-  }
-}
-function openPicker(){
-  buildWeekGrid();
-  $("#dlgPicker").showModal();
-}
-$("#openPicker").addEventListener("click", openPicker);
-$("#pickerOk").addEventListener("click", ()=>{
-  $("#dlgPicker").close();
-  const p=$("#wishesPreview"); p.innerHTML="";
-  Array.from(selected).sort().forEach(k=>{
-    const d=new Date(k);
-    const s=document.createElement("span");
-    s.className="chip-assign assigned";
-    s.textContent=`${WDAY[d.getDay()]}, ${String(d.getDate()).padStart(2,"0")}.12`;
-    p.appendChild(s);
-  });
-});
-
-/* Kontaktformular und Anmeldung ohne Login schreiben */
-$("#contactForm").addEventListener("submit", async ev=>{
-  ev.preventDefault();
-  const info = $("#kmsgInfo"); info.textContent = "";
-  try{
-    const name=$("#kname").value.trim(), email=$("#kmail").value.trim(), message=$("#kmsg").value.trim();
-    if(!name || !email || !message){ info.textContent = "Bitte alle Felder ausfüllen"; return; }
-    await addDoc(collection(db,"messages"), { name, email, message, createdAt:new Date().toISOString(), read:false });
-    info.textContent = "Nachricht wurde gesendet";
-    $("#contactForm").reset();
-  }catch(e){
-    const code = e && e.code ? e.code : "unbekannt";
-    info.textContent = "Nachricht konnte nicht gesendet werden. Fehler " + code;
-  }
-});
-
-$("#hostForm").addEventListener("submit", async ev=>{
-  ev.preventDefault();
-  const msg = $("#formMsg"); msg.textContent = ""; msg.className = "";
-  try{
-    const name=$("#name").value.trim(), email=$("#email").value.trim(), tel=$("#tel").value.trim();
-    const street=$("#street").value.trim(), city=$("#city").value.trim();
-    const note=$("#note").value.trim(); const bf=$("#barrierFreeHost").checked===true;
-    const consentOk=$("#consent").checked===true;
-    const wishes=Array.from(selected).sort();
-    if(!name || !email || !tel || !street || !city){ msg.textContent="Bitte alle Pflichtfelder ausfüllen"; msg.className="error"; return; }
-    if(wishes.length===0){ msg.textContent="Bitte mindestens einen Termin auswählen"; msg.className="error"; return; }
-    if(!consentOk){ msg.textContent="Bitte der Veröffentlichung zustimmen"; msg.className="error"; return; }
-    await addDoc(collection(db,"anmeldungen"), { name, email, telefon:tel, adresse:`${street}, ${city}`, wuensche:wishes, bemerkung:note||"", consentPublish:true, barrierFree:bf, createdAt:new Date().toISOString() });
-    msg.textContent="Vielen Dank. Ihre Anmeldung ist eingegangen"; msg.className="success";
-    $("#hostForm").reset(); selected.clear(); $("#wishesPreview").innerHTML=""; $("#dlgSubmitConfirm").showModal();
-  }catch(e){
-    const code = e && e.code ? e.code : "unbekannt";
-    msg.textContent = "Die Anmeldung konnte nicht gespeichert werden. Fehler " + code; msg.className = "error";
-  }
-});
-
-/* Admin Login */
-$("#openAdminLogin").addEventListener("click", ()=> { $("#dlgLegal").close(); $("#dlgAdminLogin").showModal(); });
-$("#btnLogin").addEventListener("click", async ()=>{
-  const e = $("#admEmail").value.trim(); const p = $("#admPass").value;
-  $("#authMsg").textContent = "";
-  try{ await signInWithEmailAndPassword(auth, e, p); $("#authMsg").textContent = "Angemeldet"; $("#dlgAdminLogin").close(); await adminLoad(); $("#dlgAdminPanel").showModal(); }
-  catch(err){ $("#authMsg").textContent = "Anmeldung nicht möglich"; }
-});
-$("#btnLogout").addEventListener("click", async ()=>{ await signOut(auth); $("#dlgAdminPanel").close(); });
-
-onAuthStateChanged(auth, async user=>{
-  if(user && user.email){ await adminLoad(); $("#dlgAdminPanel").showModal(); }
-});
-
-/* Admin Daten */
-async function adminLoad(){
-  await loadMessages();
-  await renderAnmeldungen();
-  await renderEvents();
-  await renderServices();
-  await updateProgressBar();
-}
-async function updateProgressBar(){
-  const map = new Map();
-  try{ const qy=query(collection(db,"events"), orderBy("datum","asc")); const snap=await getDocs(qy); snap.forEach(d=>{ const e=d.data(); if(e && e.datum) map.set(e.datum,e); }); }catch(e){}
-  const total = 23; let taken = 0;
-  for(const d of allDates()){ const key=ymd(d); const e=map.get(key); if(e && e.hostName) taken++; }
-  const pct = Math.round((taken/total)*100);
-  $("#progPercent").textContent = pct + "%";
-  $("#progFill").style.width = pct + "%";
-  $("#progMeta").textContent = `${taken} von ${total} Abenden vergeben`;
-}
-
-/* Nachrichten Tabelle */
-async function loadMessages(){
-  const body = $("#tblMessages tbody"); body.innerHTML = "";
-  try{
-    const qy = query(collection(db,"messages"), orderBy("createdAt","desc"));
-    const snap = await getDocs(qy);
-    if(snap.empty){ body.innerHTML = `<tr><td colspan="5" class="t-center">Keine Nachrichten vorhanden</td></tr>`; return; }
-    snap.forEach(d=>{
-      const m = d.data(); const when = m.createdAt ? new Date(m.createdAt).toLocaleString("de-DE") : "";
-      const tr = document.createElement("tr");
-      tr.innerHTML = `<td data-label="Zeit">${escapeHtml(when)}</td><td data-label="Absender">${escapeHtml(m.name||"")}</td><td data-label="E Mail">${escapeHtml(m.email||"")}</td><td data-label="Nachricht">${escapeHtml(m.message||"")}</td><td data-label="Status" class="t-center"><button class="warn" data-del="${d.id}">löschen</button></td>`;
-      body.appendChild(tr);
-    });
-    body.onclick = async e=>{
-      const del = e.target.closest("button[data-del]");
-      if(del){ if(confirm("Diese Nachricht löschen")){ await deleteDoc(doc(db,"messages", del.dataset.del)); await loadMessages(); } }
+    const firebaseConfig = {
+      apiKey: "AIzaSyCZuvHUy6xMN6WIrHUQBpxuobZkQRKB20s",
+      authDomain: "adventskalender-90bb1.firebaseapp.com",
+      projectId: "adventskalender-90bb1",
+      storageBucket: "adventskalender-90bb1.firebasestorage.app",
+      messagingSenderId: "816945632051",
+      appId: "1:816945632051:web:817e7a3d8945c3a65aa446",
+      measurementId: "G-GYH086SXWE"
     };
-  }catch(e){
-    body.innerHTML = `<tr><td colspan="5" class="t-center">Nachrichten konnten nicht geladen werden</td></tr>`;
-  }
-}
 
-/* Anmeldungen mit Zuweisung und Besonderheiten sichtbar */
-async function renderAnmeldungen(){
-  const body = $("#tblAnmeldungen tbody"); body.innerHTML = "";
-  try{
-    const snap = await getDocs(collection(db,"anmeldungen"));
-    snap.forEach(d=>{
-      const a = d.data(); const wishes = Array.isArray(a.wuensche) ? a.wuensche : [];
-      const chips = wishes.map(w=>{
-        const dd = new Date(w);
-        const label = `${String(dd.getDate()).padStart(2,"0")}.12 (${WDAY[dd.getDay()]})`;
-        return `<span class="chip-assign" data-assign="${w}" data-id="${d.id}" data-name="${escapeHtml(a.name||"")}" data-addr="${escapeHtml(a.adresse||"")}" data-email="${escapeHtml(a.email||"")}" data-note="${escapeHtml(a.bemerkung||"")}" data-bf="${a.barrierFree ? "1" : "0"}" title="Als Termin festlegen">${label}</span>`;
-      }).join("");
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td data-label="Kontakt"><strong>${escapeHtml(a.name||"")}</strong><br><span class="help">${escapeHtml(a.email||"")}</span><br><span class="help">${escapeHtml(a.telefon||"")}</span></td>
-        <td data-label="Adresse">${escapeHtml(a.adresse||"")}</td>
-        <td data-label="Wunschtermine">${chips || "<span class='help'>Keine Auswahl</span>"}</td>
-        <td data-label="Besonderheiten">${escapeHtml(a.bemerkung||"")}</td>
-        <td data-label="♿" class="t-center">${a.barrierFree ? "♿" : ""}</td>
-        <td data-label="Aktion"><button class="warn" data-del="${d.id}">Löschen</button></td>`;
-      body.appendChild(tr);
-    });
-  }catch(e){
-    body.innerHTML = `<tr><td colspan="6" class="t-center">Anmeldungen konnten nicht geladen werden</td></tr>`;
-  }
-  body.onclick = async ev=>{
-    const chip = ev.target.closest(".chip-assign");
-    const del = ev.target.closest("button[data-del]");
-    if(chip){
-      const dateKey = chip.getAttribute("data-assign");
-      const name = chip.getAttribute("data-name");
-      const addr = chip.getAttribute("data-addr");
-      const email = chip.getAttribute("data-email");
-      const note = chip.getAttribute("data-note") || "Aus Anmeldung gesetzt";
-      const bf = chip.getAttribute("data-bf") === "1";
-      try{
-        const ref = doc(db,"events", dateKey);
-        const ex = await getDoc(ref);
-        if(ex.exists() && ex.data().hostName){
-          const ok = confirm("Für dieses Datum ist bereits ein Termin eingetragen. Möchtest du überschreiben");
-          if(!ok) return;
+    const $  = s => document.querySelector(s);
+    const $$ = s => Array.from(document.querySelectorAll(s));
+    const WDAY = ["So","Mo","Di","Mi","Do","Fr","Sa"];
+
+    const rangeStart = new Date(2025, 10, 30);
+    const rangeEnd   = new Date(2025, 11, 24);
+    function ymd(d){ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`; }
+    function deDate(d){ return `${String(d.getDate()).padStart(2,"0")}.${String(d.getMonth()+1).padStart(2,"0")}.${d.getFullYear()}`; }
+    function allDates(){ const out=[]; let d=new Date(rangeStart); while(d<=rangeEnd){ out.push(new Date(d)); d.setDate(d.getDate()+1); } return out; }
+    function dec2025Dates(){ const out=[]; for(let i=1;i<=23;i++){ out.push(new Date(2025,11,i)); } return out; }
+    function escapeHtml(s){ return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+    function escapeAttr(s){ return escapeHtml(s); }
+
+    const selected = new Set();
+    let eventsMap = new Map();
+    let services = [];
+    let assignedEmails = new Set();
+    let pendingEmails = new Set();
+
+    let app, analytics, auth, db;
+
+    init();
+
+    async function init(){
+      app = initializeApp(firebaseConfig);
+      try { analytics = getAnalytics(app); } catch(e){}
+      auth = getAuth(app);
+      db = getFirestore(app);
+
+      $("#openGear").addEventListener("click", ()=> $("#dlgGear").showModal());
+      $("#openPicker").addEventListener("click", ()=> openPicker());
+      $("#pickerOk").addEventListener("click", ()=>{ $("#dlgPicker").close(); updatePreview(); });
+      $("#openLegal").addEventListener("click", ()=> $("#dlgLegal").showModal());
+      $("#openAdminLogin").addEventListener("click", ()=> { $("#dlgLegal").close(); $("#dlgAdminLogin").showModal(); });
+      $$("[data-close]").forEach(btn=>{ btn.addEventListener("click", ()=> document.getElementById(btn.getAttribute("data-close")).close()); });
+
+      $("#btnPdf").addEventListener("click", ()=> downloadPdfFromData());
+      $("#btnIcs").addEventListener("click", ()=> downloadIcsFromData());
+
+      // Sende Button an Zustimmung koppeln
+      const sendBtn = $("#sendBtn");
+      const consent = $("#consent");
+      function updateSendDisabled(){ sendBtn.disabled = !consent.checked; }
+      if(consent){ consent.addEventListener("change", updateSendDisabled); updateSendDisabled(); }
+
+      $("#hostForm").addEventListener("submit", onSubmitHostForm());
+      $("#resetBtn").addEventListener("click", ()=>{ selected.clear(); updatePreview(); if(consent){ consent.checked = false; updateSendDisabled(); } });
+
+      $("#btnLogin").addEventListener("click", adminLogin);
+      $("#btnLogout").addEventListener("click", async ()=>{ await signOut(auth); $("#dlgAdminPanel").close(); });
+
+      onAuthStateChanged(auth, async user=>{
+        if(user){
+          $("#authMsg").textContent = "Angemeldet";
+          try{ $("#dlgAdminLogin").close(); }catch(e){}
+          await adminLoad();
+          $("#dlgAdminPanel").showModal();
+        }else{
+          $("#authMsg").textContent = "Abgemeldet";
         }
-        await setDoc(ref, { datum:dateKey, wochentag:WDAY[new Date(dateKey).getDay()], hostName:name, hostAdresse:addr, hostEmail:email, info:note, uhrzeit:"18:00", barrierFree:bf, changed:true }, { merge:true });
-        chip.classList.add("assigned");
-        await renderEvents();
-        await updateProgressBar();
-      }catch(e){ alert("Zuweisung nicht möglich"); }
+      });
+
+      await loadEventsAndServices();
+      const next = computeNextDate();
+      await loadWeatherForDate(next);
+
+      $("#btnCopyEmails").addEventListener("click", copyEmails);
+      $("#includePending").addEventListener("change", updateEmailTextarea);
+
+      $("#addService").addEventListener("click", ()=> appendServiceRow());
     }
-    if(del){
-      if(confirm("Diesen Eintrag löschen")){ await deleteDoc(doc(db,"anmeldungen", del.dataset.del)); await renderAnmeldungen(); }
+
+    async function adminLogin(){
+      const e = $("#admEmail").value.trim();
+      const p = $("#admPass").value;
+      $("#authMsg").textContent = "";
+      try{
+        await signInWithEmailAndPassword(auth, e, p);
+        $("#authMsg").textContent = "Angemeldet";
+        $("#dlgAdminLogin").close();
+        await adminLoad();
+        $("#dlgAdminPanel").showModal();
+      }catch(err){
+        console.error(err);
+        $("#authMsg").textContent = "Anmeldung nicht möglich";
+      }
     }
-  };
-}
 
-/* Termine pflegen mit Notizfeld bearbeitbar */
-async function renderEvents(){
-  const body = $("#tblEvents tbody"); body.innerHTML = "";
-  const map = new Map();
-  try{
-    const qy = query(collection(db,"events"), orderBy("datum","asc"));
-    const snap = await getDocs(qy);
-    snap.forEach(d=>{ const e=d.data(); if(e && e.datum && e.datum!=="2025-12-24"){ map.set(e.datum, { id:d.id, ...e }); } });
-  }catch(e){}
-  for(const d of allDates()){
-    const id = ymd(d);
-    if(id==="2025-12-24") continue;
-    const e = map.get(id) || { hostName:"", hostAdresse:"", hostEmail:"", info:"", uhrzeit:"18:00", barrierFree:false, changed:false };
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td data-label="Datum">${deDate(new Date(id))}</td>
-      <td data-label="Tag">${WDAY[new Date(id).getDay()]}</td>
-      <td data-label="Gastgeber"><input class="wide" type="text" value="${escapeHtml(e.hostName||"")}" data-f="hostName"></td>
-      <td data-label="Adresse"><textarea class="wide" data-f="hostAdresse">${escapeHtml(e.hostAdresse||"")}</textarea></td>
-      <td data-label="Uhrzeit"><input type="text" value="${escapeHtml(e.uhrzeit||"18:00")}" data-f="uhrzeit" placeholder="z. B. 17:30"></td>
-      <td data-label="Notiz"><textarea class="wide" data-f="info" placeholder="Hinweise">${escapeHtml(e.info||"")}</textarea></td>
-      <td data-label="♿" class="t-center"><input type="checkbox" ${e.barrierFree ? "checked" : ""} data-f="barrierFree"></td>
-      <td data-label="Änderung" class="t-center"><input type="checkbox" ${e.changed ? "checked" : ""} data-f="changed"></td>
-      <td data-label="Aktion" class="t-center"><button data-save="${id}">Speichern</button></td>`;
-    body.appendChild(tr);
-  }
-  body.onclick = async ev=>{
-    const btn = ev.target.closest("button[data-save]");
-    if(!btn) return;
-    const row = btn.closest("tr");
-    const inputs = row.querySelectorAll("[data-f]");
-    const payload = { datum: btn.dataset.save, wochentag: WDAY[new Date(btn.dataset.save).getDay()] };
-    inputs.forEach(i=>{ const f=i.dataset.f; if(i.type==="checkbox"){ payload[f]=i.checked; } else { payload[f]=i.value.trim(); } });
-    if(payload.uhrzeit && !/^\d{1,2}:\d{2}$/.test(payload.uhrzeit)){ alert("Uhrzeit bitte als HH:MM eintragen"); return; }
-    try{ await setDoc(doc(db,"events", btn.dataset.save), payload, { merge:true }); btn.textContent="Gespeichert"; setTimeout(()=> btn.textContent="Speichern", 900); await loadPublicAndServices(); }
-    catch(e){ alert("Speichern nicht möglich"); }
-  };
-}
+    function onSubmitHostForm(){
+      return async ev=>{
+        ev.preventDefault();
+        const msg = $("#formMsg"); msg.textContent = ""; msg.className = "";
+        const name   = $("#name").value.trim();
+        const email  = $("#email").value.trim();
+        const tel    = $("#tel").value.trim();
+        const street = $("#street").value.trim();
+        const city   = $("#city").value.trim();
+        const note   = $("#note").value.trim();
+        const wishes = Array.from(selected).sort();
+        const consentOk = $("#consent")?.checked === true;
 
-/* Heiligabend Tabelle */
-async function renderServices(){
-  const body = $("#tblServices tbody"); body.innerHTML = "";
-  services.forEach((s)=> body.appendChild(buildServiceRow(s)));
-  body.appendChild(buildServiceRow(null));
-  body.onclick = async e=>{
-    const btn = e.target.closest("button[data-act]");
-    if(!btn) return;
-    const act = btn.getAttribute("data-act");
-    const row = btn.closest("tr");
-    const payload = {
-      gemeinde: row.querySelector('input[data-f="gemeinde"]').value.trim(),
-      uhrzeit: row.querySelector('input[data-f="uhrzeit"]').value.trim(),
-      adresse: row.querySelector('textarea[data-f="adresse"]').value.trim(),
-      info: row.querySelector('textarea[data-f="info"]').value.trim(),
-      datum: "2025-12-24",
-      isService: true
-    };
-    try{
-      if(act==="save-new"){ await addDoc(collection(db,"events"), payload); }
-      if(act==="save"){ const id = btn.getAttribute("data-sid"); await setDoc(doc(db,"events", id), payload, { merge:true }); }
-      if(act==="del"){ const id = btn.getAttribute("data-sid"); if(id && confirm("Diesen Gottesdienst löschen")) await deleteDoc(doc(db,"events", id)); }
-      await loadPublicAndServices(); await renderServices();
-    }catch(err){ alert("Änderung nicht möglich"); }
-  };
-  function buildServiceRow(s){
-    const tr = document.createElement("tr");
-    const id = s?.id || "";
-    tr.innerHTML = `
-      <td>${id ? "≡" : ""}</td>
-      <td><input type="text" data-f="gemeinde" value="${escapeHtml(s?.gemeinde||"")}" placeholder="Gemeinde"></td>
-      <td><input type="text" data-f="uhrzeit" value="${escapeHtml(s?.uhrzeit||"")}" placeholder="z. B. 16:00"></td>
-      <td><textarea data-f="adresse" placeholder="Ort, Straße, Nummer">${escapeHtml(s?.adresse||"")}</textarea></td>
-      <td><textarea data-f="info" placeholder="Hinweis optional">${escapeHtml(s?.info||"")}</textarea></td>
-      <td class="t-center">
-        <button data-act="${id ? "save" : "save-new"}" data-sid="${id}">Speichern</button>
-        <button class="warn" data-act="del" data-sid="${id}">Löschen</button>
-      </td>`;
-    return tr;
-  }
-}
+        if(!name || !email || !tel || !street || !city){
+          msg.textContent = "Bitte füllen Sie alle Pflichtfelder aus"; msg.className = "error"; return;
+        }
+        if(wishes.length === 0){
+          msg.textContent = "Bitte wählen Sie mindestens einen möglichen Termin"; msg.className = "error"; return;
+        }
+        if(!consentOk){
+          msg.textContent = "Bitte stimmen Sie der Veröffentlichung von Name und Adresse zu"; msg.className = "error"; return;
+        }
 
-/* Start */
-await loadPublicAndServices();
+        const btn = $("#sendBtn"); btn.disabled = true;
+        try{
+          await addDoc(collection(db,"anmeldungen"), {
+            name,
+            email,
+            telefon: tel,
+            adresse: `${street}, ${city}`,
+            wuensche: wishes,
+            bemerkung: note || "",
+            consentPublish: true,
+            consentTextVersion: "2025-10-12",
+            createdAt: new Date().toISOString()
+          });
+          msg.textContent = "Vielen Dank. Ihre Anmeldung ist eingegangen"; msg.className = "success";
+          // Formular zurücksetzen und Vorschau leeren
+          $("#hostForm").reset(); selected.clear(); updatePreview();
+          // Zustimmungskästchen zurücksetzen und Button erneut sperren
+          const consent = $("#consent"); if(consent){ consent.checked = false; }
+          const sendBtn = $("#sendBtn"); if(sendBtn){ sendBtn.disabled = true; }
+          // Bestätigungsdialog anzeigen
+          $("#dlgSubmitConfirm").showModal();
+        }catch(err){
+          console.error(err);
+          msg.textContent = "Die Anmeldung konnte nicht gespeichert werden"; msg.className = "error";
+        }finally{ btn.disabled = !$("#consent")?.checked; }
+      };
+    }
 
-/* Admin Login Anzeige bei bestehender Session */
-onAuthStateChanged(auth, async user=>{
-  if(user && user.email){ await adminLoad(); $("#dlgAdminPanel").showModal(); }
-});
-</script>
+    function openPicker(){
+      const grid = $("#pickerGrid"); grid.innerHTML = "";
+      dec2025Dates().forEach(d=>{
+        const key = ymd(d);
+        const el = document.createElement("div");
+        el.className = "pick" + (selected.has(key) ? " sel" : "");
+        el.dataset.key = key;
+        el.innerHTML = `<div class="d">${String(d.getDate()).padStart(2,"0")}.</div><div class="m">Dez ${d.getFullYear()}</div><div class="wd">${WDAY[d.getDay()]}</div>`;
+        el.addEventListener("click", ()=>{
+          if(selected.has(key)){ selected.delete(key); el.classList.remove("sel"); }
+          else{ selected.add(key); el.classList.add("sel"); }
+        });
+        grid.appendChild(el);
+      });
+      $("#dlgPicker").showModal();
+    }
+    function updatePreview(){
+      const prev = $("#wishesPreview"); prev.innerHTML = "";
+      Array.from(selected).sort().forEach(k=>{
+        const d = new Date(k);
+        const chip = document.createElement("span");
+        chip.className = "chip"; chip.textContent = `${WDAY[d.getDay()]}, ${String(d.getDate()).padStart(2,"0")}.12.${d.getFullYear()}`;
+        prev.appendChild(chip);
+      });
+    }
+
+    async function loadEventsAndServices(){
+      eventsMap.clear();
+      services = [];
+
+      try{
+        const qy = query(collection(db,"events"), orderBy("datum","asc"));
+        const snap = await getDocs(qy);
+        snap.forEach(d => {
+          const e=d.data();
+          if(!e) return;
+          if(e.datum === "2025-12-24" && e.isService){
+            services.push({ id:d.id, ...e });
+          }else if(e.datum){
+            eventsMap.set(e.datum, { id:d.id, ...e });
+          }
+        });
+      }catch(err){
+        console.warn("Termine konnten nicht geladen werden.");
+      }
+
+      services.sort((a,b)=>{
+        const oa = typeof a.order === "number" ? a.order : 9999;
+        const ob = typeof b.order === "number" ? b.order : 9999;
+        if(oa !== ob) return oa - ob;
+        const ta = parseTime(a.uhrzeit); const tb = parseTime(b.uhrzeit);
+        return ta - tb;
+      });
+
+      renderLists();
+      updateProgress();
+    }
+
+    function renderLists(){
+      const list = $("#terminListe"); list.innerHTML = "";
+      allDates().forEach(d=>{
+        const key = ymd(d);
+        const item = document.createElement("div"); item.className = "item";
+        const day = document.createElement("div"); day.className = "day";
+        day.innerHTML = `<div class="wd">${WDAY[d.getDay()]}</div><div class="date">${String(d.getDate()).padStart(2,"0")}.${String(d.getMonth()+1).padStart(2,"0")}</div>`;
+        const meta = document.createElement("div"); meta.className = "meta";
+
+        if(key === "2025-12-24"){
+          if(services.length){
+            const listHtml = services.map(s=>{
+              const time = s.uhrzeit ? ` um ${escapeHtml(s.uhrzeit)} Uhr` : "";
+              const line = `${escapeHtml(s.gemeinde||"Gemeinde")}${time}`;
+              const addr = s.adresse ? `<div class="addr">${escapeHtml(s.adresse)}</div>` : "";
+              const info = s.info ? `<div class="badge">${escapeHtml(s.info)}</div>` : "";
+              return `<div class="host">${line}</div>${addr}${info}`;
+            }).join("<hr style='border:none;border-top:1px solid #eee5da;margin:8px 0'>");
+            meta.innerHTML = `<div class="badge">Heiligabend Gottesdienste</div>${listHtml}`;
+          }else{
+            meta.innerHTML = `<div class="host muted">Gottesdienste werden ergänzt</div>`;
+          }
+        }else{
+          const e = eventsMap.get(key);
+          if(e && e.hostName){
+            const changed = e.changed ? `<div class="badge changed">Hinweis: geändert</div>` : "";
+            meta.innerHTML = `<div class="host">${escapeHtml(e.hostName)}</div><div class="addr">${escapeHtml(e.hostAdresse || "")}</div>${e.info ? `<div class="badge">${escapeHtml(e.info)}</div>` : ""}${changed}`;
+          }else{
+            meta.innerHTML = `<div class="host muted">Noch frei</div><div class="badge free">Anmeldung möglich</div>`;
+          }
+        }
+        item.append(day, meta); list.appendChild(item);
+      });
+
+      const next = computeNextDate();
+      const e = eventsMap.get(next);
+      const d = new Date(next);
+      $("#heuteDatum").textContent = `${WDAY[d.getDay()]}, ${deDate(d)}`;
+      if(next === "2025-12-24"){
+        $("#heuteTitel").textContent = "Heiligabend Gottesdienste";
+        $("#heuteAdresse").textContent = "Mehrere Orte in Hessisch Lichtenau und Umgebung";
+        $("#heuteHinweis").textContent = "Zeiten und Orte finden Sie in der Terminliste";
+      }else if(e && e.hostName){
+        $("#heuteTitel").textContent = e.hostName;
+        $("#heuteAdresse").textContent = e.hostAdresse || "";
+        $("#heuteHinweis").textContent = e.info ? e.info : "";
+      }else{
+        $("#heuteTitel").textContent = "Noch freie Vergabe";
+        $("#heuteAdresse").textContent = "Sobald ein Ort feststeht, erscheint er hier";
+      }
+    }
+
+    function computeNextDate(){
+      const today = new Date(); today.setHours(0,0,0,0);
+      for(const d of allDates()){
+        if(d >= today) return ymd(d);
+      }
+      return ymd(rangeStart);
+    }
+
+    async function loadWeatherForDate(dateYmd){
+      try{
+        const parts = dateYmd.split("-"); const year=+parts[0], month=+parts[1]-1, day=+parts[2];
+        const target = new Date(year, month, day);
+        const today = new Date();
+        const diffDays = Math.round((target - new Date(today.getFullYear(),today.getMonth(),today.getDate()))/86400000);
+        if(diffDays > 16){
+          $("#wText").textContent = "Vorhersage sichtbar, sobald das Datum näher rückt";
+          $("#wMeta").textContent = ""; $("#wTemp").textContent = "n. a."; return;
+        }
+        const url = new URL("https://api.open-meteo.com/v1/forecast");
+        url.searchParams.set("latitude","51.195");
+        url.searchParams.set("longitude","9.713");
+        url.searchParams.set("hourly","temperature_2m,precipitation_probability,weathercode");
+        url.searchParams.set("timezone","Europe/Berlin");
+        url.searchParams.set("forecast_days", String(Math.min(16, Math.max(2,diffDays+2))));
+        const res = await fetch(url.toString());
+        const data = await res.json();
+        const idx = data.hourly.time.findIndex(t => t.startsWith(dateYmd) && t.endsWith("18:00"));
+        let text = "Keine Daten verfügbar", meta = "", temp = "n. a.";
+        if(idx >= 0){
+          const t = Math.round(data.hourly.temperature_2m[idx]);
+          const p = data.hourly.precipitation_probability[idx];
+          const code = data.hourly.weathercode[idx];
+          const map = new Map([
+            [[0],"Klarer Himmel"], [[1,2,3],"Leicht bewölkt"], [[45,48],"Nebel"],
+            [[51,53,55],"Nieselregen"], [[61,63,65],"Regen"], [[66,67],"Gefrierender Regen"],
+            [[71,73,75],"Schnee"], [[77],"Schneekörner"], [[80,81,82],"Regenschauer"],
+            [[85,86],"Schneeschauer"], [[95],"Gewitter"], [[96,99],"Gewitter mit Hagel"]
+          ]);
+          let desc = "Wetter";
+          for(const [codes, dsc] of map){ if(codes.includes(code)){ desc = dsc; break; } }
+          temp = `${t}°C`; text = `${desc} um 18 Uhr`; meta = `Niederschlagswahrscheinlichkeit ${p} Prozent`;
+        }
+        $("#wTemp").textContent = temp; $("#wText").textContent = text; $("#wMeta").textContent = meta;
+      }catch(err){
+        console.error(err);
+        $("#wText").textContent = "Wetter konnte nicht geladen werden"; $("#wMeta").textContent = "";
+      }
+    }
+
+    function downloadPdfFromData(){
+      const rows = [];
+      allDates().forEach(d=>{
+        const key = ymd(d);
+        if(key === "2025-12-24"){
+          if(services.length){
+            services.forEach(s=>{
+              const time = s.uhrzeit ? `${s.uhrzeit} Uhr` : "Heiligabend";
+              rows.push(`<tr><td>${deDate(d)}</td><td>${WDAY[d.getDay()]}</td><td>${escapeHtml(s.gemeinde||"Gemeinde")} ${time}</td><td>${escapeHtml(s.adresse||"")}</td></tr>`);
+            });
+          }else{
+            rows.push(`<tr><td>${deDate(d)}</td><td>${WDAY[d.getDay()]}</td><td>Gottesdienste folgen</td><td></td></tr>`);
+          }
+        }else{
+          const e = eventsMap.get(key);
+          const host = e && e.hostName ? e.hostName : "Noch frei";
+          const addr = e && e.hostAdresse ? e.hostAdresse : "";
+          rows.push(`<tr><td>${deDate(d)}</td><td>${WDAY[d.getDay()]}</td><td>${escapeHtml(host)}</td><td>${escapeHtml(addr)}</td></tr>`);
+        }
+      });
+
+      const html = `
+        <!doctype html><html><head><meta charset="utf-8">
+        <title>Lebendiger Adventskalender Übersicht</title>
+        <style>
+          @page { size: A4; margin: 16mm; }
+          body{ font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; }
+          h1{ font-size:18pt; margin:0 0 10pt 0; }
+          table{ width:100%; border-collapse:collapse; font-size:11pt; }
+          th,td{ border:1px solid #ddd; padding:6px 8px; vertical-align:top; }
+          th{ background:#f5f5f5; text-align:left; }
+        </style></head><body>
+        <h1>Lebendiger Adventskalender Hessisch Lichtenau</h1>
+        <p>Übersicht aller Termine mit Adresse. Beginn jeweils 18 Uhr. Heiligabend zeigt die Gottesdienste.</p>
+        <table><thead><tr><th>Datum</th><th>Tag</th><th>Gastgeber oder Gottesdienst</th><th>Adresse</th></tr></thead>
+        <tbody>${rows.join("")}</tbody></table>
+        </body></html>`;
+
+      const w = window.open("", "_blank");
+      if(w){ w.document.open(); w.document.write(html); w.document.close(); w.addEventListener("load", ()=> { try{ w.focus(); w.print(); }catch(e){} }); }
+    }
+
+    function downloadIcsFromData(){
+      const lines = [];
+      lines.push("BEGIN:VCALENDAR");
+      lines.push("VERSION:2.0");
+      lines.push("PRODID:-//Lebendiger Adventskalender//DE");
+      lines.push("CALSCALE:GREGORIAN");
+      lines.push("X-WR-CALNAME:Lebendiger Adventskalender");
+      lines.push("X-WR-TIMEZONE:Europe/Berlin");
+
+      allDates().forEach(d=>{
+        const key = ymd(d);
+        if(key === "2025-12-24"){
+          services.forEach(s=>{
+            const hm = parseHm(s.uhrzeit || "16:00");
+            const dtStart = toIcsLocal(d, hm.h, hm.m);
+            const dtEnd   = toIcsLocal(d, hm.h, hm.m + 60);
+            const uid = `GD-${s.id}@adventskalender`;
+            const summary = escapeIcs("Lebendiger Adventskalender");
+            const desc = escapeIcs(s.gemeinde || "Gottesdienst");
+            const loc = escapeIcs(s.adresse || "");
+            lines.push("BEGIN:VEVENT");
+            lines.push(`UID:${uid}`);
+            lines.push(`DTSTART;TZID=Europe/Berlin:${dtStart}`);
+            lines.push(`DTEND;TZID=Europe/Berlin:${dtEnd}`);
+            lines.push(`SUMMARY:${summary}`);
+            lines.push(`DESCRIPTION:${desc}`);
+            lines.push(`LOCATION:${loc}`);
+            lines.push("END:VEVENT");
+          });
+        }else{
+          const e = eventsMap.get(key);
+          if(e && e.hostName && e.hostAdresse){
+            const dtStart = toIcsLocal(d, 18, 0);
+            const dtEnd   = toIcsLocal(d, 18, 30);
+            const uid = `LA-${key}@adventskalender`;
+            const summary = escapeIcs("Lebendiger Adventskalender");
+            const desc = escapeIcs(e.hostName);
+            const loc = escapeIcs(e.hostAdresse);
+            lines.push("BEGIN:VEVENT");
+            lines.push(`UID:${uid}`);
+            lines.push(`DTSTART;TZID=Europe/Berlin:${dtStart}`);
+            lines.push(`DTEND;TZID=Europe/Berlin:${dtEnd}`);
+            lines.push(`SUMMARY:${summary}`);
+            lines.push(`DESCRIPTION:${desc}`);
+            lines.push(`LOCATION:${loc}`);
+            lines.push("END:VEVENT");
+          }
+        }
+      });
+
+      lines.push("END:VCALENDAR");
+      const blob = new Blob([lines.join("\r\n")], {type:"text/calendar;charset=utf-8"});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url; a.download = "Lebendiger-Adventskalender.ics";
+      document.body.appendChild(a); a.click();
+      setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); }, 1200);
+
+      function toIcsLocal(dateObj, hour, min){
+        const d2 = new Date(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate(), hour, min, 0);
+        const y = d2.getFullYear(); const m = String(d2.getMonth()+1).padStart(2,"0");
+        const da = String(d2.getDate()).padStart(2,"0"); const h = String(d2.getHours()).padStart(2,"0"); const mi = String(d2.getMinutes()).padStart(2,"0");
+        return `${y}${m}${da}T${h}${mi}00`;
+      }
+      function escapeIcs(s){ return String(s).replace(/([,;])/g,"\\$1").replace(/\n/g,"\\n"); }
+      function parseHm(s){ const m = /^(\d{1,2}):(\d{2})$/.exec(s.trim()); if(!m) return {h:18,m:0}; return { h: Math.max(0, Math.min(23, parseInt(m[1],10))), m: Math.max(0, Math.min(59, parseInt(m[2],10))) }; }
+    }
+
+    async function adminLoad(){
+      assignedEmails = new Set();
+      pendingEmails = new Set();
+
+      const bodyA = $("#tblAnmeldungen tbody"); bodyA.innerHTML = "";
+      try{
+        const snap = await getDocs(collection(db,"anmeldungen"));
+        snap.forEach(d=>{
+          const a = d.data();
+          if(a && a.email) pendingEmails.add(a.email.trim());
+          const tr = document.createElement("tr");
+          const wishes = Array.isArray(a.wuensche)? a.wuensche : [];
+          const chips = wishes.map(w=>{
+            const dd = new Date(w);
+            const label = `${String(dd.getDate()).padStart(2,"0")}.12 (${WDAY[dd.getDay()]})`;
+            return `<span class="chip-assign" data-assign="${w}" data-id="${d.id}" data-email="${escapeAttr(a.email||"")}" title="Als Termin festlegen">${label}</span>`;
+          }).join("");
+          tr.innerHTML = `
+            <td><strong>${escapeHtml(a.name||"")}</strong><br><span class="muted">${escapeHtml(a.email||"")}</span><br><span class="muted">${escapeHtml(a.telefon||"")}</span></td>
+            <td>${escapeHtml(a.adresse||"")}</td>
+            <td>${chips || "<span class='muted'>Keine Auswahl</span>"}</td>
+            <td>${escapeHtml(a.bemerkung||"")}</td>
+            <td><button class="warn" data-del="${d.id}">Löschen</button></td>
+          `;
+          bodyA.appendChild(tr);
+        });
+      }catch(e){
+        const tr = document.createElement("tr");
+        tr.innerHTML = `<td colspan="5" class="center">Anmeldungen konnten nicht geladen werden</td>`;
+        bodyA.appendChild(tr);
+      }
+
+      bodyA.querySelectorAll(".chip-assign").forEach(ch=>{
+        ch.addEventListener("click", async ()=>{
+          const dateKey = ch.getAttribute("data-assign");
+          const row = ch.closest("tr");
+          const name = row.querySelector("td:first-child strong").textContent;
+          const addr = row.children[1].textContent.trim();
+          const email = ch.getAttribute("data-email") || "";
+          try{
+            await setDoc(doc(db,"events", dateKey), {
+              datum: dateKey,
+              wochentag: WDAY[new Date(dateKey).getDay()],
+              hostName: name,
+              hostAdresse: addr,
+              hostEmail: email,
+              info: "Aus Anmeldung gesetzt",
+              changed: true
+            }, { merge: true });
+            ch.classList.add("assigned");
+            await loadEventsAndServices();
+            await adminLoad();
+          }catch(e){
+            alert("Zuweisung nicht möglich");
+          }
+        });
+      });
+
+      bodyA.querySelectorAll("button[data-del]").forEach(btn=>{
+        btn.addEventListener("click", async ()=>{
+          if(confirm("Diesen Eintrag wirklich löschen")){
+            await deleteDoc(doc(db,"anmeldungen", btn.dataset.del));
+            adminLoad();
+          }
+        });
+      });
+
+      const bodyE = $("#tblEvents tbody"); bodyE.innerHTML = "";
+      const dates = allDates().filter(d => ymd(d) !== "2025-12-24");
+      const map = new Map(eventsMap);
+      for(const d of dates){
+        const id = ymd(d);
+        const e = map.get(id) || { datum: id, hostName:"", hostAdresse:"", hostEmail:"", info:"", changed:false };
+        if(e.hostEmail) assignedEmails.add(e.hostEmail.trim());
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${deDate(new Date(id))}</td>
+          <td>${WDAY[new Date(id).getDay()]}</td>
+          <td><input type="text" value="${escapeAttr(e.hostName||"")}" data-f="hostName"></td>
+          <td><input type="text" value="${escapeAttr(e.hostAdresse||"")}" data-f="hostAdresse"></td>
+          <td><input type="text" value="${escapeAttr(e.info||"")}" data-f="info"></td>
+          <td><label><input type="checkbox" ${e.changed ? "checked" : ""} data-f="changed"> markiert</label></td>
+          <td><button data-save="${id}">Speichern</button></td>
+        `;
+        bodyE.appendChild(tr);
+      }
+      bodyE.addEventListener("click", async ev=>{
+        const btn = ev.target.closest("button[data-save]");
+        if(!btn) return;
+        const row = btn.closest("tr");
+        const inputs = row.querySelectorAll("input[data-f]");
+        const payload = { datum: btn.dataset.save, wochentag: WDAY[new Date(btn.dataset.save).getDay()] };
+        inputs.forEach(i=>{ if(i.type === "checkbox"){ payload[i.dataset.f] = i.checked; } else { payload[i.dataset.f] = i.value.trim(); } });
+        try{
+          await setDoc(doc(db,"events", btn.dataset.save), payload, { merge:true });
+          btn.textContent = "Gespeichert"; btn.disabled = true;
+          setTimeout(()=>{ btn.textContent = "Speichern"; btn.disabled = false; }, 900);
+          await loadEventsAndServices(); updateProgress(); updateEmailTextarea();
+        }catch(e){ alert("Speichern nicht möglich"); }
+      });
+
+      await renderServiceTable();
+      updateProgress();
+    }
+
+    async function renderServiceTable(){
+      const bodyS = $("#tblServices tbody"); bodyS.innerHTML = "";
+
+      services.forEach((s, idx)=> bodyS.appendChild(buildServiceRow(s, idx)));
+      bodyS.appendChild(buildServiceRow(null, services.length));
+
+      bodyS.addEventListener("click", onServiceButtonClick);
+      enableDragAndDrop(bodyS);
+    }
+
+    function onServiceButtonClick(e){
+      const btn = e.target.closest("button[data-act]");
+      if(!btn) return;
+      const act = btn.getAttribute("data-act");
+      const id = btn.getAttribute("data-sid") || "";
+      const row = btn.closest("tr");
+      saveOrDeleteService(act, id, row);
+    }
+
+    async function saveOrDeleteService(act, id, row){
+      const payload = readServiceRow(row);
+      if(act !== "del"){
+        const v = validateService(payload);
+        if(!v.ok){ alert(v.msg); return; }
+        payload.datum = "2025-12-24";
+        payload.isService = true;
+        if(typeof payload.order !== "number"){ payload.order = guessOrder(payload.uhrzeit); }
+      }
+
+      try{
+        if(act === "save" && id){
+          await setDoc(doc(db,"events", id), payload, { merge:true });
+          row.querySelector('[data-act="save"]').textContent = "Gespeichert";
+          setTimeout(()=> row.querySelector('[data-act="save"]').textContent = "Speichern", 900);
+        }
+        if(act === "save-new"){
+          const ref = await addDoc(collection(db,"events"), payload);
+          row.querySelector('[data-act="save-new"]').setAttribute("data-sid", ref.id);
+          row.querySelector('[data-act="save-new"]').setAttribute("data-act","save");
+          row.querySelector('[data-act="del"]').setAttribute("data-sid", ref.id);
+        }
+        if(act === "del" && id){
+          if(confirm("Diesen Gottesdienst löschen")){
+            await deleteDoc(doc(db,"events", id));
+            row.remove();
+          }
+        }
+        await loadEventsAndServices();
+        await renderServiceTable();
+      }catch(err){
+        console.error(err);
+        alert("Gottesdienst konnte nicht gespeichert werden");
+      }
+    }
+
+    function buildServiceRow(s, idx){
+      const tr = document.createElement("tr");
+      const id = s && s.id ? s.id : "";
+      tr.setAttribute("draggable", s ? "true" : "false");
+      tr.dataset.sid = id;
+      tr.dataset.index = String(idx);
+      tr.innerHTML = `
+        <td style="width:40px">${s ? `<span class="drag" title="Ziehen zum Sortieren">≡</span>` : ""}</td>
+        <td><input type="text" value="${escapeAttr(s?.gemeinde||"")}" data-f="gemeinde" placeholder="Gemeinde oder Kirche"></td>
+        <td><input type="text" value="${escapeAttr(s?.uhrzeit||"")}" data-f="uhrzeit" placeholder="z. B. 16:00"></td>
+        <td><input type="text" value="${escapeAttr(s?.adresse||"")}" data-f="adresse" placeholder="Ort, Straße, Nummer"></td>
+        <td><input type="text" value="${escapeAttr(s?.info||"")}" data-f="info" placeholder="Hinweis optional"></td>
+        <td>
+          <button data-sid="${id}" data-act="${id ? "save" : "save-new"}">Speichern</button>
+          <button class="warn" data-sid="${id}" data-act="del">Löschen</button>
+        </td>
+      `;
+      return tr;
+    }
+
+    function appendServiceRow(){
+      const bodyS = $("#tblServices tbody");
+      bodyS.appendChild(buildServiceRow(null, services.length));
+    }
+
+    function readServiceRow(row){
+      return {
+        gemeinde: row.querySelector('input[data-f="gemeinde"]').value.trim(),
+        uhrzeit: row.querySelector('input[data-f="uhrzeit"]').value.trim(),
+        adresse: row.querySelector('input[data-f="adresse"]').value.trim(),
+        info: row.querySelector('input[data-f="info"]').value.trim()
+      };
+    }
+
+    function validateService(p){
+      if(!p.gemeinde) return { ok:false, msg:"Bitte Gemeinde angeben" };
+      if(p.uhrzeit && !/^\d{1,2}:\d{2}$/.test(p.uhrzeit)) return { ok:false, msg:"Uhrzeit bitte als HH:MM eintragen" };
+      return { ok:true, msg:"" };
+    }
+
+    function guessOrder(hm){
+      const t = parseTime(hm);
+      return Number.isFinite(t) ? t : 9999;
+    }
+    function parseTime(hm){
+      const m = /^(\d{1,2}):(\d{2})$/.exec(hm || "");
+      if(!m) return 9999;
+      return parseInt(m[1],10) * 60 + parseInt(m[2],10);
+    }
+
+    function enableDragAndDrop(tbody){
+      let dragRow = null;
+
+      tbody.addEventListener("dragstart", e=>{
+        const tr = e.target.closest("tr[draggable='true']");
+        if(!tr) return;
+        dragRow = tr;
+        tr.classList.add("dragging");
+        e.dataTransfer.effectAllowed = "move";
+      });
+
+      tbody.addEventListener("dragover", e=>{
+        e.preventDefault();
+        const tr = e.target.closest("tr");
+        if(!dragRow || !tr || tr === dragRow) return;
+        const rect = tr.getBoundingClientRect();
+        const before = e.clientY < rect.top + rect.height / 2;
+        tr.classList.toggle("drop-above", before);
+        tr.classList.toggle("drop-below", !before);
+      });
+
+      tbody.addEventListener("dragleave", e=>{
+        const tr = e.target.closest("tr");
+        if(tr){ tr.classList.remove("drop-above","drop-below"); }
+      });
+
+      tbody.addEventListener("drop", async e=>{
+        e.preventDefault();
+        const targetRow = e.target.closest("tr");
+        if(!dragRow || !targetRow || dragRow === targetRow) return;
+        const rect = targetRow.getBoundingClientRect();
+        const before = e.clientY < rect.top + rect.height / 2;
+        targetRow.classList.remove("drop-above","drop-below");
+        if(before){
+          targetRow.parentNode.insertBefore(dragRow, targetRow);
+        }else{
+          targetRow.parentNode.insertBefore(dragRow, targetRow.nextSibling);
+        }
+        dragRow.classList.remove("dragging");
+        await persistServiceOrder(tbody);
+        await loadEventsAndServices();
+        await renderServiceTable();
+      });
+
+      tbody.addEventListener("dragend", ()=>{
+        const rows = tbody.querySelectorAll("tr");
+        rows.forEach(r=> r.classList.remove("dragging","drop-above","drop-below"));
+        dragRow = null;
+      });
+    }
+
+    async function persistServiceOrder(tbody){
+      const rows = Array.from(tbody.querySelectorAll("tr[draggable='true']"));
+      const batch = writeBatch(db);
+      rows.forEach((tr, idx)=>{
+        const sid = tr.dataset.sid;
+        if(sid){
+          batch.set(doc(db,"events", sid), { order: idx }, { merge:true });
+        }
+      });
+      await batch.commit();
+    }
+
+    function updateProgress(){
+      const total = 23;
+      let assigned = 0;
+      for(let d=1; d<=23; d++){
+        const key = `2025-12-${String(d).padStart(2,"0")}`;
+        const e = eventsMap.get(key);
+        if(e && typeof e.hostName === "string" && e.hostName.trim().length > 0){
+          assigned++;
+        }
+      }
+      const percent = Math.round((assigned / total) * 100);
+      const fill = document.getElementById("progFill");
+      const pct  = document.getElementById("progPercent");
+      const meta = document.getElementById("progMeta");
+      if(fill) fill.style.width = `${percent}%`;
+      if(pct)  pct.textContent  = `${percent}%`;
+      if(meta) meta.textContent = `${assigned} von ${total} Abenden vergeben`;
+    }
+
+    function updateEmailTextarea(){
+      const includePending = $("#includePending").checked;
+      const emails = new Set();
+      for(const e of eventsMap.values()){
+        if(e && e.hostEmail) emails.add(e.hostEmail.trim());
+      }
+      if(includePending){ pendingEmails.forEach(x=> emails.add(x)); }
+      $("#emailAll").value = Array.from(emails).filter(Boolean).join(", ");
+    }
+
+    async function copyEmails(){
+      const txt = $("#emailAll").value.trim();
+      if(!txt){ alert("Keine E Mail Adressen vorhanden"); return; }
+      try{
+        await navigator.clipboard.writeText(txt);
+        alert("E Mail Adressen kopiert");
+      }catch(e){
+        const ta = $("#emailAll");
+        ta.focus(); ta.select();
+        const ok = document.execCommand ? document.execCommand("copy") : false;
+        alert(ok ? "E Mail Adressen kopiert" : "Kopieren nicht möglich");
+      }
+    }
+  </script>
+
 </body>
 </html>
