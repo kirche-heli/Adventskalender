@@ -33,7 +33,7 @@
     .logo-banner{ display:block; margin:0 auto 8px auto; max-width:min(900px, 92vw); height:auto; filter: drop-shadow(0 6px 18px rgba(0,0,0,.22)); }
     .subtitle{ font-size:clamp(14px, 2.4vw, 18px); opacity:.95; max-width:900px; margin:6px auto 0 auto; line-height:1.5; }
     nav{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:18px; margin-bottom:14px; }
-    nav a{ display:inline-block; text-decoration:none; color:var(--burgundy); background:var(--gold); padding:10px 14px; border-radius:999px; font-weight:600; box-shadow:var(--shadow); }
+    nav a, nav button.linklike{ display:inline-block; text-decoration:none; color:var(--burgundy); background:var(--gold); padding:10px 14px; border-radius:999px; font-weight:600; box-shadow:var(--shadow); border:none; cursor:pointer; }
     main{ max-width:1100px; margin:-12px auto 60px; padding:0 16px; }
     .card{ background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:20px; margin-bottom:18px; }
 
@@ -52,6 +52,7 @@
     @media(min-width:850px){
       .today .row{ grid-template-columns:2fr 1.2fr; align-items:stretch; }
       .grid.cols-2{ grid-template-columns:1fr 1fr; }
+      .wa-grid{ grid-template-columns:2fr 1fr; align-items:center; }
     }
     h3{ margin:4px 0 12px; font-size:20px; color:var(--forest); }
     .list{ display:flex; flex-direction:column; gap:10px; }
@@ -59,6 +60,7 @@
     .day{ min-width:92px; text-align:center; background:var(--burgundy); color:var(--cream); padding:8px 10px; border-radius:10px; line-height:1.2; box-shadow:var(--shadow); }
     .day .date{ font-size:18px; font-weight:800; }
     .day .wd{ font-size:12px; opacity:.95; }
+    .day .time{ font-size:13px; margin-top:4px; font-weight:800; color:var(--gold); }
     .meta{ flex:1; }
     .meta .host{ font-weight:700; font-size:16px; }
     .meta .addr{ color:#444; margin-top:2px; }
@@ -90,7 +92,7 @@
     .dlg-head{ padding:16px 18px 0 18px; }
     .dlg-title{ margin:0; color:var(--forest); font-size:20px; }
     .dlg-foot{ padding:12px 18px 18px 18px; display:flex; justify-content:flex-end; gap:10px; }
-    .dlg-scroll{ max-height:68vh; overflow:auto; padding:0 18px 0 18px; }
+    .dlg-scroll{ max-height:80vh; overflow:auto; padding:0 18px 0 18px; }
     .link-as-btn{ background:#e5e7eb; color:#111827; border-radius:12px; padding:8px 12px; cursor:pointer; display:inline-block; }
     .muted{ color:#6b7280; }
     .center{ text-align:center; }
@@ -119,10 +121,21 @@
     tr.drop-above{ outline:2px solid #cbd5e1; }
     tr.drop-below{ outline:2px solid #cbd5e1; }
 
-    /* Zustimmung */
     .consent{ background:#fffbf6; border:1px solid #e6d7c6; padding:12px; border-radius:12px; }
     .consent label{ font-weight:500; display:flex; align-items:flex-start; gap:8px; line-height:1.4; }
     .consent input[type="checkbox"]{ margin-top:3px; }
+
+    /* WhatsApp Karte */
+    .wa-grid{ display:grid; gap:16px; }
+    .wa-text p{ margin:0 0 8px 0; }
+    .qr-wrap{ display:flex; align-items:center; justify-content:center; }
+    .qr{
+      width:140px; height:auto; border-radius:12px; border:1px solid #e5e7eb;
+      box-shadow:var(--shadow); transition:transform .2s ease, box-shadow .2s ease;
+      cursor:pointer; background:#fff;
+    }
+    .qr:hover{ transform:scale(1.06); box-shadow:0 14px 28px rgba(0,0,0,.12), 0 10px 10px rgba(0,0,0,.08); }
+    .qr-help{ font-size:13px; color:var(--muted); margin-top:6px; text-align:center; }
   </style>
 </head>
 <body>
@@ -131,15 +144,32 @@
     <img src="Logo.png" alt="Lebendiger Adventskalender Hessisch Lichtenau" class="logo-banner">
     <div class="subtitle">Vom ersten Advent bis kurz vor Heiligabend. Tägliche Begegnungen um 18 Uhr mit Licht, Musik, Geschichten und guten Gesprächen.</div>
     <nav aria-label="Hauptnavigation">
+      <a href="#whatsapp">WhatsApp</a>
       <a href="#heute">Heute</a>
       <a href="#termine">Termine</a>
       <a href="#anmeldung">Gastgeber werden</a>
       <a href="#info">Information</a>
       <a href="#ruestzeug" id="openGear">Rüstzeug</a>
+      <button class="linklike" id="openContact">Kontakt</button>
     </nav>
   </header>
 
   <main>
+    <!-- WhatsApp Karte -->
+    <section id="whatsapp" class="card" aria-labelledby="wa-title">
+      <h3 id="wa-title">WhatsApp Kanal</h3>
+      <div class="wa-grid">
+        <div class="wa-text">
+          <p>Kurze Hinweise und die abendlichen Termine kommen hier direkt auf das Handy. Sie können den QR Code scannen oder den Link öffnen.</p>
+          <p><a class="link-as-btn" id="waLink" href="https://whatsapp.com/channel/0029VbBLGb31CYoMJfdTh60w" target="_blank" rel="noopener">Kanal in WhatsApp öffnen</a></p>
+        </div>
+        <div class="qr-wrap">
+          <img src="qrcode.jpg" alt="QR Code zum WhatsApp Kanal" class="qr" id="qrThumb">
+        </div>
+      </div>
+      <div class="qr-help">Tipp: Mit der Kamera scannen. Klicken öffnet eine vergrößerte Ansicht.</div>
+    </section>
+
     <section id="heute" class="card today" aria-labelledby="heute-title">
       <h2 id="heute-title">Nächster Termin um 18 Uhr</h2>
       <div class="row">
@@ -213,7 +243,11 @@
           <textarea id="note" name="note" placeholder="Ideen, Hinweise oder Besonderheiten"></textarea>
         </div>
 
-        <!-- Pflichtfeld Zustimmung -->
+        <div>
+          <label><input id="barrierefrei" name="barrierefrei" type="checkbox"> ♿ Veranstaltungsort barrierefrei</label>
+          <div class="help">Diese Info erscheint in der Terminübersicht.</div>
+        </div>
+
         <div class="consent">
           <label for="consent">
             <input id="consent" name="consent" type="checkbox" required>
@@ -233,7 +267,7 @@
     <section id="info" class="card" aria-labelledby="info-title">
       <h3 id="info-title">Was ist ein lebendiger Adventskalender</h3>
       <p>An jedem Abend im Advent öffnet sich um 18 Uhr ein Türchen in Form eines Fensters, eines Hauses, eines Gartens oder eines Hofes. Gastgeberinnen und Gastgeber laden für etwa 30 Minuten zu einer adventlichen Begegnung ein. Gemeinschaft und Vorfreude stehen im Mittelpunkt.</p>
-      <p>Die Gestaltung kann vielfältig sein. Möglich sind eine kurze Geschichte oder ein Impuls, gemeinsames Singen von Weihnachtsliedern, leise Musik im Hintergrund oder ein offenes Zusammensein bei Kerzenschein. Wer möchte, kann mit Plätzchen, Tee oder einem Becher Glühwein bewirten. Gäste bringen nach Möglichkeit eine eigene Tasse mit.</p>
+      <p>Die Gestaltung kann vielfältig sein. Möglich sind eine kurze Geschichte oder ein Impuls, gemeinsames Singen von Weihnachtsliedern, leise Musik oder ein offenes Zusammensein bei Kerzenschein. Wer möchte, kann mit Plätzchen, Tee oder einem Becher Glühwein bewirten. Gäste bringen nach Möglichkeit eine eigene Tasse mit.</p>
       <details>
         <summary>Organisation und nächste Schritte</summary>
         <p>Zum Auftakt eröffnen wir am Sonntag, 30. November, um 18 Uhr an der Stadtkirche die Krippe im Freien. Danach trifft sich die Stadtgemeinschaft jeden Abend an einem anderen Ort. Gruppen, Familien, Vereine, Kirchengemeinden oder Einzelpersonen können einen Abend übernehmen. Auf Wunsch stellen wir Materialien und Gestaltungsideen bereit.</p>
@@ -259,6 +293,31 @@
         <p class="muted">Du kannst die Links später durch eigene Dateien ersetzen.</p>
       </div>
       <div class="dlg-foot"><button type="button" class="secondary" data-close="dlgGear">Schließen</button></div>
+    </div>
+  </dialog>
+
+  <!-- Kontakt Dialog -->
+  <dialog id="dlgContact">
+    <div class="dlg-body">
+      <div class="dlg-head"><h3 class="dlg-title">Kontakt</h3></div>
+      <div class="dlg-scroll">
+        <p>Sie haben Fragen oder möchten eine Anregung weitergeben. Schreiben Sie uns gern. Wir melden uns zeitnah.</p>
+        <p><a class="link-as-btn" href="mailto:Dominik.Teminski@ekkw.de">Dominik.Teminski@ekkw.de</a></p>
+        <p class="muted">Vielen Dank für Ihre Nachricht.</p>
+      </div>
+      <div class="dlg-foot"><button type="button" class="secondary" data-close="dlgContact">Schließen</button></div>
+    </div>
+  </dialog>
+
+  <!-- QR Zoom Dialog -->
+  <dialog id="dlgQr">
+    <div class="dlg-body">
+      <div class="dlg-head"><h3 class="dlg-title">QR Code zum WhatsApp Kanal</h3></div>
+      <div class="dlg-scroll center">
+        <p><img src="qrcode.jpg" alt="QR Code vergrößert" style="max-width:min(540px, 88vw); height:auto; border-radius:16px; border:1px solid #e5e7eb; box-shadow:var(--shadow)"></p>
+        <p><a class="link-as-btn" href="https://whatsapp.com/channel/0029VbBLGb31CYoMJfdTh60w" target="_blank" rel="noopener">Kanal in WhatsApp öffnen</a></p>
+      </div>
+      <div class="dlg-foot"><button type="button" class="secondary" data-close="dlgQr">Schließen</button></div>
     </div>
   </dialog>
 
@@ -333,8 +392,8 @@
         <h4>Termine pflegen</h4>
         <p class="muted">Gastgeber und Adresse bearbeiten oder einen Termin als geändert markieren.</p>
         <table class="table" id="tblEvents">
-          <thead><tr><th>Datum</th><th>Wochentag</th><th>Gastgeber</th><th>Adresse</th><th>Notiz</th><th>Änderung</th><th>Aktion</th></tr></thead>
-        <tbody></tbody>
+          <thead><tr><th>Datum</th><th>Wochentag</th><th>Gastgeber</th><th>Adresse</th><th>Notiz</th><th>Barrierefrei</th><th>Änderung</th><th>Aktion</th></tr></thead>
+          <tbody></tbody>
         </table>
 
         <h4>Gottesdienste am 24. Dezember</h4>
@@ -429,16 +488,15 @@
       db = getFirestore(app);
 
       $("#openGear").addEventListener("click", ()=> $("#dlgGear").showModal());
-      $("#openPicker").addEventListener("click", ()=> openPicker());
-      $("#pickerOk").addEventListener("click", ()=>{ $("#dlgPicker").close(); updatePreview(); });
-      $("#openLegal").addEventListener("click", ()=> $("#dlgLegal").showModal());
-      $("#openAdminLogin").addEventListener("click", ()=> { $("#dlgLegal").close(); $("#dlgAdminLogin").showModal(); });
+      $("#openContact").addEventListener("click", ()=> $("#dlgContact").showModal());
+      $("#qrThumb").addEventListener("click", ()=> $("#dlgQr").showModal());
+
+      // generisches Schließen
       $$("[data-close]").forEach(btn=>{ btn.addEventListener("click", ()=> document.getElementById(btn.getAttribute("data-close")).close()); });
 
       $("#btnPdf").addEventListener("click", ()=> downloadPdfFromData());
       $("#btnIcs").addEventListener("click", ()=> downloadIcsFromData());
 
-      // Sende Button an Zustimmung koppeln
       const sendBtn = $("#sendBtn");
       const consent = $("#consent");
       function updateSendDisabled(){ sendBtn.disabled = !consent.checked; }
@@ -498,6 +556,7 @@
         const city   = $("#city").value.trim();
         const note   = $("#note").value.trim();
         const wishes = Array.from(selected).sort();
+        const bf     = $("#barrierefrei")?.checked === true;
         const consentOk = $("#consent")?.checked === true;
 
         if(!name || !email || !tel || !street || !city){
@@ -519,17 +578,15 @@
             adresse: `${street}, ${city}`,
             wuensche: wishes,
             bemerkung: note || "",
+            barrierefrei: bf === true,
             consentPublish: true,
             consentTextVersion: "2025-10-12",
             createdAt: new Date().toISOString()
           });
           msg.textContent = "Vielen Dank. Ihre Anmeldung ist eingegangen"; msg.className = "success";
-          // Formular zurücksetzen und Vorschau leeren
           $("#hostForm").reset(); selected.clear(); updatePreview();
-          // Zustimmungskästchen zurücksetzen und Button erneut sperren
           const consent = $("#consent"); if(consent){ consent.checked = false; }
           const sendBtn = $("#sendBtn"); if(sendBtn){ sendBtn.disabled = true; }
-          // Bestätigungsdialog anzeigen
           $("#dlgSubmitConfirm").showModal();
         }catch(err){
           console.error(err);
@@ -602,7 +659,8 @@
         const key = ymd(d);
         const item = document.createElement("div"); item.className = "item";
         const day = document.createElement("div"); day.className = "day";
-        day.innerHTML = `<div class="wd">${WDAY[d.getDay()]}</div><div class="date">${String(d.getDate()).padStart(2,"0")}.${String(d.getMonth()+1).padStart(2,"0")}</div>`;
+        const timeLabel = key === "2025-12-24" ? "verschiedene Zeiten" : "18:00 Uhr";
+        day.innerHTML = `<div class="wd">${WDAY[d.getDay()]}</div><div class="date">${String(d.getDate()).padStart(2,"0")}.${String(d.getMonth()+1).padStart(2,"0")}</div><div class="time">${timeLabel}</div>`;
         const meta = document.createElement("div"); meta.className = "meta";
 
         if(key === "2025-12-24"){
@@ -622,7 +680,9 @@
           const e = eventsMap.get(key);
           if(e && e.hostName){
             const changed = e.changed ? `<div class="badge changed">Hinweis: geändert</div>` : "";
-            meta.innerHTML = `<div class="host">${escapeHtml(e.hostName)}</div><div class="addr">${escapeHtml(e.hostAdresse || "")}</div>${e.info ? `<div class="badge">${escapeHtml(e.info)}</div>` : ""}${changed}`;
+            const info = e.info ? `<div class="badge">${escapeHtml(e.info)}</div>` : "";
+            const bf  = e.barrierefrei ? `<div class="badge">♿ barrierefrei</div>` : "";
+            meta.innerHTML = `<div class="host">${escapeHtml(e.hostName)}</div><div class="addr">${escapeHtml(e.hostAdresse || "")}</div>${info}${bf}${changed}`;
           }else{
             meta.innerHTML = `<div class="host muted">Noch frei</div><div class="badge free">Anmeldung möglich</div>`;
           }
@@ -814,7 +874,9 @@
       const bodyA = $("#tblAnmeldungen tbody"); bodyA.innerHTML = "";
       try{
         const snap = await getDocs(collection(db,"anmeldungen"));
+        const seen = new Set();
         snap.forEach(d=>{
+          if(seen.has(d.id)) return; seen.add(d.id);
           const a = d.data();
           if(a && a.email) pendingEmails.add(a.email.trim());
           const tr = document.createElement("tr");
@@ -822,13 +884,14 @@
           const chips = wishes.map(w=>{
             const dd = new Date(w);
             const label = `${String(dd.getDate()).padStart(2,"0")}.12 (${WDAY[dd.getDay()]})`;
-            return `<span class="chip-assign" data-assign="${w}" data-id="${d.id}" data-email="${escapeAttr(a.email||"")}" title="Als Termin festlegen">${label}</span>`;
+            const title = "Als Termin festlegen";
+            return `<span class="chip-assign" data-assign="${w}" data-id="${d.id}" data-email="${escapeAttr(a.email||"")}" title="${title}">${label}</span>`;
           }).join("");
           tr.innerHTML = `
             <td><strong>${escapeHtml(a.name||"")}</strong><br><span class="muted">${escapeHtml(a.email||"")}</span><br><span class="muted">${escapeHtml(a.telefon||"")}</span></td>
             <td>${escapeHtml(a.adresse||"")}</td>
             <td>${chips || "<span class='muted'>Keine Auswahl</span>"}</td>
-            <td>${escapeHtml(a.bemerkung||"")}</td>
+            <td>${escapeHtml(a.bemerkung||"")}${a.barrierefrei ? "<div class='badge' style='margin-top:8px'>♿ barrierefrei</div>" : ""}</td>
             <td><button class="warn" data-del="${d.id}">Löschen</button></td>
           `;
           bodyA.appendChild(tr);
@@ -846,6 +909,8 @@
           const name = row.querySelector("td:first-child strong").textContent;
           const addr = row.children[1].textContent.trim();
           const email = ch.getAttribute("data-email") || "";
+          const bfBadge = row.children[3].querySelector(".badge");
+          const bf = !!bfBadge && /barrierefrei/.test(bfBadge.textContent);
           try{
             await setDoc(doc(db,"events", dateKey), {
               datum: dateKey,
@@ -853,6 +918,7 @@
               hostName: name,
               hostAdresse: addr,
               hostEmail: email,
+              barrierefrei: bf,
               info: "Aus Anmeldung gesetzt",
               changed: true
             }, { merge: true });
@@ -879,7 +945,7 @@
       const map = new Map(eventsMap);
       for(const d of dates){
         const id = ymd(d);
-        const e = map.get(id) || { datum: id, hostName:"", hostAdresse:"", hostEmail:"", info:"", changed:false };
+        const e = map.get(id) || { datum: id, hostName:"", hostAdresse:"", hostEmail:"", info:"", changed:false, barrierefrei:false };
         if(e.hostEmail) assignedEmails.add(e.hostEmail.trim());
         const tr = document.createElement("tr");
         tr.innerHTML = `
@@ -888,6 +954,7 @@
           <td><input type="text" value="${escapeAttr(e.hostName||"")}" data-f="hostName"></td>
           <td><input type="text" value="${escapeAttr(e.hostAdresse||"")}" data-f="hostAdresse"></td>
           <td><input type="text" value="${escapeAttr(e.info||"")}" data-f="info"></td>
+          <td><label><input type="checkbox" ${e.barrierefrei ? "checked" : ""} data-f="barrierefrei"> ♿</label></td>
           <td><label><input type="checkbox" ${e.changed ? "checked" : ""} data-f="changed"> markiert</label></td>
           <td><button data-save="${id}">Speichern</button></td>
         `;
