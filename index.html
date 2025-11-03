@@ -144,7 +144,6 @@
     <img src="Logo.png" alt="Lebendiger Adventskalender Hessisch Lichtenau" class="logo-banner">
     <div class="subtitle">Vom ersten Advent bis kurz vor Heiligabend. Tägliche Begegnungen mit Licht, Musik, Geschichten und guten Gesprächen.</div>
     <nav aria-label="Hauptnavigation">
-      <a href="#whatsapp">WhatsApp</a>
       <a href="#heute">Heute</a>
       <a href="#termine">Termine</a>
       <a href="#anmeldung">Gastgeber werden</a>
@@ -472,6 +471,17 @@
       $("#openContact").addEventListener("click", e=>{ e.preventDefault(); $("#dlgContact").showModal(); });
       $("#qrThumb").addEventListener("click", ()=> $("#dlgQr").showModal());
 
+      // Picker Events hinzugefügt
+      const pickerBtn = $("#openPicker");
+      if(pickerBtn){ pickerBtn.addEventListener("click", openPicker); }
+      const pickerOk = $("#pickerOk");
+      if(pickerOk){
+        pickerOk.addEventListener("click", ()=>{
+          updatePreview();
+          $("#dlgPicker").close();
+        });
+      }
+
       $$("[data-close]").forEach(btn=>{ btn.addEventListener("click", ()=> document.getElementById(btn.getAttribute("data-close")).close()); });
 
       $("#btnPdf").addEventListener("click", ()=> downloadPdfFromData());
@@ -483,7 +493,11 @@
       if(consent){ consent.addEventListener("change", updateSendDisabled); updateSendDisabled(); }
 
       $("#hostForm").addEventListener("submit", onSubmitHostForm());
-      $("#resetBtn").addEventListener("click", ()=>{ selected.clear(); updatePreview(); if(consent){ consent.checked = false; updateSendDisabled(); } });
+      $("#resetBtn").addEventListener("click", ()=>{
+        selected.clear();
+        updatePreview();
+        if(consent){ consent.checked = false; updateSendDisabled(); }
+      });
 
       $("#btnLogin").addEventListener("click", adminLogin);
       $("#btnLogout").addEventListener("click", async ()=>{ await signOut(auth); $("#dlgAdminPanel").close(); });
@@ -594,6 +608,7 @@
       });
       $("#dlgPicker").showModal();
     }
+
     function updatePreview(){
       const prev = $("#wishesPreview"); prev.innerHTML = "";
       Array.from(selected).sort().forEach(k=>{
@@ -646,7 +661,7 @@
         const timeForBox = e && e.uhrzeit && /^\d{1,2}:\d{2}$/.test(e.uhrzeit) ? `${e.uhrzeit} Uhr` : "18:00 Uhr";
 
         let timeHtml = `<div class="time">${timeForBox}</div>`;
-        if(key === "2025-12-24"){ timeHtml = ""; } // keine Zeitangabe am 24.
+        if(key === "2025-12-24"){ timeHtml = ""; }
 
         day.innerHTML = `<div class="wd">${WDAY[d.getDay()]}</div><div class="date">${String(d.getDate()).padStart(2,"0")}.${String(d.getMonth()+1).padStart(2,"0")}</div>${timeHtml}`;
 
@@ -865,6 +880,11 @@
         return `${y}${m}${da}T${h}${mi}00`;
       }
       function escapeIcs(s){ return String(s).replace(/([,;])/g,"\\$1").replace(/\n/g,"\\n"); }
+      function parseHm(s){
+        const m = /^(\d{1,2}):(\d{2})$/.exec((s||"").trim());
+        if(!m) return {h:18,m:0};
+        return { h: Math.max(0, Math.min(23, parseInt(m[1],10))), m: Math.max(0, Math.min(59, parseInt(m[2],10))) };
+      }
     }
 
     async function adminLoad(){
@@ -967,14 +987,13 @@
         const row = btn.closest("tr");
         const inputs = row.querySelectorAll("input[data-f]");
         const payload = { datum: btn.dataset.save, wochentag: WDAY[new Date(btn.dataset.save).getDay()] };
-        let timeStr = "";
         inputs.forEach(i=>{
           if(i.type === "checkbox"){ payload[i.dataset.f] = i.checked; }
           else {
             const v = i.value.trim();
-            if(i.dataset.f === "uhrzeit"){
-              if(v && !/^\d{1,2}:\d{2}$/.test(v)){ alert("Uhrzeit bitte als HH:MM eintragen"); return; }
-              timeStr = v;
+            if(i.dataset.f === "uhrzeit" && v && !/^\d{1,2}:\d{2}$/.test(v)){
+              alert("Uhrzeit bitte als HH:MM eintragen");
+              return;
             }
             payload[i.dataset.f] = v;
           }
@@ -1094,21 +1113,6 @@
       return { ok:true, msg:"" };
     }
 
-    function guessOrder(hm){
-      const t = parseTime(hm);
-      return Number.isFinite(t) ? t : 9999;
-    }
-    function parseTime(hm){
-      const m = /^(\d{1,2}):(\d{2})$/.exec(hm || "");
-      if(!m) return 9999;
-      return parseInt(m[1],10) * 60 + parseInt(m[2],10);
-    }
-    function parseHm(s){
-      const m = /^(\d{1,2}):(\d{2})$/.exec((s||"").trim());
-      if(!m) return {h:18,m:0};
-      return { h: Math.max(0, Math.min(23, parseInt(m[1],10))), m: Math.max(0, Math.min(59, parseInt(m[2],10))) };
-    }
-
     function enableDragAndDrop(tbody){
       let dragRow = null;
 
@@ -1189,6 +1193,17 @@
       if(fill) fill.style.width = `${percent}%`;
       if(pct)  pct.textContent  = `${percent}%`;
       if(meta) meta.textContent = `${assigned} von ${total} Abenden vergeben`;
+    }
+
+    function parseTime(hm){
+      const m = /^(\d{1,2}):(\d{2})$/.exec(hm || "");
+      if(!m) return 9999;
+      return parseInt(m[1],10) * 60 + parseInt(m[2],10);
+    }
+    function parseHm(s){
+      const m = /^(\d{1,2}):(\d{2})$/.exec((s||"").trim());
+      if(!m) return {h:18,m:0};
+      return { h: Math.max(0, Math.min(23, parseInt(m[1],10))), m: Math.max(0, Math.min(59, parseInt(m[2],10))) };
     }
 
     function updateEmailTextarea(){
