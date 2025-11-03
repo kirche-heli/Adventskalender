@@ -33,7 +33,7 @@
     .logo-banner{ display:block; margin:0 auto 8px auto; max-width:min(900px, 92vw); height:auto; filter: drop-shadow(0 6px 18px rgba(0,0,0,.22)); }
     .subtitle{ font-size:clamp(14px, 2.4vw, 18px); opacity:.95; max-width:900px; margin:6px auto 0 auto; line-height:1.5; }
     nav{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:18px; margin-bottom:14px; }
-    nav a, nav button.linklike{ display:inline-block; text-decoration:none; color:var(--burgundy); background:var(--gold); padding:10px 14px; border-radius:999px; font-weight:600; box-shadow:var(--shadow); border:none; cursor:pointer; }
+    nav a{ display:inline-block; text-decoration:none; color:var(--burgundy); background:var(--gold); padding:10px 14px; border-radius:999px; font-weight:600; box-shadow:var(--shadow); }
     main{ max-width:1100px; margin:-12px auto 60px; padding:0 16px; }
     .card{ background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:20px; margin-bottom:18px; }
 
@@ -142,15 +142,14 @@
 
   <header>
     <img src="Logo.png" alt="Lebendiger Adventskalender Hessisch Lichtenau" class="logo-banner">
-    <div class="subtitle">Vom ersten Advent bis kurz vor Heiligabend. Tägliche Begegnungen um 18 Uhr mit Licht, Musik, Geschichten und guten Gesprächen.</div>
+    <div class="subtitle">Vom ersten Advent bis kurz vor Heiligabend. Tägliche Begegnungen mit Licht, Musik, Geschichten und guten Gesprächen.</div>
     <nav aria-label="Hauptnavigation">
       <a href="#whatsapp">WhatsApp</a>
       <a href="#heute">Heute</a>
       <a href="#termine">Termine</a>
       <a href="#anmeldung">Gastgeber werden</a>
       <a href="#info">Information</a>
-      <a href="#ruestzeug" id="openGear">Rüstzeug</a>
-      <button class="linklike" id="openContact">Kontakt</button>
+      <a href="#" id="openContact">Kontakt</a>
     </nav>
   </header>
 
@@ -160,21 +159,22 @@
       <h3 id="wa-title">WhatsApp Kanal</h3>
       <div class="wa-grid">
         <div class="wa-text">
-          <p>Kurze Hinweise und die abendlichen Termine kommen hier direkt auf das Handy. Sie können den QR Code scannen oder den Link öffnen.</p>
+          <p>Kurze Hinweise und die abendlichen Treffpunkte kommen hier direkt auf das Handy. Sie können den QR Code scannen oder den Link öffnen.</p>
           <p><a class="link-as-btn" id="waLink" href="https://whatsapp.com/channel/0029VbBLGb31CYoMJfdTh60w" target="_blank" rel="noopener">Kanal in WhatsApp öffnen</a></p>
         </div>
         <div class="qr-wrap">
           <img src="qrcode.jpg" alt="QR Code zum WhatsApp Kanal" class="qr" id="qrThumb">
         </div>
       </div>
-      <div class="qr-help">Tipp: Mit der Kamera scannen. Klicken öffnet eine vergrößerte Ansicht.</div>
+      <div class="qr-help">Mit der Kamera scannen. Klicken öffnet eine vergrößerte Ansicht.</div>
     </section>
 
     <section id="heute" class="card today" aria-labelledby="heute-title">
-      <h2 id="heute-title">Nächster Termin um 18 Uhr</h2>
+      <h2 id="heute-title">Nächster Termin</h2>
       <div class="row">
         <div class="info">
           <span class="pill" id="heuteDatum">Datum wird geladen</span>
+          <span class="pill" id="heuteZeit" style="display:none"></span>
           <div class="title" id="heuteTitel">Noch kein Eintrag ausgewählt</div>
           <div class="addr" id="heuteAdresse"></div>
           <div class="help" id="heuteHinweis"></div>
@@ -182,7 +182,7 @@
         <div class="weather" aria-live="polite">
           <div class="big" id="wTemp">n. a.</div>
           <div>
-            <div id="wText">Wetter für 18 Uhr wird geladen</div>
+            <div id="wText">Wetter wird geladen</div>
             <small id="wMeta"></small>
           </div>
         </div>
@@ -191,7 +191,7 @@
 
     <section id="termine" class="card" aria-labelledby="termine-title">
       <h3 id="termine-title">Alle Termine</h3>
-      <p class="help">Zeitraum von Sonntag, 30. November, bis Mittwoch, 24. Dezember. Beginn jeweils um 18 Uhr. Am 24. Dezember erscheinen die Gottesdienste der beteiligten Gemeinden.</p>
+      <p class="help">Zeitraum von Sonntag, 30. November, bis Mittwoch, 24. Dezember. Beginn in der Regel um 18 Uhr. Abweichungen stehen beim Datum.</p>
       <div class="list" id="terminListe" role="list"></div>
       <div class="actions" style="margin-top:12px">
         <button type="button" id="btnPdf" class="secondary">Übersicht als PDF</button>
@@ -266,11 +266,11 @@
 
     <section id="info" class="card" aria-labelledby="info-title">
       <h3 id="info-title">Was ist ein lebendiger Adventskalender</h3>
-      <p>An jedem Abend im Advent öffnet sich um 18 Uhr ein Türchen in Form eines Fensters, eines Hauses, eines Gartens oder eines Hofes. Gastgeberinnen und Gastgeber laden für etwa 30 Minuten zu einer adventlichen Begegnung ein. Gemeinschaft und Vorfreude stehen im Mittelpunkt.</p>
-      <p>Die Gestaltung kann vielfältig sein. Möglich sind eine kurze Geschichte oder ein Impuls, gemeinsames Singen von Weihnachtsliedern, leise Musik oder ein offenes Zusammensein bei Kerzenschein. Wer möchte, kann mit Plätzchen, Tee oder einem Becher Glühwein bewirten. Gäste bringen nach Möglichkeit eine eigene Tasse mit.</p>
+      <p>An jedem Abend im Advent öffnet sich ein Fenster, ein Garten oder eine Haustür. Gastgeberinnen und Gastgeber laden für etwa 30 Minuten zu einer adventlichen Begegnung ein. Gemeinschaft und Vorfreude stehen im Mittelpunkt.</p>
+      <p>Die Gestaltung kann vielfältig sein. Möglich sind eine kurze Geschichte oder ein Impuls, gemeinsames Singen von Weihnachtsliedern, leise Musik oder ein offenes Zusammensein bei Kerzenschein. Gäste bringen nach Möglichkeit eine eigene Tasse mit.</p>
       <details>
         <summary>Organisation und nächste Schritte</summary>
-        <p>Zum Auftakt eröffnen wir am Sonntag, 30. November, um 18 Uhr an der Stadtkirche die Krippe im Freien. Danach trifft sich die Stadtgemeinschaft jeden Abend an einem anderen Ort. Gruppen, Familien, Vereine, Kirchengemeinden oder Einzelpersonen können einen Abend übernehmen. Auf Wunsch stellen wir Materialien und Gestaltungsideen bereit.</p>
+        <p>Zum Auftakt eröffnen wir am Sonntag, 30. November, an der Stadtkirche die Krippe im Freien. Danach trifft sich die Stadtgemeinschaft jeden Abend an einem anderen Ort. Gruppen, Familien, Vereine, Kirchengemeinden oder Einzelpersonen können einen Abend übernehmen. Auf Wunsch stellen wir Materialien und Gestaltungsideen bereit.</p>
       </details>
     </section>
   </main>
@@ -278,23 +278,6 @@
   <footer>
     <span class="footlink" id="openLegal">Impressum und Datenschutz</span>
   </footer>
-
-  <!-- Rüstzeug -->
-  <dialog id="dlgGear">
-    <div class="dlg-body">
-      <div class="dlg-head"><h3 class="dlg-title">Rüstzeug für den Abend</h3></div>
-      <div class="dlg-scroll">
-        <p>Hier findest du Materialien zur Vorbereitung deines Abends.</p>
-        <ul>
-          <li><a href="#" download>Vorlage Ablaufplan PDF</a></li>
-          <li><a href="#" download>Liederliste PDF</a></li>
-          <li><a href="#" download>Impulsideen PDF</a></li>
-        </ul>
-        <p class="muted">Du kannst die Links später durch eigene Dateien ersetzen.</p>
-      </div>
-      <div class="dlg-foot"><button type="button" class="secondary" data-close="dlgGear">Schließen</button></div>
-    </div>
-  </dialog>
 
   <!-- Kontakt Dialog -->
   <dialog id="dlgContact">
@@ -331,8 +314,7 @@
         <p>Die Ev. Kirchengemeinde Hessisch Lichtenau ist eine Körperschaft des öffentlichen Rechts. Vertretungsberechtigt ist der Kirchenvorstand.</p>
         <p><strong>Verantwortlich nach §18 MStV</strong><br>Pfarrerin Anja Peters, Mühlweg 21, 37235 Hessisch Lichtenau</p>
         <p><strong>Datenschutz</strong></p>
-        <p>Es werden keine Tracking Dienste oder Cookies eingesetzt. Technisch notwendige Protokolle des Hosts werden nur kurz gespeichert. Die lokale Speicherung von Sprache und Wiedergabegeschwindigkeit erfolgt ausschließlich im Browser und kann jederzeit gelöscht werden.</p>
-        <p>Rechte nach DSGVO. Auskunft, Berichtigung, Löschung, Einschränkung, Widerspruch und Datenübertragbarkeit. Beschwerden bei der Aufsichtsbehörde sind möglich.</p>
+        <p>Es werden keine Tracking Dienste oder Cookies eingesetzt. Technisch notwendige Protokolle des Hosts werden nur kurz gespeichert. Die lokale Speicherung erfolgt ausschließlich im Browser und kann jederzeit gelöscht werden.</p>
         <hr>
         <p class="muted">Nur für das Organisationsteam</p>
         <p><span class="link-as-btn" id="openAdminLogin">Admin</span></p>
@@ -390,9 +372,9 @@
         <p id="anmeldHelp" class="muted">Nach der Zuweisung kannst du den Antrag optional löschen.</p>
 
         <h4>Termine pflegen</h4>
-        <p class="muted">Gastgeber und Adresse bearbeiten oder einen Termin als geändert markieren.</p>
+        <p class="muted">Gastgeber, Adresse, Uhrzeit und Hinweise bearbeiten oder einen Termin als geändert markieren.</p>
         <table class="table" id="tblEvents">
-          <thead><tr><th>Datum</th><th>Wochentag</th><th>Gastgeber</th><th>Adresse</th><th>Notiz</th><th>Barrierefrei</th><th>Änderung</th><th>Aktion</th></tr></thead>
+          <thead><tr><th>Datum</th><th>Wochentag</th><th>Uhrzeit</th><th>Gastgeber</th><th>Adresse</th><th>Notiz</th><th>Barrierefrei</th><th>Änderung</th><th>Aktion</th></tr></thead>
           <tbody></tbody>
         </table>
 
@@ -429,7 +411,7 @@
     </div>
   </dialog>
 
-  <!-- Bestätigungsdialog nach dem Absenden -->
+  <!-- Bestätigungsdialog -->
   <dialog id="dlgSubmitConfirm" aria-labelledby="dlgSubmitConfirmTitle">
     <div class="dlg-body">
       <div class="dlg-head"><h3 class="dlg-title" id="dlgSubmitConfirmTitle">Anmeldung bestätigt</h3></div>
@@ -487,11 +469,9 @@
       auth = getAuth(app);
       db = getFirestore(app);
 
-      $("#openGear").addEventListener("click", ()=> $("#dlgGear").showModal());
-      $("#openContact").addEventListener("click", ()=> $("#dlgContact").showModal());
+      $("#openContact").addEventListener("click", e=>{ e.preventDefault(); $("#dlgContact").showModal(); });
       $("#qrThumb").addEventListener("click", ()=> $("#dlgQr").showModal());
 
-      // generisches Schließen
       $$("[data-close]").forEach(btn=>{ btn.addEventListener("click", ()=> document.getElementById(btn.getAttribute("data-close")).close()); });
 
       $("#btnPdf").addEventListener("click", ()=> downloadPdfFromData());
@@ -521,7 +501,10 @@
 
       await loadEventsAndServices();
       const next = computeNextDate();
-      await loadWeatherForDate(next);
+      const e = eventsMap.get(next);
+      const timeStr = e && e.uhrzeit && /^\d{1,2}:\d{2}$/.test(e.uhrzeit) ? e.uhrzeit : "18:00";
+      setHeuteTime(timeStr);
+      await loadWeatherForDate(next, timeStr);
 
       $("#btnCopyEmails").addEventListener("click", copyEmails);
       $("#includePending").addEventListener("change", updateEmailTextarea);
@@ -659,8 +642,14 @@
         const key = ymd(d);
         const item = document.createElement("div"); item.className = "item";
         const day = document.createElement("div"); day.className = "day";
-        const timeLabel = key === "2025-12-24" ? "verschiedene Zeiten" : "18:00 Uhr";
-        day.innerHTML = `<div class="wd">${WDAY[d.getDay()]}</div><div class="date">${String(d.getDate()).padStart(2,"0")}.${String(d.getMonth()+1).padStart(2,"0")}</div><div class="time">${timeLabel}</div>`;
+        const e = eventsMap.get(key);
+        const timeForBox = e && e.uhrzeit && /^\d{1,2}:\d{2}$/.test(e.uhrzeit) ? `${e.uhrzeit} Uhr` : "18:00 Uhr";
+
+        let timeHtml = `<div class="time">${timeForBox}</div>`;
+        if(key === "2025-12-24"){ timeHtml = ""; } // keine Zeitangabe am 24.
+
+        day.innerHTML = `<div class="wd">${WDAY[d.getDay()]}</div><div class="date">${String(d.getDate()).padStart(2,"0")}.${String(d.getMonth()+1).padStart(2,"0")}</div>${timeHtml}`;
+
         const meta = document.createElement("div"); meta.className = "meta";
 
         if(key === "2025-12-24"){
@@ -677,7 +666,6 @@
             meta.innerHTML = `<div class="host muted">Gottesdienste werden ergänzt</div>`;
           }
         }else{
-          const e = eventsMap.get(key);
           if(e && e.hostName){
             const changed = e.changed ? `<div class="badge changed">Hinweis: geändert</div>` : "";
             const info = e.info ? `<div class="badge">${escapeHtml(e.info)}</div>` : "";
@@ -694,6 +682,9 @@
       const e = eventsMap.get(next);
       const d = new Date(next);
       $("#heuteDatum").textContent = `${WDAY[d.getDay()]}, ${deDate(d)}`;
+      const timeStr = e && e.uhrzeit && /^\d{1,2}:\d{2}$/.test(e.uhrzeit) ? e.uhrzeit : "18:00";
+      setHeuteTime(timeStr);
+
       if(next === "2025-12-24"){
         $("#heuteTitel").textContent = "Heiligabend Gottesdienste";
         $("#heuteAdresse").textContent = "Mehrere Orte in Hessisch Lichtenau und Umgebung";
@@ -708,6 +699,12 @@
       }
     }
 
+    function setHeuteTime(hhmm){
+      const pill = $("#heuteZeit");
+      pill.textContent = `Beginn ${hhmm} Uhr`;
+      pill.style.display = "inline-block";
+    }
+
     function computeNextDate(){
       const today = new Date(); today.setHours(0,0,0,0);
       for(const d of allDates()){
@@ -716,10 +713,11 @@
       return ymd(rangeStart);
     }
 
-    async function loadWeatherForDate(dateYmd){
+    async function loadWeatherForDate(dateYmd, hhmm="18:00"){
       try{
         const parts = dateYmd.split("-"); const year=+parts[0], month=+parts[1]-1, day=+parts[2];
         const target = new Date(year, month, day);
+        const hm = parseHm(hhmm);
         const today = new Date();
         const diffDays = Math.round((target - new Date(today.getFullYear(),today.getMonth(),today.getDate()))/86400000);
         if(diffDays > 16){
@@ -734,7 +732,8 @@
         url.searchParams.set("forecast_days", String(Math.min(16, Math.max(2,diffDays+2))));
         const res = await fetch(url.toString());
         const data = await res.json();
-        const idx = data.hourly.time.findIndex(t => t.startsWith(dateYmd) && t.endsWith("18:00"));
+        const hourTag = String(hm.h).padStart(2,"0")+":"+String(hm.m).padStart(2,"0");
+        const idx = data.hourly.time.findIndex(t => t.startsWith(dateYmd) && t.endsWith(hourTag));
         let text = "Keine Daten verfügbar", meta = "", temp = "n. a.";
         if(idx >= 0){
           const t = Math.round(data.hourly.temperature_2m[idx]);
@@ -748,7 +747,7 @@
           ]);
           let desc = "Wetter";
           for(const [codes, dsc] of map){ if(codes.includes(code)){ desc = dsc; break; } }
-          temp = `${t}°C`; text = `${desc} um 18 Uhr`; meta = `Niederschlagswahrscheinlichkeit ${p} Prozent`;
+          temp = `${t}°C`; text = `${desc} um ${hourTag}`; meta = `Niederschlagswahrscheinlichkeit ${p} Prozent`;
         }
         $("#wTemp").textContent = temp; $("#wText").textContent = text; $("#wMeta").textContent = meta;
       }catch(err){
@@ -774,7 +773,8 @@
           const e = eventsMap.get(key);
           const host = e && e.hostName ? e.hostName : "Noch frei";
           const addr = e && e.hostAdresse ? e.hostAdresse : "";
-          rows.push(`<tr><td>${deDate(d)}</td><td>${WDAY[d.getDay()]}</td><td>${escapeHtml(host)}</td><td>${escapeHtml(addr)}</td></tr>`);
+          const time = e && e.uhrzeit ? `${e.uhrzeit} Uhr` : "18:00 Uhr";
+          rows.push(`<tr><td>${deDate(d)}</td><td>${WDAY[d.getDay()]}</td><td>${escapeHtml(host)} (${time})</td><td>${escapeHtml(addr)}</td></tr>`);
         }
       });
 
@@ -790,7 +790,7 @@
           th{ background:#f5f5f5; text-align:left; }
         </style></head><body>
         <h1>Lebendiger Adventskalender Hessisch Lichtenau</h1>
-        <p>Übersicht aller Termine mit Adresse. Beginn jeweils 18 Uhr. Heiligabend zeigt die Gottesdienste.</p>
+        <p>Übersicht aller Termine mit Uhrzeit und Adresse. Heiligabend zeigt die Gottesdienste.</p>
         <table><thead><tr><th>Datum</th><th>Tag</th><th>Gastgeber oder Gottesdienst</th><th>Adresse</th></tr></thead>
         <tbody>${rows.join("")}</tbody></table>
         </body></html>`;
@@ -816,7 +816,7 @@
             const dtStart = toIcsLocal(d, hm.h, hm.m);
             const dtEnd   = toIcsLocal(d, hm.h, hm.m + 60);
             const uid = `GD-${s.id}@adventskalender`;
-            const summary = escapeIcs("Lebendiger Adventskalender");
+            const summary = escapeIcs("Heiligabend Gottesdienst");
             const desc = escapeIcs(s.gemeinde || "Gottesdienst");
             const loc = escapeIcs(s.adresse || "");
             lines.push("BEGIN:VEVENT");
@@ -831,8 +831,9 @@
         }else{
           const e = eventsMap.get(key);
           if(e && e.hostName && e.hostAdresse){
-            const dtStart = toIcsLocal(d, 18, 0);
-            const dtEnd   = toIcsLocal(d, 18, 30);
+            const hm = parseHm(e.uhrzeit || "18:00");
+            const dtStart = toIcsLocal(d, hm.h, hm.m);
+            const dtEnd   = toIcsLocal(d, hm.h, hm.m + 30);
             const uid = `LA-${key}@adventskalender`;
             const summary = escapeIcs("Lebendiger Adventskalender");
             const desc = escapeIcs(e.hostName);
@@ -864,7 +865,6 @@
         return `${y}${m}${da}T${h}${mi}00`;
       }
       function escapeIcs(s){ return String(s).replace(/([,;])/g,"\\$1").replace(/\n/g,"\\n"); }
-      function parseHm(s){ const m = /^(\d{1,2}):(\d{2})$/.exec(s.trim()); if(!m) return {h:18,m:0}; return { h: Math.max(0, Math.min(23, parseInt(m[1],10))), m: Math.max(0, Math.min(59, parseInt(m[2],10))) }; }
     }
 
     async function adminLoad(){
@@ -945,12 +945,13 @@
       const map = new Map(eventsMap);
       for(const d of dates){
         const id = ymd(d);
-        const e = map.get(id) || { datum: id, hostName:"", hostAdresse:"", hostEmail:"", info:"", changed:false, barrierefrei:false };
+        const e = map.get(id) || { datum: id, uhrzeit:"", hostName:"", hostAdresse:"", hostEmail:"", info:"", changed:false, barrierefrei:false };
         if(e.hostEmail) assignedEmails.add(e.hostEmail.trim());
         const tr = document.createElement("tr");
         tr.innerHTML = `
           <td>${deDate(new Date(id))}</td>
           <td>${WDAY[new Date(id).getDay()]}</td>
+          <td><input type="text" value="${escapeAttr(e.uhrzeit||"")}" data-f="uhrzeit" placeholder="z. B. 17:30"></td>
           <td><input type="text" value="${escapeAttr(e.hostName||"")}" data-f="hostName"></td>
           <td><input type="text" value="${escapeAttr(e.hostAdresse||"")}" data-f="hostAdresse"></td>
           <td><input type="text" value="${escapeAttr(e.info||"")}" data-f="info"></td>
@@ -966,12 +967,31 @@
         const row = btn.closest("tr");
         const inputs = row.querySelectorAll("input[data-f]");
         const payload = { datum: btn.dataset.save, wochentag: WDAY[new Date(btn.dataset.save).getDay()] };
-        inputs.forEach(i=>{ if(i.type === "checkbox"){ payload[i.dataset.f] = i.checked; } else { payload[i.dataset.f] = i.value.trim(); } });
+        let timeStr = "";
+        inputs.forEach(i=>{
+          if(i.type === "checkbox"){ payload[i.dataset.f] = i.checked; }
+          else {
+            const v = i.value.trim();
+            if(i.dataset.f === "uhrzeit"){
+              if(v && !/^\d{1,2}:\d{2}$/.test(v)){ alert("Uhrzeit bitte als HH:MM eintragen"); return; }
+              timeStr = v;
+            }
+            payload[i.dataset.f] = v;
+          }
+        });
         try{
           await setDoc(doc(db,"events", btn.dataset.save), payload, { merge:true });
           btn.textContent = "Gespeichert"; btn.disabled = true;
           setTimeout(()=>{ btn.textContent = "Speichern"; btn.disabled = false; }, 900);
           await loadEventsAndServices(); updateProgress(); updateEmailTextarea();
+
+          const next = computeNextDate();
+          if(btn.dataset.save === next){
+            const e = eventsMap.get(next);
+            const t = e && e.uhrzeit ? e.uhrzeit : "18:00";
+            setHeuteTime(t);
+            await loadWeatherForDate(next, t);
+          }
         }catch(e){ alert("Speichern nicht möglich"); }
       });
 
@@ -1082,6 +1102,11 @@
       const m = /^(\d{1,2}):(\d{2})$/.exec(hm || "");
       if(!m) return 9999;
       return parseInt(m[1],10) * 60 + parseInt(m[2],10);
+    }
+    function parseHm(s){
+      const m = /^(\d{1,2}):(\d{2})$/.exec((s||"").trim());
+      if(!m) return {h:18,m:0};
+      return { h: Math.max(0, Math.min(23, parseInt(m[1],10))), m: Math.max(0, Math.min(59, parseInt(m[2],10))) };
     }
 
     function enableDragAndDrop(tbody){
