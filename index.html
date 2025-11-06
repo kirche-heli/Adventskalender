@@ -62,7 +62,6 @@
     @media(min-width:850px){
       .today .row{ grid-template-columns:2fr 1.2fr; align-items:stretch; }
       .grid.cols-2{ grid-template-columns:1fr 1fr; }
-      .wa-grid{ grid-template-columns:2fr 1fr; align-items:center; }
     }
     h3{ margin:4px 0 12px; font-size:20px; color:var(--forest); }
     .list{ display:flex; flex-direction:column; gap:10px; }
@@ -106,6 +105,23 @@
     .link-as-btn{ background:#e5e7eb; color:#111827; border-radius:12px; padding:8px 12px; cursor:pointer; display:inline-block; }
     .muted{ color:var(--muted); }
     .center{ text-align:center; }
+
+    /* WhatsApp Abschnitt neu ausgerichtet */
+    .wa-grid{
+      display:grid;
+      gap:16px;
+      align-items:center;
+    }
+    @media(min-width:780px){
+      .wa-grid{
+        grid-template-columns: 1fr 1.4fr; /* links QR, rechts Text */
+      }
+    }
+    .wa-left{ display:flex; justify-content:flex-start; }
+    .wa-right{ display:flex; flex-direction:column; justify-content:center; gap:10px; }
+    .qr-wrap{ text-align:left; }
+    .qr{ width:160px; height:auto; border-radius:12px; border:1px solid #e5e7eb; box-shadow:var(--shadow); }
+    @media(min-width:850px){ .qr{ width:180px; } }
 
     /* Picker Wochenraster Mo bis So */
     .picker-wrap{ margin:10px 0; }
@@ -152,11 +168,6 @@
     .consent{ background:#fffbf6; border:1px solid #e6d7c6; padding:12px; border-radius:12px; }
     .consent label{ font-weight:500; display:flex; align-items:flex-start; gap:8px; line-height:1.4; }
     .consent input[type="checkbox"]{ margin-top:3px; }
-
-    /* WhatsApp QR kompakt */
-    .qr-wrap{ text-align:center; }
-    .qr{ width:160px; height:auto; border-radius:12px; border:1px solid #e5e7eb; box-shadow:var(--shadow); }
-    @media(min-width:850px){ .qr{ width:180px; } }
   </style>
 </head>
 <body>
@@ -177,15 +188,17 @@
     <section id="whatsapp" class="card" aria-labelledby="wa-title">
       <h3 id="wa-title">WhatsApp Kanal</h3>
       <div class="wa-grid">
-        <div class="wa-text">
+        <div class="wa-left">
+          <div class="qr-wrap">
+            <img src="qrcode.jpg" alt="QR Code zum WhatsApp Kanal" class="qr" id="qrThumb">
+          </div>
+        </div>
+        <div class="wa-right">
           <p>Kurze Hinweise und die abendlichen Treffpunkte kommen hier direkt auf das Handy. Sie können den QR Code scannen oder den Link öffnen.</p>
           <p><a class="link-as-btn" id="waLink" href="https://whatsapp.com/channel/0029VbBLGb31CYoMJfdTh60w" target="_blank" rel="noopener">Kanal in WhatsApp öffnen</a></p>
-        </div>
-        <div class="qr-wrap">
-          <img src="qrcode.jpg" alt="QR Code zum WhatsApp Kanal" class="qr" id="qrThumb">
+          <small class="muted">Mit der Kamera scannen. Ein Klick auf den QR Code öffnet eine vergrößerte Ansicht.</small>
         </div>
       </div>
-      <div class="qr-help">Mit der Kamera scannen. Klicken öffnet eine vergrößerte Ansicht.</div>
     </section>
 
     <section id="heute" class="card today" aria-labelledby="heute-title">
@@ -368,27 +381,7 @@
       <div class="dlg-head"><h3 class="dlg-title">Admin Bereich</h3></div>
       <div class="dlg-scroll">
 
-        <div class="actions" style="margin-bottom:12px">
-          <button type="button" class="secondary" id="btnChronik">Chronik</button>
-        </div>
-
-        <!-- Jahresverwaltung ausgeblendet bis Klick auf Chronik -->
-        <div id="yearTools" class="card" style="padding:14px; border:1px dashed #e5e7eb; display:none">
-          <h4 style="margin:6px 0 10px 0">Jahresverwaltung</h4>
-          <div class="actions" style="justify-content:space-between; flex-wrap:wrap">
-            <div>
-              <label for="yearInput">Aktives Jahr</label>
-              <input type="number" id="yearInput" style="width:120px; margin-left:8px">
-              <button type="button" id="btnLoadYear" class="secondary">Jahr laden</button>
-            </div>
-            <div>
-              <button type="button" id="btnNewYear" class="secondary">Neues Jahr anlegen</button>
-              <button type="button" id="btnArchiveLegacy" class="secondary" title="Kopiert 2025 in calendars/2025 ohne zu löschen">2025 archivieren</button>
-            </div>
-          </div>
-          <p class="help" style="margin-top:8px">Archiv legt eine Kopie in <code>calendars/Jahr</code> an. Umschalten auf ein Jahr lädt fortan Daten aus <code>calendars/{Jahr}/events</code> und <code>calendars/{Jahr}/anmeldungen</code>. Die alte 2025 Struktur bleibt erhalten.</p>
-        </div>
-
+        <!-- Jahresverwaltung ist nun am Ende versteckt und wird über den Chronik Button dort geöffnet -->
         <div class="prog-wrap" id="progWrap" aria-live="polite">
           <div class="prog-label"><span>Belegung 1 bis 23 Dezember</span><span id="progPercent">0%</span></div>
           <div class="prog-bar"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
@@ -429,6 +422,28 @@
           </div>
           <textarea id="emailAll" class="email-area" readonly></textarea>
           <div class="muted">Tipp: In deinem Mailprogramm im Feld BCC nutzen.</div>
+        </div>
+
+        <!-- Jahresverwaltung unten, ausgeblendet bis Klick auf Chronik -->
+        <div id="yearTools" class="card" style="padding:14px; border:1px dashed #e5e7eb; display:none; margin-top:16px">
+          <h4 style="margin:6px 0 10px 0">Jahresverwaltung</h4>
+          <div class="actions" style="justify-content:space-between; flex-wrap:wrap">
+            <div>
+              <label for="yearInput">Aktives Jahr</label>
+              <input type="number" id="yearInput" style="width:120px; margin-left:8px">
+              <button type="button" id="btnLoadYear" class="secondary">Jahr laden</button>
+            </div>
+            <div>
+              <button type="button" id="btnNewYear" class="secondary">Neues Jahr anlegen</button>
+              <button type="button" id="btnArchiveLegacy" class="secondary" title="Kopiert 2025 in calendars/2025 ohne zu löschen">2025 archivieren</button>
+            </div>
+          </div>
+          <p class="help" style="margin-top:8px">Archiv legt eine Kopie in <code>calendars/Jahr</code> an. Umschalten auf ein Jahr lädt fortan Daten aus <code>calendars/{Jahr}/events</code> und <code>calendars/{Jahr}/anmeldungen</code>. Die alte 2025 Struktur bleibt erhalten.</p>
+        </div>
+
+        <!-- Chronik Button ganz unten -->
+        <div class="actions" style="margin-top:12px; justify-content:flex-end">
+          <button type="button" class="secondary" id="btnChronik">Chronik</button>
         </div>
 
       </div>
@@ -561,14 +576,14 @@
       $("#btnLogin").addEventListener("click", adminLogin);
       $("#btnLogout").addEventListener("click", async ()=>{ await signOut(auth); $("#dlgAdminPanel").close(); });
 
-      // Chronik ein und aus
+      // Chronik unten ein und aus
       $("#btnChronik").addEventListener("click", ()=>{
         const box = $("#yearTools");
         box.style.display = box.style.display === "none" ? "block" : "none";
         if(box.style.display === "block"){ $("#yearInput").value = String(ACTIVE_YEAR); }
       });
 
-      // Jahr Verwaltung Listener erst beim Anzeigen setzen
+      // Jahr Verwaltung Listener
       $("#btnLoadYear").addEventListener("click", async ()=>{
         const y = parseInt($("#yearInput").value,10) || ACTIVE_YEAR;
         ACTIVE_YEAR = y;
