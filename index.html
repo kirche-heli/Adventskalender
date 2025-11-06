@@ -107,7 +107,7 @@
     .muted{ color:var(--muted); }
     .center{ text-align:center; }
 
-    /* Picker Wochenraster Mo bis So mit Statusstreifen */
+    /* Picker Wochenraster Mo bis So */
     .picker-wrap{ margin:10px 0; }
     .week-head{ display:grid; grid-template-columns:repeat(7, 1fr); gap:8px; font-weight:700; color:#334155; font-size:12px; text-align:center; }
     .picker-grid{ display:grid; gap:8px; grid-template-columns:repeat(7, minmax(70px, 1fr)); margin-top:8px; }
@@ -127,6 +127,7 @@
     }
     .pick.free::after{ background: linear-gradient(90deg,#22c55e,#16a34a); }
     .pick.booked::after{ background: linear-gradient(90deg,#f87171,#b91c1c); }
+
     .preview-chips{ display:flex; gap:8px; flex-wrap:wrap; margin-top:6px; }
     .chip{ background:#eef2ff; color:#334155; padding:4px 8px; border-radius:999px; font-size:12px; }
 
@@ -151,6 +152,11 @@
     .consent{ background:#fffbf6; border:1px solid #e6d7c6; padding:12px; border-radius:12px; }
     .consent label{ font-weight:500; display:flex; align-items:flex-start; gap:8px; line-height:1.4; }
     .consent input[type="checkbox"]{ margin-top:3px; }
+
+    /* WhatsApp QR kompakt */
+    .qr-wrap{ text-align:center; }
+    .qr{ width:160px; height:auto; border-radius:12px; border:1px solid #e5e7eb; box-shadow:var(--shadow); }
+    @media(min-width:850px){ .qr{ width:180px; } }
   </style>
 </head>
 <body>
@@ -167,7 +173,6 @@
     </nav>
   </header>
 
-  <!-- WhatsApp Karte -->
   <main>
     <section id="whatsapp" class="card" aria-labelledby="wa-title">
       <h3 id="wa-title">WhatsApp Kanal</h3>
@@ -333,7 +338,6 @@
         <p class="muted">Nur für das Organisationsteam</p>
         <div class="actions" style="gap:6px">
           <span class="link-as-btn" id="openAdminLogin">Admin</span>
-          <span class="link-as-btn" id="openYearTools">Jahr verwalten</span>
         </div>
       </div>
       <div class="dlg-foot"><button type="button" class="secondary" data-close="dlgLegal">Schließen</button></div>
@@ -362,71 +366,76 @@
   <dialog id="dlgAdminPanel">
     <div class="dlg-body">
       <div class="dlg-head"><h3 class="dlg-title">Admin Bereich</h3></div>
-    <div class="dlg-scroll">
+      <div class="dlg-scroll">
 
-      <!-- Jahr Verwaltung -->
-      <div class="card" style="padding:14px; border:1px dashed #e5e7eb">
-        <div class="actions" style="justify-content:space-between; flex-wrap:wrap">
-          <div>
-            <label for="yearInput">Aktives Jahr</label>
-            <input type="number" id="yearInput" style="width:120px; margin-left:8px">
-            <button type="button" id="btnLoadYear" class="secondary">Jahr laden</button>
-          </div>
-          <div>
-            <button type="button" id="btnNewYear" class="secondary">Neues Jahr anlegen</button>
-            <button type="button" id="btnArchiveLegacy" class="secondary" title="Kopiert 2025 in calendars/2025 ohne zu löschen">2025 archivieren</button>
-          </div>
+        <div class="actions" style="margin-bottom:12px">
+          <button type="button" class="secondary" id="btnChronik">Chronik</button>
         </div>
-        <p class="help" style="margin-top:8px">Archiv legt eine Kopie in <code>calendars/Jahr</code> an. Umschalten auf neues Jahr lädt fortan Daten aus <code>calendars/{Jahr}/events</code> und <code>calendars/{Jahr}/anmeldungen</code>. Die alte 2025 Struktur bleibt erhalten.</p>
-      </div>
 
-      <div class="prog-wrap" id="progWrap" aria-live="polite">
-        <div class="prog-label"><span>Belegung 1 bis 23 Dezember</span><span id="progPercent">0%</span></div>
-        <div class="prog-bar"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
-        <div class="muted" id="progMeta">0 von 23 Abenden vergeben</div>
-      </div>
-
-      <h4>Anmeldungen zuweisen</h4>
-      <p class="muted">Klicke auf einen gewünschten Termin einer Anmeldung, um ihn sofort als endgültigen Termin zu setzen. Neueste Anmeldungen stehen oben.</p>
-      <table class="table" id="tblAnmeldungen" aria-describedby="anmeldHelp">
-        <thead><tr><th>Name und Kontakt</th><th>Adresse</th><th>Wunschtermine</th><th>Bemerkung</th><th>Aktion</th></tr></thead>
-        <tbody></tbody>
-      </table>
-      <p id="anmeldHelp" class="muted">Nach der Zuweisung kannst du den Antrag optional löschen.</p>
-
-      <h4>Termine pflegen</h4>
-      <p class="muted">Gastgeber, Adresse, Uhrzeit und Hinweise bearbeiten oder einen Termin als geändert markieren.</p>
-      <table class="table" id="tblEvents">
-        <thead><tr><th>Datum</th><th>Wochentag</th><th>Uhrzeit</th><th>Gastgeber</th><th>Adresse</th><th>Notiz</th><th>Barrierefrei</th><th>Änderung</th><th>Aktion</th></tr></thead>
-        <tbody></tbody>
-      </table>
-
-      <h4>Gottesdienste am 24. Dezember</h4>
-      <p class="muted">Lege die Gottesdienste an, speichere sie und sortiere sie danach per Ziehen in die gewünschte Reihenfolge.</p>
-      <table class="table" id="tblServices">
-        <thead><tr><th></th><th>Gemeinde</th><th>Uhrzeit</th><th>Adresse</th><th>Notiz</th><th>Aktion</th></tr></thead>
-        <tbody></tbody>
-      </table>
-      <div class="actions" style="margin-top:8px">
-        <button type="button" id="addService" class="secondary">Neuen Gottesdienst hinzufügen</button>
-      </div>
-
-      <!-- E Mail Block ans Ende gesetzt -->
-      <div class="email-box">
-        <div class="email-row">
-          <label for="emailAll">E Mail Adressen der Gastgeber</label>
-          <label class="muted" style="margin-left:auto"><input type="checkbox" id="includePending"> auch Anmeldungen einbeziehen</label>
-          <button type="button" class="secondary" id="btnCopyEmails">Adressen kopieren</button>
+        <!-- Jahresverwaltung ausgeblendet bis Klick auf Chronik -->
+        <div id="yearTools" class="card" style="padding:14px; border:1px dashed #e5e7eb; display:none">
+          <h4 style="margin:6px 0 10px 0">Jahresverwaltung</h4>
+          <div class="actions" style="justify-content:space-between; flex-wrap:wrap">
+            <div>
+              <label for="yearInput">Aktives Jahr</label>
+              <input type="number" id="yearInput" style="width:120px; margin-left:8px">
+              <button type="button" id="btnLoadYear" class="secondary">Jahr laden</button>
+            </div>
+            <div>
+              <button type="button" id="btnNewYear" class="secondary">Neues Jahr anlegen</button>
+              <button type="button" id="btnArchiveLegacy" class="secondary" title="Kopiert 2025 in calendars/2025 ohne zu löschen">2025 archivieren</button>
+            </div>
+          </div>
+          <p class="help" style="margin-top:8px">Archiv legt eine Kopie in <code>calendars/Jahr</code> an. Umschalten auf ein Jahr lädt fortan Daten aus <code>calendars/{Jahr}/events</code> und <code>calendars/{Jahr}/anmeldungen</code>. Die alte 2025 Struktur bleibt erhalten.</p>
         </div>
-        <textarea id="emailAll" class="email-area" readonly></textarea>
-        <div class="muted">Tipp: In deinem Mailprogramm im Feld BCC nutzen.</div>
-      </div>
 
-    </div>
-    <div class="dlg-foot">
-      <button type="button" id="btnLogout" class="secondary">Abmelden</button>
-      <button type="button" class="secondary" data-close="dlgAdminPanel">Schließen</button>
-    </div>
+        <div class="prog-wrap" id="progWrap" aria-live="polite">
+          <div class="prog-label"><span>Belegung 1 bis 23 Dezember</span><span id="progPercent">0%</span></div>
+          <div class="prog-bar"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+          <div class="muted" id="progMeta">0 von 23 Abenden vergeben</div>
+        </div>
+
+        <h4>Anmeldungen zuweisen</h4>
+        <p class="muted">Klicke auf einen gewünschten Termin einer Anmeldung, um ihn sofort als endgültigen Termin zu setzen. Neueste Anmeldungen stehen oben.</p>
+        <table class="table" id="tblAnmeldungen" aria-describedby="anmeldHelp">
+          <thead><tr><th>Name und Kontakt</th><th>Adresse</th><th>Wunschtermine</th><th>Bemerkung</th><th>Aktion</th></tr></thead>
+          <tbody></tbody>
+        </table>
+        <p id="anmeldHelp" class="muted">Nach der Zuweisung kannst du den Antrag optional löschen.</p>
+
+        <h4>Termine pflegen</h4>
+        <p class="muted">Gastgeber, Adresse, Uhrzeit und Hinweise bearbeiten oder einen Termin als geändert markieren.</p>
+        <table class="table" id="tblEvents">
+          <thead><tr><th>Datum</th><th>Wochentag</th><th>Uhrzeit</th><th>Gastgeber</th><th>Adresse</th><th>Notiz</th><th>Barrierefrei</th><th>Änderung</th><th>Aktion</th></tr></thead>
+          <tbody></tbody>
+        </table>
+
+        <h4>Gottesdienste am 24. Dezember</h4>
+        <p class="muted">Lege die Gottesdienste an, speichere sie und sortiere sie danach per Ziehen in die gewünschte Reihenfolge.</p>
+        <table class="table" id="tblServices">
+          <thead><tr><th></th><th>Gemeinde</th><th>Uhrzeit</th><th>Adresse</th><th>Notiz</th><th>Aktion</th></tr></thead>
+          <tbody></tbody>
+        </table>
+        <div class="actions" style="margin-top:8px">
+          <button type="button" id="addService" class="secondary">Neuen Gottesdienst hinzufügen</button>
+        </div>
+
+        <!-- E Mail Block am Ende -->
+        <div class="email-box">
+          <div class="email-row">
+            <label for="emailAll">E Mail Adressen der Gastgeber</label>
+            <label class="muted" style="margin-left:auto"><input type="checkbox" id="includePending"> auch Anmeldungen einbeziehen</label>
+            <button type="button" class="secondary" id="btnCopyEmails">Adressen kopieren</button>
+          </div>
+          <textarea id="emailAll" class="email-area" readonly></textarea>
+          <div class="muted">Tipp: In deinem Mailprogramm im Feld BCC nutzen.</div>
+        </div>
+
+      </div>
+      <div class="dlg-foot">
+        <button type="button" id="btnLogout" class="secondary">Abmelden</button>
+        <button type="button" class="secondary" data-close="dlgAdminPanel">Schließen</button>
+      </div>
     </div>
   </dialog>
 
@@ -436,14 +445,12 @@
       <div class="dlg-head"><h3 class="dlg-title">Wunschtermine im Dezember 2025</h3></div>
       <div class="dlg-scroll">
         <p class="muted">Bitte wähle alle passenden Abende. Beginn ist jeweils 18 Uhr für etwa 20 bis 30 Minuten.</p>
-
         <div class="picker-wrap">
           <div class="week-head">
             <div>Mo</div><div>Di</div><div>Mi</div><div>Do</div><div>Fr</div><div>Sa</div><div>So</div>
           </div>
           <div id="pickerGrid" class="picker-grid"></div>
         </div>
-
       </div>
       <div class="dlg-foot">
         <button type="button" class="secondary" data-close="dlgPicker">Abbrechen</button>
@@ -485,13 +492,12 @@
     const $$ = s => Array.from(document.querySelectorAll(s));
     const WDAY = ["So","Mo","Di","Mi","Do","Fr","Sa"];
 
-    // Jahr Steuerung
-    const LEGACY_YEAR = 2025;              // kompatibler Altbestand in Root-Collections
+    const LEGACY_YEAR = 2025;
     let ACTIVE_YEAR = parseInt(localStorage.getItem("LA_ACTIVE_YEAR") || "2025", 10);
-    let USE_LEGACY_2025 = localStorage.getItem("LA_USE_LEGACY_2025") !== "false"; // default true, nach Archivierung auf false setzen
+    let USE_LEGACY_2025 = localStorage.getItem("LA_USE_LEGACY_2025") !== "false";
 
-    const rangeStartFor = y => new Date(y, 10, 30); // 30. November
-    const rangeEndFor   = y => new Date(y, 11, 24); // 24. Dezember
+    const rangeStartFor = y => new Date(y, 10, 30);
+    const rangeEndFor   = y => new Date(y, 11, 24);
 
     function ymd(d){ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`; }
     function deDate(d){ return `${String(d.getDate()).padStart(2,"0")}.${String(d.getMonth()+1).padStart(2,"0")}.${d.getFullYear()}`; }
@@ -503,11 +509,7 @@
       while(d<=end){ out.push(new Date(d)); d.setDate(d.getDate()+1); }
       return out;
     }
-    function decDates(year=ACTIVE_YEAR){
-      const out=[]; for(let i=1;i<=23;i++){ out.push(new Date(year,11,i)); } return out;
-    }
-    function escapeHtml(s){ return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
-    function escapeAttr(s){ return escapeHtml(s); }
+    function decDates(year=ACTIVE_YEAR){ const out=[]; for(let i=1;i<=23;i++){ out.push(new Date(year,11,i)); } return out; }
 
     const selected = new Set();
     let eventsMap = new Map();
@@ -522,42 +524,28 @@
     async function init(){
       app = initializeApp(firebaseConfig);
       try { analytics = getAnalytics(app); } catch(e){}
-      auth = getAuth(app);
+      const authObj = getAuth(app); auth = authObj;
       db = getFirestore(app);
 
-      // UI Listener
       $("#openContact").addEventListener("click", e=>{ e.preventDefault(); $("#dlgContact").showModal(); });
       $("#qrThumb").addEventListener("click", ()=> $("#dlgQr").showModal());
 
-      // Impressum öffnen
       document.getElementById("openLegal")
         ?.addEventListener("click", e => { e.preventDefault(); document.getElementById("dlgLegal").showModal(); });
-      // Admin aus Impressum
       document.getElementById("openAdminLogin")
         ?.addEventListener("click", () => document.getElementById("dlgAdminLogin").showModal());
-      // Jahr Werkzeuge aus Impressum
-      document.getElementById("openYearTools")
-        ?.addEventListener("click", async () => {
-          document.getElementById("dlgLegal").close();
-          await adminGuard();
-          document.getElementById("dlgAdminPanel").showModal();
-        });
 
-      // Picker
       $("#openPicker")?.addEventListener("click", openPicker);
       $("#pickerOk").addEventListener("click", ()=>{ updatePreview(); $("#dlgPicker").close(); });
 
-      // Schließen Buttons
       document.addEventListener("click", e=>{
         const btn = e.target.closest("[data-close]");
         if(btn){ const id = btn.getAttribute("data-close"); try{ $("#"+id).close(); }catch(_){} }
       });
 
-      // Export
       $("#btnPdf").addEventListener("click", ()=> downloadPdfFromData());
       $("#btnIcs").addEventListener("click", ()=> downloadIcsFromData());
 
-      // Formular
       const sendBtn = $("#sendBtn");
       const consent = $("#consent");
       function updateSendDisabled(){ if(sendBtn && consent) sendBtn.disabled = !consent.checked; }
@@ -570,12 +558,17 @@
         if(consent){ consent.checked = false; updateSendDisabled(); }
       });
 
-      // Admin
       $("#btnLogin").addEventListener("click", adminLogin);
       $("#btnLogout").addEventListener("click", async ()=>{ await signOut(auth); $("#dlgAdminPanel").close(); });
 
-      // Jahr Verwaltung
-      $("#yearInput").value = String(ACTIVE_YEAR);
+      // Chronik ein und aus
+      $("#btnChronik").addEventListener("click", ()=>{
+        const box = $("#yearTools");
+        box.style.display = box.style.display === "none" ? "block" : "none";
+        if(box.style.display === "block"){ $("#yearInput").value = String(ACTIVE_YEAR); }
+      });
+
+      // Jahr Verwaltung Listener erst beim Anzeigen setzen
       $("#btnLoadYear").addEventListener("click", async ()=>{
         const y = parseInt($("#yearInput").value,10) || ACTIVE_YEAR;
         ACTIVE_YEAR = y;
@@ -583,18 +576,20 @@
         await loadEventsAndServices();
         renderLists();
         setHeuteFromFirst();
+        alert(`Jahr ${ACTIVE_YEAR} geladen`);
       });
 
       $("#btnNewYear").addEventListener("click", async ()=>{
-        const y = parseInt(prompt("Für welches Jahr soll vorbereitet werden", String(ACTIVE_YEAR+1))||"",10);
+        const pre = prompt("Für welches Jahr soll vorbereitet werden", String(ACTIVE_YEAR+1));
+        const y = parseInt(pre||"",10);
         if(!y || y<2025 || y>2100) return;
-        // Leere Events für 1 bis 23 Dezember anlegen in calendars/{y}/events
+        if(!confirm(`Soll das Jahr ${y} wirklich angelegt werden`)) return;
         const batch = writeBatch(db);
         decDates(y).forEach(d=>{
           const key = ymd(d);
           batch.set(doc(collection(db, `calendars/${y}/events`), key), {
             datum:key,
-            wochentag: WDAY[d.getDay()],
+            wochentag: ["So","Mo","Di","Mi","Do","Fr","Sa"][d.getDay()],
             hostName:"",
             hostAdresse:"",
             hostEmail:"",
@@ -612,19 +607,19 @@
         await loadEventsAndServices();
         renderLists();
         setHeuteFromFirst();
-        alert("Neues Jahr wurde vorbereitet");
+        alert(`Neues Jahr ${y} wurde vorbereitet`);
       });
 
       $("#btnArchiveLegacy").addEventListener("click", async ()=>{
         if(ACTIVE_YEAR !== 2025){ alert("Archivieren ist nur für 2025 relevant"); return; }
-        if(!confirm("Alle 2025 Daten in calendars/2025 kopieren")) return;
+        if(!confirm("Möchten Sie das Jahr 2025 wirklich archivieren")) return;
+        if(!confirm("Sicher. Es wird eine Kopie unter calendars/2025 erstellt")) return;
         await archiveYear2025();
         USE_LEGACY_2025 = false;
         localStorage.setItem("LA_USE_LEGACY_2025","false");
         alert("Archiv erstellt. Ab jetzt kannst du auf ein neues Jahr umschalten.");
       });
 
-      // Auth Watch
       onAuthStateChanged(auth, async user=>{
         if(user){
           $("#authMsg").textContent = "Angemeldet";
@@ -636,22 +631,10 @@
         }
       });
 
-      // Daten laden und Start setzen
       await loadEventsAndServices();
       renderLists();
       setHeuteFromFirst();
       await loadWeatherForDate(computeNextDate(), currentTimeForNext());
-      // Footer Impressum Link funktioniert bereits durch Listener oben
-    }
-
-    async function adminGuard(){
-      return new Promise(resolve=>{
-        const unsub = onAuthStateChanged(auth, user=>{
-          unsub();
-          if(user) resolve(true);
-          else document.getElementById("dlgAdminLogin").showModal();
-        });
-      });
     }
 
     async function adminLogin(){
@@ -723,7 +706,7 @@
 
     function colRef(name){
       if(ACTIVE_YEAR === LEGACY_YEAR && USE_LEGACY_2025){
-        return collection(db, name); // Altbestand
+        return collection(db, name);
       }
       return collection(db, `calendars/${ACTIVE_YEAR}/${name}`);
     }
@@ -735,7 +718,6 @@
     }
 
     async function archiveYear2025(){
-      // kopiert events und anmeldungen nach calendars/2025
       const evSnap = await getDocs(collection(db, "events"));
       const anSnap = await getDocs(collection(db, "anmeldungen"));
       const batch = writeBatch(db);
@@ -748,12 +730,11 @@
       await batch.commit();
     }
 
-    /* Picker Wochenraster und Statusstreifen */
     function openPicker(){
       const grid = $("#pickerGrid"); grid.innerHTML = "";
 
-      const first = new Date(ACTIVE_YEAR,11,1); // 1. Dezember
-      const js = first.getDay(); // 0 So, 1 Mo, ..., 6 Sa
+      const first = new Date(ACTIVE_YEAR,11,1);
+      const js = first.getDay();
       const blanks = (js === 0) ? 6 : (js - 1);
       for(let i=0;i<blanks;i++){
         const spacer = document.createElement("div");
@@ -815,8 +796,8 @@
       services.sort((a,b)=>{
         const oa = typeof a.order === "number" ? a.order : 9999;
         const ob = typeof b.order === "number" ? b.order : 9999;
-        if(oa !== ob) return oa - ob;
         const ta = parseTime(a.uhrzeit); const tb = parseTime(b.uhrzeit);
+        if(oa !== ob) return oa - ob;
         return ta - tb;
       });
     }
@@ -829,7 +810,6 @@
         const day = document.createElement("div"); day.className = "day";
         const e = eventsMap.get(key);
         const timeForBox = e && e.uhrzeit && /^\d{1,2}:\d{2}$/.test(e.uhrzeit) ? `${e.uhrzeit} Uhr` : "18:00 Uhr";
-
         let timeHtml = `<div class="time">${timeForBox}</div>`;
         if(key === `${ACTIVE_YEAR}-12-24`){ timeHtml = ""; }
 
@@ -1063,7 +1043,6 @@
       }
     }
 
-    /* Admin Daten laden: Anmeldungen nach Eingang sortiert, neu oben */
     async function adminLoad(){
       assignedEmails = new Set();
       pendingEmails = new Set();
@@ -1112,7 +1091,7 @@
           try{
             await setDoc(docRef("events", dateKey), {
               datum: dateKey,
-              wochentag: WDAY[new Date(dateKey).getDay()],
+              wochentag: ["So","Mo","Di","Mi","Do","Fr","Sa"][new Date(dateKey).getDay()],
               hostName: name,
               hostAdresse: addr,
               hostEmail: email,
@@ -1170,9 +1149,7 @@
           if(i.type === "checkbox"){ payload[i.dataset.f] = i.checked; }
           else {
             const v = i.value.trim();
-            if(i.dataset.f === "uhrzeit" && v && !/^\d{1,2}:\d{2}$/.test(v)){
-              timeInvalid = true;
-            }
+            if(i.dataset.f === "uhrzeit" && v && !/^\d{1,2}:\d{2}$/.test(v)){ timeInvalid = true; }
             payload[i.dataset.f] = v;
           }
         });
@@ -1202,10 +1179,8 @@
 
     async function renderServiceTable(){
       const bodyS = $("#tblServices tbody"); bodyS.innerHTML = "";
-
       services.forEach((s, idx)=> bodyS.appendChild(buildServiceRow(s, idx)));
       bodyS.appendChild(buildServiceRow(null, services.length));
-
       bodyS.addEventListener("click", onServiceButtonClick);
       enableDragAndDrop(bodyS);
     }
@@ -1228,7 +1203,6 @@
         payload.isService = true;
         if(typeof payload.order !== "number"){ payload.order = guessOrder(payload.uhrzeit); }
       }
-
       try{
         if(act === "save" && id){
           await setDoc(docRef("events", id), payload, { merge:true });
@@ -1386,6 +1360,9 @@
       if(!m) return {h:18,m:0};
       return { h: Math.max(0, Math.min(23, parseInt(m[1],10))), m: Math.max(0, Math.min(59, parseInt(m[2],10))) };
     }
+
+    function escapeHtml(s){ return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+    function escapeAttr(s){ return escapeHtml(s); }
 
     function updateEmailTextarea(){
       const includePending = $("#includePending").checked;
