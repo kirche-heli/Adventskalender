@@ -27,8 +27,6 @@
       padding:0;
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji", "Segoe UI Emoji";
       color:var(--ink);
-
-      /* weicher Verlauf ohne harte Kante */
       background: var(--paper);
       background-image:
         linear-gradient(
@@ -106,10 +104,10 @@
     .dlg-foot{ padding:12px 18px 18px 18px; display:flex; justify-content:flex-end; gap:10px; }
     .dlg-scroll{ max-height:80vh; overflow:auto; padding:0 18px 0 18px; }
     .link-as-btn{ background:#e5e7eb; color:#111827; border-radius:12px; padding:8px 12px; cursor:pointer; display:inline-block; }
-    .muted{ color:#6b7280; }
+    .muted{ color:var(--muted); }
     .center{ text-align:center; }
 
-    /* Picker mit Wochenraster Mo bis So und Statusstreifen unten */
+    /* Picker Wochenraster Mo bis So mit Statusstreifen */
     .picker-wrap{ margin:10px 0; }
     .week-head{ display:grid; grid-template-columns:repeat(7, 1fr); gap:8px; font-weight:700; color:#334155; font-size:12px; text-align:center; }
     .picker-grid{ display:grid; gap:8px; grid-template-columns:repeat(7, minmax(70px, 1fr)); margin-top:8px; }
@@ -153,18 +151,6 @@
     .consent{ background:#fffbf6; border:1px solid #e6d7c6; padding:12px; border-radius:12px; }
     .consent label{ font-weight:500; display:flex; align-items:flex-start; gap:8px; line-height:1.4; }
     .consent input[type="checkbox"]{ margin-top:3px; }
-
-    /* WhatsApp Karte */
-    .wa-grid{ display:grid; gap:16px; }
-    .wa-text p{ margin:0 0 8px 0; }
-    .qr-wrap{ display:flex; align-items:center; justify-content:center; }
-    .qr{
-      width:140px; height:auto; border-radius:12px; border:1px solid #e5e7eb;
-      box-shadow:var(--shadow); transition:transform .2s ease, box-shadow .2s ease;
-      cursor:pointer; background:#fff;
-    }
-    .qr:hover{ transform:scale(1.06); box-shadow:0 14px 28px rgba(0,0,0,.12), 0 10px 10px rgba(0,0,0,.08); }
-    .qr-help{ font-size:13px; color:var(--muted); margin-top:6px; text-align:center; }
   </style>
 </head>
 <body>
@@ -181,8 +167,8 @@
     </nav>
   </header>
 
+  <!-- WhatsApp Karte -->
   <main>
-    <!-- WhatsApp Karte -->
     <section id="whatsapp" class="card" aria-labelledby="wa-title">
       <h3 id="wa-title">WhatsApp Kanal</h3>
       <div class="wa-grid">
@@ -345,7 +331,10 @@
         <p>Es werden keine Tracking Dienste oder Cookies eingesetzt. Technisch notwendige Protokolle des Hosts werden nur kurz gespeichert. Die lokale Speicherung erfolgt ausschließlich im Browser und kann jederzeit gelöscht werden.</p>
         <hr>
         <p class="muted">Nur für das Organisationsteam</p>
-        <p><span class="link-as-btn" id="openAdminLogin">Admin</span></p>
+        <div class="actions" style="gap:6px">
+          <span class="link-as-btn" id="openAdminLogin">Admin</span>
+          <span class="link-as-btn" id="openYearTools">Jahr verwalten</span>
+        </div>
       </div>
       <div class="dlg-foot"><button type="button" class="secondary" data-close="dlgLegal">Schließen</button></div>
     </div>
@@ -374,6 +363,22 @@
     <div class="dlg-body">
       <div class="dlg-head"><h3 class="dlg-title">Admin Bereich</h3></div>
     <div class="dlg-scroll">
+
+      <!-- Jahr Verwaltung -->
+      <div class="card" style="padding:14px; border:1px dashed #e5e7eb">
+        <div class="actions" style="justify-content:space-between; flex-wrap:wrap">
+          <div>
+            <label for="yearInput">Aktives Jahr</label>
+            <input type="number" id="yearInput" style="width:120px; margin-left:8px">
+            <button type="button" id="btnLoadYear" class="secondary">Jahr laden</button>
+          </div>
+          <div>
+            <button type="button" id="btnNewYear" class="secondary">Neues Jahr anlegen</button>
+            <button type="button" id="btnArchiveLegacy" class="secondary" title="Kopiert 2025 in calendars/2025 ohne zu löschen">2025 archivieren</button>
+          </div>
+        </div>
+        <p class="help" style="margin-top:8px">Archiv legt eine Kopie in <code>calendars/Jahr</code> an. Umschalten auf neues Jahr lädt fortan Daten aus <code>calendars/{Jahr}/events</code> und <code>calendars/{Jahr}/anmeldungen</code>. Die alte 2025 Struktur bleibt erhalten.</p>
+      </div>
 
       <div class="prog-wrap" id="progWrap" aria-live="polite">
         <div class="prog-label"><span>Belegung 1 bis 23 Dezember</span><span id="progPercent">0%</span></div>
@@ -480,12 +485,27 @@
     const $$ = s => Array.from(document.querySelectorAll(s));
     const WDAY = ["So","Mo","Di","Mi","Do","Fr","Sa"];
 
-    const rangeStart = new Date(2025, 10, 30); // 30. November
-    const rangeEnd   = new Date(2025, 11, 24);
+    // Jahr Steuerung
+    const LEGACY_YEAR = 2025;              // kompatibler Altbestand in Root-Collections
+    let ACTIVE_YEAR = parseInt(localStorage.getItem("LA_ACTIVE_YEAR") || "2025", 10);
+    let USE_LEGACY_2025 = localStorage.getItem("LA_USE_LEGACY_2025") !== "false"; // default true, nach Archivierung auf false setzen
+
+    const rangeStartFor = y => new Date(y, 10, 30); // 30. November
+    const rangeEndFor   = y => new Date(y, 11, 24); // 24. Dezember
+
     function ymd(d){ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`; }
     function deDate(d){ return `${String(d.getDate()).padStart(2,"0")}.${String(d.getMonth()+1).padStart(2,"0")}.${d.getFullYear()}`; }
-    function allDates(){ const out=[]; let d=new Date(rangeStart); while(d<=rangeEnd){ out.push(new Date(d)); d.setDate(d.getDate()+1); } return out; }
-    function dec2025Dates(){ const out=[]; for(let i=1;i<=23;i++){ out.push(new Date(2025,11,i)); } return out; }
+
+    function allDates(year=ACTIVE_YEAR){
+      const start = rangeStartFor(year);
+      const end = rangeEndFor(year);
+      const out=[]; const d=new Date(start);
+      while(d<=end){ out.push(new Date(d)); d.setDate(d.getDate()+1); }
+      return out;
+    }
+    function decDates(year=ACTIVE_YEAR){
+      const out=[]; for(let i=1;i<=23;i++){ out.push(new Date(year,11,i)); } return out;
+    }
     function escapeHtml(s){ return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
     function escapeAttr(s){ return escapeHtml(s); }
 
@@ -505,21 +525,42 @@
       auth = getAuth(app);
       db = getFirestore(app);
 
+      // UI Listener
       $("#openContact").addEventListener("click", e=>{ e.preventDefault(); $("#dlgContact").showModal(); });
       $("#qrThumb").addEventListener("click", ()=> $("#dlgQr").showModal());
 
-      const pickerBtn = $("#openPicker");
-      if(pickerBtn){ pickerBtn.addEventListener("click", openPicker); }
+      // Impressum öffnen
+      document.getElementById("openLegal")
+        ?.addEventListener("click", e => { e.preventDefault(); document.getElementById("dlgLegal").showModal(); });
+      // Admin aus Impressum
+      document.getElementById("openAdminLogin")
+        ?.addEventListener("click", () => document.getElementById("dlgAdminLogin").showModal());
+      // Jahr Werkzeuge aus Impressum
+      document.getElementById("openYearTools")
+        ?.addEventListener("click", async () => {
+          document.getElementById("dlgLegal").close();
+          await adminGuard();
+          document.getElementById("dlgAdminPanel").showModal();
+        });
+
+      // Picker
+      $("#openPicker")?.addEventListener("click", openPicker);
       $("#pickerOk").addEventListener("click", ()=>{ updatePreview(); $("#dlgPicker").close(); });
 
-      $$("[data-close]").forEach(btn=>{ btn.addEventListener("click", ()=> document.getElementById(btn.getAttribute("data-close")).close()); });
+      // Schließen Buttons
+      document.addEventListener("click", e=>{
+        const btn = e.target.closest("[data-close]");
+        if(btn){ const id = btn.getAttribute("data-close"); try{ $("#"+id).close(); }catch(_){} }
+      });
 
+      // Export
       $("#btnPdf").addEventListener("click", ()=> downloadPdfFromData());
       $("#btnIcs").addEventListener("click", ()=> downloadIcsFromData());
 
+      // Formular
       const sendBtn = $("#sendBtn");
       const consent = $("#consent");
-      function updateSendDisabled(){ sendBtn.disabled = !consent.checked; }
+      function updateSendDisabled(){ if(sendBtn && consent) sendBtn.disabled = !consent.checked; }
       if(consent){ consent.addEventListener("change", updateSendDisabled); updateSendDisabled(); }
 
       $("#hostForm").addEventListener("submit", onSubmitHostForm());
@@ -529,9 +570,61 @@
         if(consent){ consent.checked = false; updateSendDisabled(); }
       });
 
+      // Admin
       $("#btnLogin").addEventListener("click", adminLogin);
       $("#btnLogout").addEventListener("click", async ()=>{ await signOut(auth); $("#dlgAdminPanel").close(); });
 
+      // Jahr Verwaltung
+      $("#yearInput").value = String(ACTIVE_YEAR);
+      $("#btnLoadYear").addEventListener("click", async ()=>{
+        const y = parseInt($("#yearInput").value,10) || ACTIVE_YEAR;
+        ACTIVE_YEAR = y;
+        localStorage.setItem("LA_ACTIVE_YEAR", String(ACTIVE_YEAR));
+        await loadEventsAndServices();
+        renderLists();
+        setHeuteFromFirst();
+      });
+
+      $("#btnNewYear").addEventListener("click", async ()=>{
+        const y = parseInt(prompt("Für welches Jahr soll vorbereitet werden", String(ACTIVE_YEAR+1))||"",10);
+        if(!y || y<2025 || y>2100) return;
+        // Leere Events für 1 bis 23 Dezember anlegen in calendars/{y}/events
+        const batch = writeBatch(db);
+        decDates(y).forEach(d=>{
+          const key = ymd(d);
+          batch.set(doc(collection(db, `calendars/${y}/events`), key), {
+            datum:key,
+            wochentag: WDAY[d.getDay()],
+            hostName:"",
+            hostAdresse:"",
+            hostEmail:"",
+            uhrzeit:"18:00",
+            info:"",
+            barrierefrei:false,
+            changed:false
+          }, { merge:true });
+        });
+        await batch.commit();
+        ACTIVE_YEAR = y;
+        localStorage.setItem("LA_ACTIVE_YEAR", String(ACTIVE_YEAR));
+        localStorage.setItem("LA_USE_LEGACY_2025", "false");
+        USE_LEGACY_2025 = false;
+        await loadEventsAndServices();
+        renderLists();
+        setHeuteFromFirst();
+        alert("Neues Jahr wurde vorbereitet");
+      });
+
+      $("#btnArchiveLegacy").addEventListener("click", async ()=>{
+        if(ACTIVE_YEAR !== 2025){ alert("Archivieren ist nur für 2025 relevant"); return; }
+        if(!confirm("Alle 2025 Daten in calendars/2025 kopieren")) return;
+        await archiveYear2025();
+        USE_LEGACY_2025 = false;
+        localStorage.setItem("LA_USE_LEGACY_2025","false");
+        alert("Archiv erstellt. Ab jetzt kannst du auf ein neues Jahr umschalten.");
+      });
+
+      // Auth Watch
       onAuthStateChanged(auth, async user=>{
         if(user){
           $("#authMsg").textContent = "Angemeldet";
@@ -543,17 +636,22 @@
         }
       });
 
+      // Daten laden und Start setzen
       await loadEventsAndServices();
-      const next = computeNextDate();
-      const e = eventsMap.get(next);
-      const timeStr = e && e.uhrzeit && /^\d{1,2}:\d{2}$/.test(e.uhrzeit) ? e.uhrzeit : "18:00";
-      setHeuteTime(timeStr);
-      await loadWeatherForDate(next, timeStr);
+      renderLists();
+      setHeuteFromFirst();
+      await loadWeatherForDate(computeNextDate(), currentTimeForNext());
+      // Footer Impressum Link funktioniert bereits durch Listener oben
+    }
 
-      $("#btnCopyEmails").addEventListener("click", copyEmails);
-      $("#includePending").addEventListener("change", updateEmailTextarea);
-
-      $("#addService").addEventListener("click", ()=> appendServiceRow());
+    async function adminGuard(){
+      return new Promise(resolve=>{
+        const unsub = onAuthStateChanged(auth, user=>{
+          unsub();
+          if(user) resolve(true);
+          else document.getElementById("dlgAdminLogin").showModal();
+        });
+      });
     }
 
     async function adminLogin(){
@@ -598,7 +696,8 @@
 
         const btn = $("#sendBtn"); btn.disabled = true;
         try{
-          await addDoc(collection(db,"anmeldungen"), {
+          await addDoc(colRef("anmeldungen"), {
+            year: ACTIVE_YEAR,
             name,
             email,
             telefon: tel,
@@ -622,22 +721,46 @@
       };
     }
 
-    /* Picker mit Wochenraster und Statusstreifen */
+    function colRef(name){
+      if(ACTIVE_YEAR === LEGACY_YEAR && USE_LEGACY_2025){
+        return collection(db, name); // Altbestand
+      }
+      return collection(db, `calendars/${ACTIVE_YEAR}/${name}`);
+    }
+    function docRef(name, id){
+      if(ACTIVE_YEAR === LEGACY_YEAR && USE_LEGACY_2025){
+        return doc(db, name, id);
+      }
+      return doc(db, `calendars/${ACTIVE_YEAR}/${name}/${id}`);
+    }
+
+    async function archiveYear2025(){
+      // kopiert events und anmeldungen nach calendars/2025
+      const evSnap = await getDocs(collection(db, "events"));
+      const anSnap = await getDocs(collection(db, "anmeldungen"));
+      const batch = writeBatch(db);
+      evSnap.forEach(dref=>{
+        batch.set(doc(db, "calendars/2025/events/"+dref.id), dref.data(), { merge:true });
+      });
+      anSnap.forEach(dref=>{
+        batch.set(doc(db, "calendars/2025/anmeldungen/"+dref.id), dref.data(), { merge:true });
+      });
+      await batch.commit();
+    }
+
+    /* Picker Wochenraster und Statusstreifen */
     function openPicker(){
       const grid = $("#pickerGrid"); grid.innerHTML = "";
 
-      // Lücken bis zum ersten Montag vor dem 1. Dezember
-      const first = new Date(2025,11,1);
-      let wd = first.getDay(); // 1=Mo bei uns nötig, JS 1=Mo? JS 1=Mo wenn wir Map So=0
-      // Umrechnung: wir wollen Montag an Spalte 1
-      let js = wd; // JS: 0 So, 1 Mo, ... 6 Sa
+      const first = new Date(ACTIVE_YEAR,11,1); // 1. Dezember
+      const js = first.getDay(); // 0 So, 1 Mo, ..., 6 Sa
       const blanks = (js === 0) ? 6 : (js - 1);
       for(let i=0;i<blanks;i++){
         const spacer = document.createElement("div");
         grid.appendChild(spacer);
       }
 
-      dec2025Dates().forEach(d=>{
+      decDates().forEach(d=>{
         const key = ymd(d);
         const el = document.createElement("div");
         const ev = eventsMap.get(key);
@@ -674,19 +797,19 @@
       services = [];
 
       try{
-        const qy = query(collection(db,"events"), orderBy("datum","asc"));
+        const qy = query(colRef("events"), orderBy("datum","asc"));
         const snap = await getDocs(qy);
         snap.forEach(d => {
           const e=d.data();
           if(!e) return;
-          if(e.datum === "2025-12-24" && e.isService){
+          if(e.datum === `${ACTIVE_YEAR}-12-24` && e.isService){
             services.push({ id:d.id, ...e });
           }else if(e.datum){
             eventsMap.set(e.datum, { id:d.id, ...e });
           }
         });
       }catch(err){
-        console.warn("Termine konnten nicht geladen werden.");
+        console.warn("Termine konnten nicht geladen werden.", err);
       }
 
       services.sort((a,b)=>{
@@ -696,9 +819,6 @@
         const ta = parseTime(a.uhrzeit); const tb = parseTime(b.uhrzeit);
         return ta - tb;
       });
-
-      renderLists();
-      updateProgress();
     }
 
     function renderLists(){
@@ -711,13 +831,13 @@
         const timeForBox = e && e.uhrzeit && /^\d{1,2}:\d{2}$/.test(e.uhrzeit) ? `${e.uhrzeit} Uhr` : "18:00 Uhr";
 
         let timeHtml = `<div class="time">${timeForBox}</div>`;
-        if(key === "2025-12-24"){ timeHtml = ""; }
+        if(key === `${ACTIVE_YEAR}-12-24`){ timeHtml = ""; }
 
         day.innerHTML = `<div class="wd">${["So","Mo","Di","Mi","Do","Fr","Sa"][d.getDay()]}</div><div class="date">${String(d.getDate()).padStart(2,"0")}.${String(d.getMonth()+1).padStart(2,"0")}</div>${timeHtml}`;
 
         const meta = document.createElement("div"); meta.className = "meta";
 
-        if(key === "2025-12-24"){
+        if(key === `${ACTIVE_YEAR}-12-24`){
           if(services.length){
             const listHtml = services.map(s=>{
               const time = s.uhrzeit ? ` um ${escapeHtml(s.uhrzeit)} Uhr` : "";
@@ -750,7 +870,7 @@
       const timeStr = e && e.uhrzeit && /^\d{1,2}:\d{2}$/.test(e.uhrzeit) ? e.uhrzeit : "18:00";
       setHeuteTime(timeStr);
 
-      if(next === "2025-12-24"){
+      if(next === `${ACTIVE_YEAR}-12-24`){
         $("#heuteTitel").textContent = "Heiligabend Gottesdienste";
         $("#heuteAdresse").textContent = "Mehrere Orte in Hessisch Lichtenau und Umgebung";
         $("#heuteHinweis").textContent = "Zeiten und Orte finden Sie in der Terminliste";
@@ -762,6 +882,8 @@
         $("#heuteTitel").textContent = "Noch freie Vergabe";
         $("#heuteAdresse").textContent = "Sobald ein Ort feststeht, erscheint er hier";
       }
+
+      updateProgress();
     }
 
     function setHeuteTime(hhmm){
@@ -775,15 +897,19 @@
       for(const d of allDates()){
         if(d >= today) return ymd(d);
       }
-      return ymd(rangeStart);
+      return ymd(rangeStartFor(ACTIVE_YEAR));
+    }
+    function currentTimeForNext(){
+      const e = eventsMap.get(computeNextDate());
+      return e && e.uhrzeit ? e.uhrzeit : "18:00";
     }
 
     async function loadWeatherForDate(dateYmd, hhmm="18:00"){
       try{
         const parts = dateYmd.split("-"); const year=+parts[0], month=+parts[1]-1, day=+parts[2];
-        const target = new Date(year, month, day);
         const hm = parseHm(hhmm);
         const today = new Date();
+        const target = new Date(year, month, day);
         const diffDays = Math.round((target - new Date(today.getFullYear(),today.getMonth(),today.getDate()))/86400000);
         if(diffDays > 16){
           $("#wText").textContent = "Vorhersage sichtbar, sobald das Datum näher rückt";
@@ -825,7 +951,7 @@
       const rows = [];
       allDates().forEach(d=>{
         const key = ymd(d);
-        if(key === "2025-12-24"){
+        if(key === `${ACTIVE_YEAR}-12-24`){
           if(services.length){
             services.forEach(s=>{
               const time = s.uhrzeit ? `${s.uhrzeit} Uhr` : "Heiligabend";
@@ -845,7 +971,7 @@
 
       const html = `
         <!doctype html><html><head><meta charset="utf-8">
-        <title>Lebendiger Adventskalender Übersicht</title>
+        <title>Lebendiger Adventskalender Übersicht ${ACTIVE_YEAR}</title>
         <style>
           @page { size: A4; margin: 16mm; }
           body{ font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; }
@@ -854,7 +980,7 @@
           th,td{ border:1px solid #ddd; padding:6px 8px; vertical-align:top; }
           th{ background:#f5f5f5; text-align:left; }
         </style></head><body>
-        <h1>Lebendiger Adventskalender Hessisch Lichtenau</h1>
+        <h1>Lebendiger Adventskalender Hessisch Lichtenau ${ACTIVE_YEAR}</h1>
         <p>Übersicht aller Termine mit Uhrzeit und Adresse. Heiligabend zeigt die Gottesdienste.</p>
         <table><thead><tr><th>Datum</th><th>Tag</th><th>Gastgeber oder Gottesdienst</th><th>Adresse</th></tr></thead>
         <tbody>${rows.join("")}</tbody></table>
@@ -870,17 +996,17 @@
       lines.push("VERSION:2.0");
       lines.push("PRODID:-//Lebendiger Adventskalender//DE");
       lines.push("CALSCALE:GREGORIAN");
-      lines.push("X-WR-CALNAME:Lebendiger Adventskalender");
+      lines.push(`X-WR-CALNAME:Lebendiger Adventskalender ${ACTIVE_YEAR}`);
       lines.push("X-WR-TIMEZONE:Europe/Berlin");
 
       allDates().forEach(d=>{
         const key = ymd(d);
-        if(key === "2025-12-24"){
+        if(key === `${ACTIVE_YEAR}-12-24`){
           services.forEach(s=>{
             const hm = parseHm(s.uhrzeit || "16:00");
             const dtStart = toIcsLocal(d, hm.h, hm.m);
             const dtEnd   = toIcsLocal(d, hm.h, hm.m + 60);
-            const uid = `GD-${s.id}@adventskalender`;
+            const uid = `GD-${s.id || key}@adventskalender`;
             const summary = escapeIcs("Heiligabend Gottesdienst");
             const desc = escapeIcs(s.gemeinde || "Gottesdienst");
             const loc = escapeIcs(s.adresse || "");
@@ -919,7 +1045,7 @@
       const blob = new Blob([lines.join("\r\n")], {type:"text/calendar;charset=utf-8"});
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
-      a.href = url; a.download = "Lebendiger-Adventskalender.ics";
+      a.href = url; a.download = `Lebendiger-Adventskalender-${ACTIVE_YEAR}.ics`;
       document.body.appendChild(a); a.click();
       setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); }, 1200);
 
@@ -944,7 +1070,7 @@
 
       const bodyA = $("#tblAnmeldungen tbody"); bodyA.innerHTML = "";
       try{
-        const qAnm = query(collection(db,"anmeldungen"), orderBy("createdAt","desc"));
+        const qAnm = query(colRef("anmeldungen"), orderBy("createdAt","desc"));
         const snap = await getDocs(qAnm);
         const seen = new Set();
         snap.forEach(d=>{
@@ -984,9 +1110,9 @@
           const bfBadge = row.children[3].querySelector(".badge");
           const bf = !!bfBadge && /barrierefrei/.test(bfBadge.textContent);
           try{
-            await setDoc(doc(db,"events", dateKey), {
+            await setDoc(docRef("events", dateKey), {
               datum: dateKey,
-              wochentag: ["So","Mo","Di","Mi","Do","Fr","Sa"][new Date(dateKey).getDay()],
+              wochentag: WDAY[new Date(dateKey).getDay()],
               hostName: name,
               hostAdresse: addr,
               hostEmail: email,
@@ -1006,14 +1132,14 @@
       bodyA.querySelectorAll("button[data-del]").forEach(btn=>{
         btn.addEventListener("click", async ()=>{
           if(confirm("Diesen Eintrag wirklich löschen")){
-            await deleteDoc(doc(db,"anmeldungen", btn.dataset.del));
+            await deleteDoc(docRef("anmeldungen", btn.dataset.del));
             adminLoad();
           }
         });
       });
 
       const bodyE = $("#tblEvents tbody"); bodyE.innerHTML = "";
-      const dates = allDates().filter(d => ymd(d) !== "2025-12-24");
+      const dates = allDates().filter(d => ymd(d) !== `${ACTIVE_YEAR}-12-24`);
       const map = new Map(eventsMap);
       for(const d of dates){
         const id = ymd(d);
@@ -1039,19 +1165,20 @@
         const row = btn.closest("tr");
         const inputs = row.querySelectorAll("input[data-f]");
         const payload = { datum: btn.dataset.save, wochentag: ["So","Mo","Di","Mi","Do","Fr","Sa"][new Date(btn.dataset.save).getDay()] };
+        let timeInvalid = false;
         inputs.forEach(i=>{
           if(i.type === "checkbox"){ payload[i.dataset.f] = i.checked; }
           else {
             const v = i.value.trim();
             if(i.dataset.f === "uhrzeit" && v && !/^\d{1,2}:\d{2}$/.test(v)){
-              alert("Uhrzeit bitte als HH:MM eintragen");
-              return;
+              timeInvalid = true;
             }
             payload[i.dataset.f] = v;
           }
         });
+        if(timeInvalid){ alert("Uhrzeit bitte als HH:MM eintragen"); return; }
         try{
-          await setDoc(doc(db,"events", btn.dataset.save), payload, { merge:true });
+          await setDoc(docRef("events", btn.dataset.save), payload, { merge:true });
           btn.textContent = "Gespeichert"; btn.disabled = true;
           setTimeout(()=>{ btn.textContent = "Speichern"; btn.disabled = false; }, 900);
           await loadEventsAndServices(); updateProgress(); updateEmailTextarea();
@@ -1068,6 +1195,9 @@
 
       await renderServiceTable();
       updateProgress();
+      $("#includePending").addEventListener("change", updateEmailTextarea);
+      $("#btnCopyEmails").addEventListener("click", copyEmails);
+      updateEmailTextarea();
     }
 
     async function renderServiceTable(){
@@ -1094,26 +1224,26 @@
       if(act !== "del"){
         const v = validateService(payload);
         if(!v.ok){ alert(v.msg); return; }
-        payload.datum = "2025-12-24";
+        payload.datum = `${ACTIVE_YEAR}-12-24`;
         payload.isService = true;
         if(typeof payload.order !== "number"){ payload.order = guessOrder(payload.uhrzeit); }
       }
 
       try{
         if(act === "save" && id){
-          await setDoc(doc(db,"events", id), payload, { merge:true });
+          await setDoc(docRef("events", id), payload, { merge:true });
           row.querySelector('[data-act="save"]').textContent = "Gespeichert";
           setTimeout(()=> row.querySelector('[data-act="save"]').textContent = "Speichern", 900);
         }
         if(act === "save-new"){
-          const ref = await addDoc(collection(db,"events"), payload);
+          const ref = await addDoc(colRef("events"), payload);
           row.querySelector('[data-act="save-new"]').setAttribute("data-sid", ref.id);
           row.querySelector('[data-act="save-new"]').setAttribute("data-act","save");
           row.querySelector('[data-act="del"]').setAttribute("data-sid", ref.id);
         }
         if(act === "del" && id){
           if(confirm("Diesen Gottesdienst löschen")){
-            await deleteDoc(doc(db,"events", id));
+            await deleteDoc(docRef("events", id));
             row.remove();
           }
         }
@@ -1145,11 +1275,6 @@
       return tr;
     }
 
-    function appendServiceRow(){
-      const bodyS = $("#tblServices tbody");
-      bodyS.appendChild(buildServiceRow(null, services.length));
-    }
-
     function readServiceRow(row){
       return {
         gemeinde: row.querySelector('input[data-f="gemeinde"]').value.trim(),
@@ -1158,11 +1283,15 @@
         info: row.querySelector('input[data-f="info"]').value.trim()
       };
     }
-
     function validateService(p){
       if(!p.gemeinde) return { ok:false, msg:"Bitte Gemeinde angeben" };
       if(p.uhrzeit && !/^\d{1,2}:\d{2}$/.test(p.uhrzeit)) return { ok:false, msg:"Uhrzeit bitte als HH:MM eintragen" };
       return { ok:true, msg:"" };
+    }
+    function guessOrder(hm){
+      const m = /^(\d{1,2}):(\d{2})$/.exec(hm||"");
+      if(!m) return 9999;
+      return parseInt(m[1],10)*60+parseInt(m[2],10);
     }
 
     function enableDragAndDrop(tbody){
@@ -1222,7 +1351,7 @@
       rows.forEach((tr, idx)=>{
         const sid = tr.dataset.sid;
         if(sid){
-          batch.set(doc(db,"events", sid), { order: idx }, { merge:true });
+          batch.set(docRef("events", sid), { order: idx }, { merge:true });
         }
       });
       await batch.commit();
@@ -1232,7 +1361,7 @@
       const total = 23;
       let assigned = 0;
       for(let d=1; d<=23; d++){
-        const key = `2025-12-${String(d).padStart(2,"0")}`;
+        const key = `${ACTIVE_YEAR}-12-${String(d).padStart(2,"0")}`;
         const e = eventsMap.get(key);
         if(e && typeof e.hostName === "string" && e.hostName.trim().length > 0){
           assigned++;
@@ -1280,6 +1409,13 @@
         const ok = document.execCommand ? document.execCommand("copy") : false;
         alert(ok ? "E Mail Adressen kopiert" : "Kopieren nicht möglich");
       }
+    }
+
+    function setHeuteFromFirst(){
+      const next = computeNextDate();
+      const e = eventsMap.get(next);
+      const t = e && e.uhrzeit ? e.uhrzeit : "18:00";
+      setHeuteTime(t);
     }
   </script>
 
