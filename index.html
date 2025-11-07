@@ -21,7 +21,7 @@
       --danger:#a61b1b;
       --card:#ffffff;
       --shadow: 0 10px 20px rgba(0,0,0,.08), 0 6px 6px rgba(0,0,0,.06);
-      --radius:18px;
+      --radius:16px;
       --pin-regular:#7b1e36;
       --pin-service:#d9b36c;
       --pin-pending:#a7a9a9;
@@ -38,104 +38,92 @@
     nav a{ display:inline-block; text-decoration:none; color:var(--burgundy); background:var(--gold); padding:10px 14px; border-radius:999px; font-weight:600; box-shadow:var(--shadow); }
 
     main{ max-width:1100px; margin:-12px auto 60px; padding:0 16px; }
-    .card{ background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:20px; margin-bottom:18px; }
+    .card{ background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:18px; margin-bottom:16px; }
 
-    .today{ display:grid; gap:16px; }
+    .today{ display:grid; gap:12px; }
     .today h2{ margin:0 0 6px; font-size:22px; color:var(--forest); }
-    .today .row{ display:grid; gap:14px; }
-    .today .info{ display:flex; flex-direction:column; gap:8px; }
+    .today .row{ display:grid; gap:12px; }
     .today .pill{ display:inline-block; padding:6px 10px; background:var(--paper); border:1px solid #efe2d6; border-radius:999px; font-size:13px; color:var(--muted); }
-    .today .title{ font-size:20px; font-weight:700; }
-    .today .addr{ font-size:16px; }
-    .weather{ display:flex; align-items:center; gap:14px; padding:12px; border:1px dashed #e6d7c6; border-radius:14px; background:#fffbf6; }
-    .weather .big{ font-size:28px; font-weight:700; color:var(--burgundy-dark); min-width:64px; text-align:center; }
-    .weather small{ color:var(--muted); }
+    .weather{ display:flex; align-items:center; gap:12px; padding:10px; border:1px dashed #e6d7c6; border-radius:12px; background:#fffbf6; }
+    .weather .big{ font-size:26px; font-weight:700; color:var(--burgundy-dark); min-width:60px; text-align:center; }
 
-    .grid{ display:grid; gap:16px; }
-    @media(min-width:850px){ .today .row{ grid-template-columns:2fr 1.2fr; align-items:stretch; } .grid.cols-2{ grid-template-columns:1fr 1fr; } }
+    .grid{ display:grid; gap:12px; }
+    @media(min-width:850px){ .today .row{ grid-template-columns:2fr 1.2fr; } .grid.cols-2{ grid-template-columns:1fr 1fr; } }
     h3{ margin:4px 0 12px; font-size:20px; color:var(--forest); }
-    .list{ display:flex; flex-direction:column; gap:10px; }
-    .item{ display:flex; gap:12px; align-items:flex-start; border:1px solid #eee5da; padding:14px; border-radius:14px; background:#fffefe; }
-    .day{ min-width:92px; text-align:center; background:var(--burgundy); color:var(--cream); padding:8px 10px; border-radius:10px; line-height:1.2; box-shadow:var(--shadow); }
-    .day .date{ font-size:18px; font-weight:800; }
-    .day .wd{ font-size:12px; opacity:.95; }
-    .day .time{ font-size:13px; margin-top:4px; font-weight:800; color:var(--gold); }
-    .meta{ flex:1; }
+
+    .list{ display:flex; flex-direction:column; gap:8px; }
+    .item{ display:flex; gap:10px; align-items:flex-start; border:1px solid #eee5da; padding:12px; border-radius:12px; background:#fffefe; }
+    .day{ min-width:86px; text-align:center; background:var(--burgundy); color:var(--cream); padding:8px 8px; border-radius:10px; line-height:1.2; box-shadow:var(--shadow); }
+    .day .date{ font-size:16px; font-weight:800; }
+    .day .wd{ font-size:11px; opacity:.95; }
+    .day .time{ font-size:12px; margin-top:4px; font-weight:800; color:var(--gold); }
     .meta .host{ font-weight:700; font-size:16px; }
     .meta .addr{ color:#444; margin-top:2px; }
-    .badge{ display:inline-block; font-size:12px; padding:4px 8px; border-radius:999px; background:#eef2ff; color:#334155; margin-top:6px; }
+    .badge{ display:inline-block; font-size:12px; padding:3px 7px; border-radius:999px; background:#eef2ff; color:#334155; margin-top:6px; }
     .free{ background:#fff1f1; color:#7a1d1d; }
     .changed{ background:#fff7cc; color:#7a5600; }
 
-    form{ display:grid; gap:12px; }
     label{ font-weight:600; }
     input[type="text"], input[type="email"], input[type="tel"], textarea{
-      width:100%; padding:12px 14px; border-radius:12px; border:1px solid #e5e7eb; background:#fff; font-size:16px;
+      width:100%; padding:10px 12px; border-radius:10px; border:1px solid #e5e7eb; background:#fff; font-size:16px;
     }
-    textarea{ min-height:110px; resize:vertical; }
+    textarea{ min-height:100px; resize:vertical; }
     .help{ color:var(--muted); font-size:14px; }
-    .actions{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
-    button{ border:none; padding:12px 16px; border-radius:12px; background:var(--forest); color:#fff; font-weight:700; cursor:pointer; box-shadow:var(--shadow); }
+    .actions{ display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+    button{ border:none; padding:10px 14px; border-radius:10px; background:var(--forest); color:#fff; font-weight:700; cursor:pointer; box-shadow:var(--shadow); }
     button.secondary{ background:var(--burgundy); }
     button.warn{ background:var(--danger); }
     .success{ color:var(--ok); font-weight:600; }
     .error{ color:var(--danger); font-weight:600; }
 
-    details{ background:#fffdf9; border:1px solid #f0e6d9; padding:14px; border-radius:12px; }
+    details{ background:#fffdf9; border:1px solid #f0e6d9; padding:12px; border-radius:12px; }
 
     footer{ max-width:1100px; margin:30px auto 80px; padding:0 16px; color:#222; text-align:center; }
     .footlink{ font-size:14px; color:#1f2937; text-decoration:underline; cursor:pointer; }
 
     dialog{ border:none; border-radius:16px; padding:0; width:min(1100px, 96vw); box-shadow:var(--shadow); }
-    .dlg-body{ padding:18px; background:#ffffff; border-radius:16px; }
-    .dlg-head{ padding:16px 18px 0 18px; }
+    .dlg-body{ padding:16px; background:#ffffff; border-radius:16px; }
+    .dlg-head{ padding:12px 16px 0 16px; }
     .dlg-title{ margin:0; color:var(--forest); font-size:20px; }
-    .dlg-foot{ padding:12px 18px 18px 18px; display:flex; justify-content:flex-end; gap:10px; }
-    .dlg-scroll{ max-height:80vh; overflow:auto; padding:0 18px 0 18px; }
-    .link-as-btn{ background:#e5e7eb; color:#111827; border-radius:12px; padding:8px 12px; cursor:pointer; display:inline-block; }
+    .dlg-foot{ padding:10px 16px 16px 16px; display:flex; justify-content:flex-end; gap:8px; }
+    .dlg-scroll{ max-height:80vh; overflow:auto; padding:0 16px 0 16px; }
+    .link-as-btn{ background:#e5e7eb; color:#111827; border-radius:10px; padding:7px 10px; cursor:pointer; display:inline-block; }
     .muted{ color:var(--muted); }
     .center{ text-align:center; }
 
-    /* WhatsApp und Nachrücker Karte */
-    .wa-grid{ display:grid; gap:16px; align-items:start; }
+    /* WhatsApp und Nachrücker */
+    .wa-grid{ display:grid; gap:12px; align-items:start; }
     @media(min-width:900px){ .wa-grid.has-waitlist{ grid-template-columns: 1fr 1fr; } }
     .wa-left{ order:1; }
     .wa-right{ order:2; }
     .wa-grid.has-waitlist .wa-left{ order:2; }
     .wa-grid.has-waitlist .wa-right{ order:1; }
-    .wa-block, .waitlist-block{ background:#fff; border:1px solid #e5e7eb; border-radius:14px; padding:14px; box-shadow:var(--shadow); }
-
-    .wa-content{ display:flex; align-items:center; gap:16px; }
+    .wa-block, .waitlist-block{ background:#fff; border:1px solid #e5e7eb; border-radius:12px; padding:12px; box-shadow:var(--shadow); }
+    .wa-content{ display:flex; align-items:center; gap:14px; }
     .wa-text{ flex:1; min-width:0; }
-    .wa-text p{ margin:0 0 8px 0; }
+    .wa-text p{ margin:0 0 6px 0; }
     @media(max-width: 640px){ .wa-content{ flex-direction:column; align-items:flex-start; } }
-    .qr{ width:160px; height:auto; border-radius:12px; border:1px solid #e5e7eb; box-shadow:var(--shadow); }
+    .qr{ width:160px; height:auto; border-radius:10px; border:1px solid #e5e7eb; box-shadow:var(--shadow); }
     @media(min-width:850px){ .qr{ width:180px; } }
 
     /* Termin Picker */
-    .picker-wrap{ margin:10px 0; }
-    .week-head{ display:grid; grid-template-columns:repeat(7, 1fr); gap:8px; font-weight:700; color:#334155; font-size:12px; text-align:center; }
-    .picker-grid{ display:grid; gap:8px; grid-template-columns:repeat(7, minmax(70px, 1fr)); margin-top:8px; }
-    .pick{ border:1px solid #e5e7eb; border-radius:10px; padding:8px; text-align:center; cursor:pointer; user-select:none; background:#fff; position:relative; padding-bottom:16px; min-height:66px; }
-    .pick .d{ font-weight:800; font-size:16px; }
+    .picker-wrap{ margin:8px 0; }
+    .week-head{ display:grid; grid-template-columns:repeat(7, 1fr); gap:6px; font-weight:700; color:#334155; font-size:12px; text-align:center; }
+    .picker-grid{ display:grid; gap:6px; grid-template-columns:repeat(7, minmax(66px, 1fr)); margin-top:6px; }
+    .pick{ border:1px solid #e5e7eb; border-radius:10px; padding:6px; text-align:center; cursor:pointer; user-select:none; background:#fff; position:relative; padding-bottom:14px; min-height:60px; }
+    .pick .d{ font-weight:800; font-size:15px; }
     .pick .wd{ font-size:11px; color:#64748b; }
     .pick.sel{ outline:3px solid var(--gold); background:#fffaf0; }
-    .pick::after{ content:""; position:absolute; left:6px; right:6px; bottom:6px; height:4px; border-radius:3px; background:#e5e7eb; }
+    .pick::after{ content:""; position:absolute; left:6px; right:6px; bottom:6px; height:3px; border-radius:3px; background:#e5e7eb; }
     .pick.free::after{ background: linear-gradient(90deg,#22c55e,#16a34a); }
     .pick.booked::after{ background: linear-gradient(90deg,#f87171,#b91c1c); }
 
-    .preview-chips{ display:flex; gap:8px; flex-wrap:wrap; margin-top:6px; }
-    .chip{ background:#eef2ff; color:#334155; padding:4px 8px; border-radius:999px; font-size:12px; }
+    .preview-chips{ display:flex; gap:6px; flex-wrap:wrap; margin-top:6px; }
+    .chip{ background:#eef2ff; color:#334155; padding:3px 7px; border-radius:999px; font-size:12px; }
 
-    .email-box{ display:grid; gap:8px; margin-top:14px; }
-    .email-row{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
-    .email-area{ width:100%; min-height:90px; border:1px solid #e5e7eb; border-radius:12px; padding:10px; font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size:13px; }
-
-    .consent{ background:#fffbf6; border:1px solid #e6d7c6; padding:12px; border-radius:12px; }
+    .consent{ background:#fffbf6; border:1px solid #e6d7c6; padding:10px; border-radius:10px; }
     .consent label{ font-weight:500; display:flex; align-items:flex-start; gap:8px; line-height:1.4; }
     .consent input[type="checkbox"]{ margin-top:3px; }
-
-    .waitlist-note{ border:1px dashed #e6d7c6; background:#fffbf6; border-radius:14px; padding:12px; }
 
     table.table{ width:100%; border-collapse:collapse; }
     table.table th, table.table td{ border:1px solid #eee5da; padding:8px; vertical-align:top; }
@@ -152,33 +140,34 @@
     .leaflet-div-icon{ background:transparent; border:none; }
 
     /* Admin Fortschritt */
-    .prog-wrap{ background:#fff; border:1px solid #eee5da; border-radius:14px; padding:14px; margin-bottom:14px; }
-    .prog-label{ display:flex; justify-content:space-between; align-items:center; font-weight:700; color:#334155; margin-bottom:8px; }
+    .prog-wrap{ background:#fff; border:1px solid #eee5da; border-radius:12px; padding:12px; margin-bottom:12px; }
+    .prog-label{ display:flex; justify-content:space-between; align-items:center; font-weight:700; color:#334155; margin-bottom:6px; }
     .prog-bar{ width:100%; height:10px; background:#f1e8dc; border-radius:999px; overflow:hidden; }
     .prog-fill{ height:100%; width:0%; background:linear-gradient(90deg, var(--gold), #f3d38f); }
 
-    /* Admin Terminpflege als Kartenliste */
-    .event-cards{ display:grid; gap:12px; }
-    .event-card{ border:1px solid #eee5da; border-radius:14px; padding:12px; background:#fff; box-shadow:var(--shadow); }
-    .event-head{ display:flex; align-items:center; gap:12px; margin-bottom:10px; }
-    .date-badge{ min-width:110px; text-align:center; background:var(--burgundy); color:var(--cream); padding:8px 10px; border-radius:10px; line-height:1.1; box-shadow:var(--shadow); font-weight:800; }
-    .event-body{ display:grid; gap:10px; }
+    /* Kompakte Terminpflege als Kartenliste */
+    .event-cards{ display:grid; gap:8px; }
+    .event-card{ border:1px solid #eee5da; border-radius:12px; padding:10px; background:#fff; box-shadow:var(--shadow); }
+    .event-head{ display:flex; align-items:center; gap:10px; margin-bottom:6px; }
+    .date-badge{ min-width:94px; text-align:center; background:var(--burgundy); color:var(--cream); padding:6px 8px; border-radius:9px; line-height:1.1; box-shadow:var(--shadow); font-weight:800; font-size:14px; }
+    .event-body{ display:grid; gap:6px; }
     @media(min-width:900px){
-      .event-body{ grid-template-columns: 0.7fr 1.1fr 1fr 0.6fr 0.6fr; align-items:start; }
+      .event-body{ grid-template-columns: 0.6fr 1fr 1fr 0.8fr 0.6fr; align-items:start; }
     }
-    .event-field{ display:flex; flex-direction:column; gap:6px; }
-    .event-field label{ font-weight:600; font-size:12px; color:#334155; }
-    .event-actions{ display:flex; justify-content:flex-end; gap:8px; margin-top:10px; }
+    .event-field{ display:flex; flex-direction:column; gap:4px; }
+    .event-actions{ display:flex; justify-content:flex-end; gap:8px; margin-top:6px; }
 
-    /* Admin Gottesdienste kompakt */
-    .service-list{ display:grid; gap:10px; }
-    .service-row{ border:1px solid #eee5da; border-radius:12px; padding:10px; background:#fff; }
-    .service-grid{ display:grid; gap:8px; }
+    /* Gottesdienste Drag and Drop */
+    .service-list{ display:grid; gap:8px; }
+    .service-row{ border:1px solid #eee5da; border-radius:10px; padding:8px; background:#fff; }
+    .service-row[draggable="true"]{ cursor:grab; }
+    .service-row.dragging{ opacity:.6; }
+    .service-grid{ display:grid; gap:6px; }
     @media(min-width:900px){
       .service-grid{ grid-template-columns: 1fr 0.5fr 1fr 1fr auto; align-items:center; }
     }
+    .handle{ font-size:12px; color:var(--muted); user-select:none; }
 
-    /* Utility */
     .sr-only{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); border:0; }
   </style>
 </head>
@@ -202,18 +191,17 @@
       <div id="waGrid" class="wa-grid">
         <div class="wa-right">
           <div class="waitlist-block" id="waitlistBox" style="display:none">
-            <h4 style="margin:0 0 10px 0">Nachrückerliste</h4>
+            <h4 style="margin:0 0 8px 0">Nachrückerliste</h4>
             <div class="waitlist-note" id="waitlistText">
               Alle Termine sind vergeben. Es kann kurzfristig ein Platz frei werden. Wenn Sie einspringen möchten, tragen Sie sich ein. Bei Bedarf melden wir uns und stimmen den Termin mit Ihnen ab.
             </div>
-            <div class="actions" style="margin-top:10px">
+            <div class="actions" style="margin-top:8px">
               <button type="button" id="openWaitlist" class="secondary">Auf Nachrückerliste eintragen</button>
             </div>
           </div>
         </div>
         <div class="wa-left">
           <div class="wa-block">
-            <!-- keine zweite Überschrift mehr, nur der Inhalt -->
             <div class="wa-content">
               <img src="qrcode.jpg" alt="QR Code zum WhatsApp Kanal" class="qr" id="qrThumb">
               <div class="wa-text">
@@ -230,7 +218,7 @@
     <section id="heute" class="card today" aria-labelledby="heute-title">
       <h2 id="heute-title">Nächster Termin</h2>
       <div class="row">
-        <div class="info">
+        <div>
           <span class="pill" id="heuteDatum">Datum wird geladen</span>
           <span class="pill" id="heuteZeit" style="display:none"></span>
           <div class="title" id="heuteTitel">Noch kein Eintrag ausgewählt</div>
@@ -251,7 +239,7 @@
       <h3 id="termine-title">Alle Termine</h3>
       <p class="help">Zeitraum von Sonntag, 30. November, bis Mittwoch, 24. Dezember. Beginn in der Regel um 18 Uhr. Abweichungen stehen beim Datum.</p>
       <div class="list" id="terminListe" role="list"></div>
-      <div class="actions" style="margin-top:12px">
+      <div class="actions" style="margin-top:10px">
         <button type="button" id="btnPdf" class="secondary">Übersicht als PDF</button>
         <button type="button" id="btnIcs">Alle Termine als Kalenderdatei</button>
         <button type="button" id="btnMap">Karte</button>
@@ -471,20 +459,21 @@
         <p id="anmeldHelp" class="muted">Nach der Zuweisung kannst du den Antrag optional löschen.</p>
 
         <h4>Termine pflegen</h4>
-        <p class="muted">Jeder Abend als Karte. Uhrzeit, Gastgeber, Adresse und Hinweise bearbeiten. Änderungen speichern.</p>
+        <p class="muted">Kompakte Kartenansicht. Uhrzeit, Gastgeber, Adresse und Hinweise bearbeiten. Änderungen speichern.</p>
         <div class="event-cards" id="eventCards"></div>
 
         <h4>Gottesdienste am 24. Dezember</h4>
-        <p class="muted">Einträge bearbeiten und speichern. Die Reihenfolge ergibt sich aus der Uhrzeit.</p>
+        <p class="muted">Mit der Griffleiste lassen sich die Einträge manuell sortieren. Danach Reihenfolge speichern.</p>
         <div class="service-list" id="serviceList"></div>
-        <div class="actions" style="margin-top:8px">
+        <div class="actions" style="margin-top:6px">
+          <button type="button" id="saveServiceOrder" class="secondary">Reihenfolge speichern</button>
           <button type="button" id="addService" class="secondary">Neuen Gottesdienst hinzufügen</button>
         </div>
 
-        <div class="email-box">
-          <div class="email-row">
+        <div class="email-box" style="margin-top:10px">
+          <div class="actions" style="justify-content:space-between">
             <label for="emailAll">E Mail Adressen der Gastgeber</label>
-            <label class="muted" style="margin-left:auto"><input type="checkbox" id="includePending"> auch Anmeldungen einbeziehen</label>
+            <label class="muted"><input type="checkbox" id="includePending"> auch Anmeldungen einbeziehen</label>
             <button type="button" class="secondary" id="btnCopyEmails">Adressen kopieren</button>
           </div>
           <textarea id="emailAll" class="email-area" readonly></textarea>
@@ -493,7 +482,7 @@
 
         <!-- Nachrückerliste Abschnitt nur sichtbar, wenn aktiv -->
         <div id="waitlistSection" style="display:none">
-          <h4 style="margin-top:18px">Nachrückerliste</h4>
+          <h4 style="margin-top:14px">Nachrückerliste</h4>
           <p class="muted" id="waitlistStateText">Status wird geladen</p>
           <table class="table" id="tblWaitlist">
             <thead><tr><th>Name und Kontakt</th><th>Adresse</th><th>Bemerkung</th><th>Aktion</th></tr></thead>
@@ -501,7 +490,7 @@
           </table>
         </div>
 
-        <div class="actions" style="margin-top:12px; justify-content:flex-end; gap:8px">
+        <div class="actions" style="margin-top:10px; justify-content:flex-end; gap:8px">
           <button type="button" class="secondary" id="btnToggleWaitlist">Nachrückerliste aktivieren</button>
           <button type="button" class="secondary" id="btnChronik">Chronik</button>
         </div>
@@ -572,7 +561,9 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-analytics.js";
     import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-    import { getFirestore, collection, addDoc, getDocs, setDoc, doc, deleteDoc, query, orderBy, getDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+    import {
+      getFirestore, collection, addDoc, getDocs, setDoc, doc, deleteDoc, query, orderBy, getDoc, writeBatch
+    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCZuvHUy6xMN6WIrHUQBpxuobZkQRKB20s",
@@ -590,7 +581,6 @@
 
     const LEGACY_YEAR = 2025;
     let ACTIVE_YEAR = parseInt(localStorage.getItem("LA_ACTIVE_YEAR") || "2025", 10);
-    let USE_LEGACY_2025 = localStorage.getItem("LA_USE_LEGACY_2025") !== "false";
 
     const rangeStartFor = y => new Date(y, 10, 30);
     const rangeEndFor   = y => new Date(y, 11, 24);
@@ -620,7 +610,7 @@
     let markerLayer = null;
     let geoCache = JSON.parse(localStorage.getItem("LA_GEOCACHE")||"{}");
 
-    let app, analytics, auth, db;
+    let app, auth, db;
 
     init();
 
@@ -681,6 +671,40 @@
       setHeuteFromFirst();
       await loadWeatherForDate(computeNextDate(), currentTimeForNext());
       await loadWaitlistState();
+
+      // Toggle Nachrückerliste
+      $("#btnToggleWaitlist").addEventListener("click", toggleWaitlistActive);
+    }
+
+    function settingsPath(){
+      // Einfache Struktur für 2025
+      if(ACTIVE_YEAR === LEGACY_YEAR){ return "settings"; }
+      return `calendars/${ACTIVE_YEAR}/settings`;
+    }
+    function colRef(name){
+      if(ACTIVE_YEAR === LEGACY_YEAR){ return collection(db, name); }
+      return collection(db, `calendars/${ACTIVE_YEAR}/${name}`);
+    }
+    function docRef(name, id){
+      if(ACTIVE_YEAR === LEGACY_YEAR){ return doc(db, name, id); }
+      return doc(db, `calendars/${ACTIVE_YEAR}/${name}/${id}`);
+    }
+
+    async function toggleWaitlistActive(){
+      const want = !waitlistActive;
+      const text = want
+        ? "Möchtest du die Nachrückerliste jetzt wirklich aktivieren"
+        : "Möchtest du die Nachrückerliste jetzt wirklich deaktivieren";
+      if(!confirm(text)) return;
+      try{
+        const ref = doc(db, settingsPath(), "nachruecker");
+        await setDoc(ref, { active: want, updatedAt: new Date().toISOString() }, { merge:true });
+        waitlistActive = want;
+        await loadWaitlistState();
+        if(waitlistActive){ await renderWaitlistTable(); }
+      }catch(e){
+        alert("Einstellung konnte nicht gespeichert werden");
+      }
     }
 
     async function loadWaitlistState(){
@@ -703,26 +727,6 @@
       if(waTitle){ waTitle.textContent = waitlistActive ? "Aktuelles und Nachrückerliste" : "WhatsApp Kanal"; }
       const wlSection = $("#waitlistSection");
       if(wlSection){ wlSection.style.display = waitlistActive ? "block" : "none"; }
-    }
-
-    function settingsPath(){
-      if(ACTIVE_YEAR === LEGACY_YEAR && localStorage.getItem("LA_USE_LEGACY_2025") !== "false"){
-        return "settings";
-      }
-      return `calendars/${ACTIVE_YEAR}/settings`;
-    }
-
-    function colRef(name){
-      if(ACTIVE_YEAR === LEGACY_YEAR && localStorage.getItem("LA_USE_LEGACY_2025") !== "false"){
-        return collection(db, name);
-      }
-      return collection(db, `calendars/${ACTIVE_YEAR}/${name}`);
-    }
-    function docRef(name, id){
-      if(ACTIVE_YEAR === LEGACY_YEAR && localStorage.getItem("LA_USE_LEGACY_2025") !== "false"){
-        return doc(db, name, id);
-      }
-      return doc(db, `calendars/${ACTIVE_YEAR}/${name}/${id}`);
     }
 
     function onSubmitHostForm(){
@@ -803,6 +807,7 @@
           });
           msg.textContent = "Vielen Dank. Sie stehen nun auf der Nachrückerliste"; msg.className = "success";
           $("#waitlistForm").reset();
+          if(waitlistActive){ await renderWaitlistTable(); }
         }catch(err){
           console.error(err);
           msg.textContent = "Eintrag konnte nicht gespeichert werden"; msg.className = "error";
@@ -829,7 +834,11 @@
       }catch(err){
         console.warn("Termine konnten nicht geladen werden.", err);
       }
+      // Sortierung der Gottesdienste: zuerst nach order, sonst nach Uhrzeit
       services.sort((a,b)=>{
+        const oa = typeof a.order === "number" ? a.order : 9999;
+        const ob = typeof b.order === "number" ? b.order : 9999;
+        if(oa !== ob) return oa - ob;
         const ta = parseTime(a.uhrzeit||"23:59");
         const tb = parseTime(b.uhrzeit||"23:59");
         return ta - tb;
@@ -857,7 +866,7 @@
               const addr = s.adresse ? `<div class="addr">${escapeHtml(s.adresse)}</div>` : "";
               const info = s.info ? `<div class="badge">${escapeHtml(s.info)}</div>` : "";
               return `<div class="host">${line}</div>${addr}${info}`;
-            }).join("<hr style='border:none;border-top:1px solid #eee5da;margin:8px 0'>");
+            }).join("<hr style='border:none;border-top:1px solid #eee5da;margin:6px 0'>");
             meta.innerHTML = `<div class="badge">Heiligabend Gottesdienste</div>${listHtml}`;
           }else{
             meta.innerHTML = `<div class="host muted">Gottesdienste werden ergänzt</div>`;
@@ -1053,13 +1062,13 @@
             const dd = new Date(w);
             const label = `${String(dd.getDate()).padStart(2,"0")}.12 (${WDAY[dd.getDay()]})`;
             const title = "Als Termin festlegen";
-            return `<span class="chip-assign" data-assign="${w}" data-id="${d.id}" data-email="${escapeAttr(a.email||"")}" title="${title}">${label}</span>`;
-          }).join("");
+            return `<span class="chip" style="cursor:pointer" data-assign="${w}" data-id="${d.id}" data-email="${escapeAttr(a.email||"")}" title="${title}">${label}</span>`;
+          }).join(" ");
           tr.innerHTML = `
             <td><strong>${escapeHtml(a.name||"")}</strong><br><span class="muted">${escapeHtml(a.email||"")}</span><br><span class="muted">${escapeHtml(a.telefon||"")}</span></td>
             <td>${escapeHtml(a.adresse||"")}</td>
             <td>${chips || "<span class='muted'>Keine Auswahl</span>"}</td>
-            <td>${escapeHtml(a.bemerkung||"")}${a.barrierefrei ? "<div class='badge' style='margin-top:8px'>♿ barrierefrei</div>" : ""}</td>
+            <td>${escapeHtml(a.bemerkung||"")}${a.barrierefrei ? "<div class='badge' style='margin-top:6px'>♿ barrierefrei</div>" : ""}</td>
             <td><button class="warn" data-del="${d.id}">Löschen</button></td>
           `;
           bodyA.appendChild(tr);
@@ -1070,7 +1079,7 @@
         bodyA.appendChild(tr);
       }
 
-      bodyA.querySelectorAll(".chip-assign").forEach(ch=>{
+      bodyA.querySelectorAll("[data-assign]").forEach(ch=>{
         ch.addEventListener("click", async ()=>{
           const dateKey = ch.getAttribute("data-assign");
           const row = ch.closest("tr");
@@ -1090,7 +1099,6 @@
               info: "Aus Anmeldung gesetzt",
               changed: true
             }, { merge: true });
-            ch.classList.add("assigned");
             await loadEventsAndServices();
             await adminLoad();
           }catch(e){
@@ -1108,10 +1116,10 @@
         });
       });
 
-      // Terminpflege als Karten
+      // Terminpflege als kompakte Karten
       renderEventCards();
 
-      // Gottesdienste kompakt
+      // Gottesdienste mit Drag and Drop
       renderServiceList();
 
       // E Mailliste
@@ -1138,7 +1146,7 @@
         const wd = WDAY[new Date(id).getDay()];
         card.innerHTML = `
           <div class="event-head">
-            <div class="date-badge">${String(new Date(id).getDate()).padStart(2,"0")}.12<br><span style="font-size:12px;font-weight:600;">${wd}</span></div>
+            <div class="date-badge">${String(new Date(id).getDate()).padStart(2,"0")}.12<br><span style="font-size:11px;font-weight:600;">${wd}</span></div>
             <div><strong>${e.hostName ? escapeHtml(e.hostName) : "Noch frei"}</strong><br><span class="muted">${e.hostAdresse ? escapeHtml(e.hostAdresse) : "Adresse folgt"}</span></div>
           </div>
           <div class="event-body">
@@ -1207,10 +1215,14 @@
 
     function renderServiceList(){
       const list = $("#serviceList"); list.innerHTML = "";
-      services.forEach(s=>{
-        list.appendChild(buildServiceRow(s));
+      services.forEach((s, idx)=>{
+        list.appendChild(buildServiceRow(s, idx));
       });
-      list.appendChild(buildServiceRow(null));
+      // leere Eingabe
+      list.appendChild(buildServiceRow(null, services.length));
+
+      enableServiceDrag(list);
+
       list.addEventListener("click", async ev=>{
         const btn = ev.target.closest("button[data-act]");
         if(!btn) return;
@@ -1220,6 +1232,7 @@
           if(!payload.gemeinde && !payload.uhrzeit){ alert("Bitte Angaben ergänzen"); return; }
           payload.isService = true;
           payload.datum = `${ACTIVE_YEAR}-12-24`;
+          payload.order = services.length; // hinten anhängen
           try{
             await addDoc(colRef("events"), payload);
             await loadEventsAndServices();
@@ -1231,7 +1244,7 @@
           try{
             await setDoc(docRef("events", btn.dataset.sid), payload, { merge:true });
             btn.textContent = "Gespeichert"; btn.disabled = true;
-            setTimeout(()=>{ btn.textContent = "Speichern"; btn.disabled = false; }, 900);
+            setTimeout(()=>{ btn.textContent = "Speichern"; btn.disabled = false; }, 800);
             await loadEventsAndServices();
           }catch(e){ alert("Speichern nicht möglich"); }
         }else if(btn.dataset.act === "del"){
@@ -1241,14 +1254,19 @@
         }
       });
 
-      function buildServiceRow(s){
+      $("#saveServiceOrder").onclick = saveServiceOrder;
+
+      function buildServiceRow(s, idx){
         const row = document.createElement("div"); row.className = "service-row";
+        row.draggable = !!s; // nur bestehende sind ziehbar
+        row.dataset.sid = s?.id || "";
+        row.dataset.order = typeof s?.order === "number" ? String(s.order) : String(idx);
         row.innerHTML = `
           <div class="service-grid">
-            <input type="text" value="${escapeAttr(s?.gemeinde||"")}" data-f="gemeinde" placeholder="Gemeinde oder Kirche">
+            <div class="handle">${s ? `Reihenfolge: ${Number(row.dataset.order)+1}` : "Neuer Eintrag"}</div>
             <input type="text" value="${escapeAttr(s?.uhrzeit||"")}" data-f="uhrzeit" placeholder="z. B. 16:00">
+            <input type="text" value="${escapeAttr(s?.gemeinde||"")}" data-f="gemeinde" placeholder="Gemeinde oder Kirche">
             <input type="text" value="${escapeAttr(s?.adresse||"")}" data-f="adresse" placeholder="Adresse">
-            <input type="text" value="${escapeAttr(s?.info||"")}" data-f="info" placeholder="Notiz">
             <div>
               ${s?.id
                 ? `<button data-act="save" data-sid="${s.id}">Speichern</button> <button class="warn" data-act="del" data-sid="${s.id}">Löschen</button>`
@@ -1265,36 +1283,102 @@
       }
     }
 
+    function enableServiceDrag(container){
+      let dragEl = null;
+      container.addEventListener("dragstart", e=>{
+        const row = e.target.closest(".service-row[draggable='true']");
+        if(!row) return;
+        dragEl = row;
+        row.classList.add("dragging");
+        e.dataTransfer.effectAllowed = "move";
+      });
+      container.addEventListener("dragend", e=>{
+        const row = e.target.closest(".service-row.dragging");
+        if(row) row.classList.remove("dragging");
+        dragEl = null;
+        // Reihen neu nummerieren in der Anzeige
+        renumberServiceHandles(container);
+      });
+      container.addEventListener("dragover", e=>{
+        if(!dragEl) return;
+        e.preventDefault();
+        const after = getDragAfterElement(container, e.clientY);
+        if(after == null) container.insertBefore(dragEl, container.querySelector(".service-row:last-child")); // vor die leere Eingabe
+        else container.insertBefore(dragEl, after);
+      });
+
+      function getDragAfterElement(container, y){
+        const rows = [...container.querySelectorAll(".service-row[draggable='true']:not(.dragging)")];
+        let closest = null;
+        let closestOffset = Number.NEGATIVE_INFINITY;
+        for(const child of rows){
+          const box = child.getBoundingClientRect();
+          const offset = y - box.top - box.height / 2;
+          if(offset < 0 && offset > closestOffset){
+            closestOffset = offset;
+            closest = child;
+          }
+        }
+        return closest;
+      }
+      function renumberServiceHandles(container){
+        const rows = [...container.querySelectorAll(".service-row")];
+        rows.forEach((r,i)=>{
+          const h = r.querySelector(".handle");
+          if(h && r.dataset.sid){ h.textContent = `Reihenfolge: ${i+1}`; }
+        });
+      }
+    }
+
+    async function saveServiceOrder(){
+      const list = $("#serviceList");
+      const rows = [...list.querySelectorAll(".service-row")].filter(r => r.dataset.sid);
+      if(rows.length === 0) return;
+      try{
+        const batch = writeBatch(db);
+        rows.forEach((r, idx)=>{
+          const ref = docRef("events", r.dataset.sid);
+          batch.set(ref, { order: idx, isService: true, datum: `${ACTIVE_YEAR}-12-24` }, { merge:true });
+        });
+        await batch.commit();
+        await loadEventsAndServices();
+        renderServiceList();
+        alert("Reihenfolge gespeichert");
+      }catch(e){
+        alert("Reihenfolge konnte nicht gespeichert werden");
+      }
+    }
+
     async function renderWaitlistTable(){
       const body = $("#tblWaitlist tbody"); body.innerHTML = "";
       try{
         const qy = query(colRef("nachruecker"), orderBy("createdAt","desc"));
-        const snap = await getDocs(qy);
-        if(snap.empty){
-          const tr = document.createElement("tr");
-          tr.innerHTML = `<td colspan="4" class="center muted">Keine Einträge</td>`;
-          body.appendChild(tr);
-        }else{
-          snap.forEach(d=>{
-            const a = d.data();
+          const snap = await getDocs(qy);
+          if(snap.empty){
             const tr = document.createElement("tr");
-            tr.innerHTML = `
-              <td><strong>${escapeHtml(a.name||"")}</strong><br><span class="muted">${escapeHtml(a.email||"")}</span><br><span class="muted">${escapeHtml(a.telefon||"")}</span></td>
-              <td>${escapeHtml(a.adresse||"")}</td>
-              <td>${escapeHtml(a.bemerkung||"")}</td>
-              <td><button class="warn" data-wdel="${d.id}">Löschen</button></td>
-            `;
+            tr.innerHTML = `<td colspan="4" class="center muted">Keine Einträge</td>`;
             body.appendChild(tr);
-          });
-          body.querySelectorAll("button[data-wdel]").forEach(btn=>{
-            btn.addEventListener("click", async ()=>{
-              if(confirm("Diesen Eintrag wirklich löschen")){
-                await deleteDoc(docRef("nachruecker", btn.dataset.wdel));
-                renderWaitlistTable();
-              }
+          }else{
+            snap.forEach(d=>{
+              const a = d.data();
+              const tr = document.createElement("tr");
+              tr.innerHTML = `
+                <td><strong>${escapeHtml(a.name||"")}</strong><br><span class="muted">${escapeHtml(a.email||"")}</span><br><span class="muted">${escapeHtml(a.telefon||"")}</span></td>
+                <td>${escapeHtml(a.adresse||"")}</td>
+                <td>${escapeHtml(a.bemerkung||"")}</td>
+                <td><button class="warn" data-wdel="${d.id}">Löschen</button></td>
+              `;
+              body.appendChild(tr);
             });
-          });
-        }
+            body.querySelectorAll("button[data-wdel]").forEach(btn=>{
+              btn.addEventListener("click", async ()=>{
+                if(confirm("Diesen Eintrag wirklich löschen")){
+                  await deleteDoc(docRef("nachruecker", btn.dataset.wdel));
+                  renderWaitlistTable();
+                }
+              });
+            });
+          }
       }catch(e){
         const tr = document.createElement("tr");
         tr.innerHTML = `<td colspan="4" class="center">Nachrückerliste konnte nicht geladen werden</td>`;
@@ -1306,6 +1390,9 @@
       $("#dlgMap").showModal();
       setTimeout(initOrUpdateMap, 50);
     }
+
+    let mapInstance = null, markerLayer = null;
+    let geoCache = JSON.parse(localStorage.getItem("LA_GEOCACHE")||"{}");
 
     async function initOrUpdateMap(){
       if(!mapInstance){
@@ -1414,15 +1501,17 @@
     function sleep(ms){ return new Promise(r=>setTimeout(r, ms)); }
 
     async function geocodeCached(query){
+      if(!window.LA_GEOCACHE){ window.LA_GEOCACHE = JSON.parse(localStorage.getItem("LA_GEOCACHE")||"{}"); }
+      const cache = window.LA_GEOCACHE;
       const key = query.trim();
-      if(geoCache[key]) return geoCache[key];
+      if(cache[key]) return cache[key];
       const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(key)}&limit=1&addressdetails=0`;
       const res = await fetch(url, { headers:{ "Accept":"application/json" }});
       const data = await res.json();
       if(!Array.isArray(data) || data.length===0) throw new Error("Not found");
       const out = { lat: parseFloat(data[0].lat), lon: parseFloat(data[0].lon) };
-      geoCache[key] = out;
-      localStorage.setItem("LA_GEOCACHE", JSON.stringify(geoCache));
+      cache[key] = out;
+      localStorage.setItem("LA_GEOCACHE", JSON.stringify(cache));
       return out;
     }
 
