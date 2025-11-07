@@ -37,7 +37,6 @@
           rgba(95,22,42,0.00) 58%
         );
     }
-
     header{ color:var(--cream); padding:36px 16px 28px; text-align:center; position:relative; }
     .logo-banner{ display:block; margin:0 auto 8px auto; max-width:min(900px, 92vw); height:auto; filter: drop-shadow(0 6px 18px rgba(0,0,0,.22)); }
     .subtitle{ font-size:clamp(14px, 2.4vw, 18px); opacity:.95; max-width:900px; margin:6px auto 0 auto; line-height:1.5; }
@@ -119,8 +118,8 @@
     }
     .wa-left{ order:1; }
     .wa-right{ order:2; }
-    .wa-grid.has-waitlist .wa-left{ order:2; }   /* WhatsApp rechts */
-    .wa-grid.has-waitlist .wa-right{ order:1; }  /* Nachrücker links */
+    .wa-grid.has-waitlist .wa-left{ order:2; }
+    .wa-grid.has-waitlist .wa-right{ order:1; }
 
     .wa-block, .waitlist-block{
       background:#fff;
@@ -131,7 +130,7 @@
     }
 
     /* Kompakter WhatsApp Block: QR links, Text rechts */
-    .wa-content{
+   .wa-content{
       display:flex;
       align-items:center;
       gap:16px;
@@ -141,12 +140,10 @@
     @media(max-width: 640px){
       .wa-content{ flex-direction:column; align-items:flex-start; }
     }
-
-    .qr-wrap{ display:flex; align-items:center; justify-content:center; }
     .qr{ width:160px; height:auto; border-radius:12px; border:1px solid #e5e7eb; box-shadow:var(--shadow); }
     @media(min-width:850px){ .qr{ width:180px; } }
 
-    /* Picker Wochenraster */
+    /* Picker */
     .picker-wrap{ margin:10px 0; }
     .week-head{ display:grid; grid-template-columns:repeat(7, 1fr); gap:8px; font-weight:700; color:#334155; font-size:12px; text-align:center; }
     .picker-grid{ display:grid; gap:8px; grid-template-columns:repeat(7, minmax(70px, 1fr)); margin-top:8px; }
@@ -154,33 +151,15 @@
     .pick .d{ font-weight:800; font-size:16px; }
     .pick .wd{ font-size:11px; color:#64748b; }
     .pick.sel{ outline:3px solid var(--gold); background:#fffaf0; }
-    .pick::after{
-      content:"";
-      position:absolute;
-      left:6px;
-      right:6px;
-      bottom:6px;
-      height:4px;
-      border-radius:3px;
-      background:#e5e7eb;
-    }
+    .pick::after{ content:""; position:absolute; left:6px; right:6px; bottom:6px; height:4px; border-radius:3px; background:#e5e7eb; }
     .pick.free::after{ background: linear-gradient(90deg,#22c55e,#16a34a); }
     .pick.booked::after{ background: linear-gradient(90deg,#f87171,#b91c1c); }
 
     .preview-chips{ display:flex; gap:8px; flex-wrap:wrap; margin-top:6px; }
     .chip{ background:#eef2ff; color:#334155; padding:4px 8px; border-radius:999px; font-size:12px; }
 
-    .chip-assign{ display:inline-block; padding:4px 8px; border-radius:999px; font-size:12px; background:#f0f9ff; color:#075985; cursor:pointer; margin:2px 6px 2px 0; border:1px solid #e0f2fe; }
-    .chip-assign.assigned{ background:#dcfce7; color:#065f46; border-color:#bbf7d0; }
-
-    .prog-wrap{ margin:12px 0 18px; }
-    .prog-label{ display:flex; justify-content:space-between; font-weight:600; margin-bottom:6px; }
-    .prog-bar{ height:12px; background:#f1f5f9; border-radius:999px; overflow:hidden; }
-    .prog-fill{ height:100%; width:0%; background:linear-gradient(90deg,#22c55e,#16a34a); transition:width .4s ease; }
-
     .email-box{ display:grid; gap:8px; margin-top:14px; }
     .email-row{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
-    .email-row label{ font-weight:600; }
     .email-area{ width:100%; min-height:90px; border:1px solid #e5e7eb; border-radius:12px; padding:10px; font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size:13px; }
 
     .drag{ cursor:grab; user-select:none; font-weight:700; padding:6px 8px; border:1px solid #e5e7eb; border-radius:8px; background:#f8fafc; display:inline-block; }
@@ -192,12 +171,7 @@
     .consent label{ font-weight:500; display:flex; align-items:flex-start; gap:8px; line-height:1.4; }
     .consent input[type="checkbox"]{ margin-top:3px; }
 
-    .waitlist-note{
-      border:1px dashed #e6d7c6;
-      background:#fffbf6;
-      border-radius:14px;
-      padding:12px;
-    }
+    .waitlist-note{ border:1px dashed #e6d7c6; background:#fffbf6; border-radius:14px; padding:12px; }
 
     table.table{ width:100%; border-collapse:collapse; }
     table.table th, table.table td{ border:1px solid #eee5da; padding:8px; vertical-align:top; }
@@ -221,22 +195,18 @@
   <main>
     <section id="whatsapp" class="card" aria-labelledby="wa-title">
       <h3 id="wa-title">WhatsApp Kanal</h3>
-
       <div id="waGrid" class="wa-grid">
-        <!-- Nachrücker Box, links bei aktiver Liste -->
         <div class="wa-right">
           <div id="waitlistBox" class="waitlist-block" style="display:none">
             <h4 style="margin:0 0 10px 0">Nachrückerliste</h4>
             <div class="waitlist-note" id="waitlistText">
-              Alle Termine sind vergeben. Es kann vorkommen, dass kurzfristig ein Termin frei wird. Wenn Sie in diesem Fall einspringen möchten, können Sie sich hier eintragen. Wir melden uns bei Ihnen, sobald eine Vertretung gebraucht wird.
+              Alle Termine sind vergeben. Manchmal wird kurzfristig ein Platz frei. Wenn Sie einspringen möchten, können Sie sich hier eintragen. Wir melden uns, sobald eine Vertretung gebraucht wird.
             </div>
             <div class="actions" style="margin-top:10px">
               <button type="button" id="openWaitlist" class="secondary">Auf Nachrückerliste eintragen</button>
             </div>
           </div>
         </div>
-
-        <!-- WhatsApp Box, rechts bei aktiver Liste, sonst volle Breite -->
         <div class="wa-left">
           <div class="wa-block">
             <h4 style="margin:0 0 10px 0">WhatsApp Kanal</h4>
@@ -546,7 +516,7 @@
     <div class="dlg-body">
       <div class="dlg-head"><h3 class="dlg-title">Wunschtermine im Dezember 2025</h3></div>
       <div class="dlg-scroll">
-        <p class="muted">Bitte wähle alle passenden Abende. Beginn ist jeweils 18 Uhr für etwa 20 bis 30 Minuten.</p>
+        <p class="muted">Bitte wählen Sie alle passenden Abende. Beginn ist jeweils 18 Uhr für etwa 20 bis 30 Minuten.</p>
         <div class="picker-wrap">
           <div class="week-head">
             <div>Mo</div><div>Di</div><div>Mi</div><div>Do</div><div>Fr</div><div>Sa</div><div>So</div>
@@ -626,8 +596,8 @@
 
     async function init(){
       app = initializeApp(firebaseConfig);
-      try { analytics = getAnalytics(app); } catch(e){}
-      const authObj = getAuth(app); auth = authObj;
+      try { getAnalytics(app); } catch(e){}
+      auth = getAuth(app);
       db = getFirestore(app);
 
       $("#openContact").addEventListener("click", e=>{ e.preventDefault(); $("#dlgContact").showModal(); });
@@ -667,6 +637,7 @@
 
       $("#btnChronik").addEventListener("click", ()=>{
         const box = $("#yearTools");
+        if(!box) return;
         box.style.display = box.style.display === "none" ? "block" : "none";
         if(box.style.display === "block"){ $("#yearInput").value = String(ACTIVE_YEAR); }
       });
@@ -821,7 +792,6 @@
     async function loadEventsAndServices(){
       eventsMap.clear();
       services = [];
-
       try{
         const qy = query(colRef("events"), orderBy("datum","asc"));
         const snap = await getDocs(qy);
@@ -837,7 +807,6 @@
       }catch(err){
         console.warn("Termine konnten nicht geladen werden.", err);
       }
-
       services.sort((a,b)=>{
         const oa = typeof a.order === "number" ? a.order : 9999;
         const ob = typeof b.order === "number" ? b.order : 9999;
@@ -857,9 +826,7 @@
         const timeForBox = e && e.uhrzeit && /^\d{1,2}:\d{2}$/.test(e.uhrzeit) ? `${e.uhrzeit} Uhr` : "18:00 Uhr";
         let timeHtml = `<div class="time">${timeForBox}</div>`;
         if(key === `${ACTIVE_YEAR}-12-24`){ timeHtml = ""; }
-
         day.innerHTML = `<div class="wd">${["So","Mo","Di","Mi","Do","Fr","Sa"][d.getDay()]}</div><div class="date">${String(d.getDate()).padStart(2,"0")}.${String(d.getMonth()+1).padStart(2,"0")}</div>${timeHtml}`;
-
         const meta = document.createElement("div"); meta.className = "meta";
 
         if(key === `${ACTIVE_YEAR}-12-24`){
@@ -907,7 +874,6 @@
         $("#heuteTitel").textContent = "Noch freie Vergabe";
         $("#heuteAdresse").textContent = "Sobald ein Ort feststeht, erscheint er hier";
       }
-
       updateProgress();
     }
 
@@ -972,6 +938,61 @@
       }
     }
 
+    /* Terminpicker Funktionen */
+    function openPicker(){
+      buildPickerGrid();
+      $("#dlgPicker").showModal();
+    }
+
+    function buildPickerGrid(){
+      const grid = $("#pickerGrid");
+      grid.innerHTML = "";
+      const days = decDates();
+      // Sortiert von Montag bis Sonntag Spaltenweise
+      days.forEach(d=>{
+        const key = ymd(d);
+        const box = document.createElement("div");
+        const e = eventsMap.get(key);
+        box.className = "pick " + (e && e.hostName ? "booked" : "free");
+        if(selected.has(key)) box.classList.add("sel");
+        const wd = ["So","Mo","Di","Mi","Do","Fr","Sa"][d.getDay()];
+        box.innerHTML = `<div class="d">${String(d.getDate()).padStart(2,"0")}.12</div><div class="wd">${wd}</div>`;
+        box.setAttribute("role","button");
+        box.setAttribute("tabindex","0");
+        box.setAttribute("aria-pressed", selected.has(key) ? "true" : "false");
+        box.addEventListener("click", ()=> toggleDaySelect(key, box));
+        box.addEventListener("keydown", ev=>{
+          if(ev.key === " " || ev.key === "Enter"){ ev.preventDefault(); toggleDaySelect(key, box); }
+        });
+        grid.appendChild(box);
+      });
+    }
+
+    function toggleDaySelect(key, el){
+      if(selected.has(key)){ selected.delete(key); el.classList.remove("sel"); el.setAttribute("aria-pressed","false"); }
+      else { selected.add(key); el.classList.add("sel"); el.setAttribute("aria-pressed","true"); }
+      updatePreview();
+    }
+
+    function updatePreview(){
+      const wrap = $("#wishesPreview");
+      wrap.innerHTML = "";
+      const arr = Array.from(selected).sort();
+      if(arr.length === 0){
+        wrap.innerHTML = `<span class="muted">Noch keine Auswahl</span>`;
+        return;
+      }
+      arr.forEach(k=>{
+        const d = new Date(k);
+        const chip = document.createElement("span");
+        chip.className = "chip";
+        const wd = ["So","Mo","Di","Mi","Do","Fr","Sa"][d.getDay()];
+        chip.textContent = `${String(d.getDate()).padStart(2,"0")}.12 (${wd})`;
+        wrap.appendChild(chip);
+      });
+    }
+    /* Ende Terminpicker */
+
     function downloadPdfFromData(){
       const rows = [];
       allDates().forEach(d=>{
@@ -1028,7 +1049,7 @@
         const key = ymd(d);
         if(key === `${ACTIVE_YEAR}-12-24`){
           services.forEach(s=>{
-            const hm = parseHm(s.uhrzeit || "16:00");
+            const hm = parseHm2(s.uhrzeit || "16:00");
             const dtStart = toIcsLocal(d, hm.h, hm.m);
             const dtEnd   = toIcsLocal(d, hm.h, hm.m + 60);
             const uid = `GD-${s.id || key}@adventskalender`;
@@ -1047,7 +1068,7 @@
         }else{
           const e = eventsMap.get(key);
           if(e && e.hostName && e.hostAdresse){
-            const hm = parseHm(e.uhrzeit || "18:00");
+            const hm = parseHm2(e.uhrzeit || "18:00");
             const dtStart = toIcsLocal(d, hm.h, hm.m);
             const dtEnd   = toIcsLocal(d, hm.h, hm.m + 30);
             const uid = `LA-${key}@adventskalender`;
@@ -1081,12 +1102,7 @@
         return `${y}${m}${da}T${h}${mi}00`;
       }
       function escapeIcs(s){ return String(s).replace(/([,;])/g,"\\$1").replace(/\n/g,"\\n"); }
-      function parseIcsHm(s){
-        const m = /^(\d{1,2}):(\d{2})$/.exec((s||"").trim());
-        if(!m) return {h:18,m:0};
-        return { h: Math.max(0, Math.min(23, parseInt(m[1],10))), m: Math.max(0, Math.min(59, parseInt(m[2],10))) };
-      }
-      function parseHm(s){
+      function parseHm2(s){
         const m = /^(\d{1,2}):(\d{2})$/.exec((s||"").trim());
         if(!m) return {h:18,m:0};
         return { h: Math.max(0, Math.min(23, parseInt(m[1],10))), m: Math.max(0, Math.min(59, parseInt(m[2],10))) };
@@ -1196,7 +1212,7 @@
         tr.innerHTML = `
           <td>${deDate(new Date(id))}</td>
           <td>${["So","Mo","Di","Mi","Do","Fr","Sa"][new Date(id).getDay()]}</td>
-          <td><input type="text" value="${escapeAttr(e.uhrzeit||"")} " data-f="uhrzeit" placeholder="z. B. 17:30"></td>
+          <td><input type="text" value="${escapeAttr(e.uhrzeit||"")}" data-f="uhrzeit" placeholder="z. B. 17:30"></td>
           <td><input type="text" value="${escapeAttr(e.hostName||"")}" data-f="hostName"></td>
           <td><input type="text" value="${escapeAttr(e.hostAdresse||"")}" data-f="hostAdresse"></td>
           <td><input type="text" value="${escapeAttr(e.info||"")}" data-f="info"></td>
