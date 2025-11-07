@@ -6,6 +6,8 @@
   <title>Lebendiger Adventskalender Hessisch Lichtenau</title>
   <meta name="description" content="Informationen, Termine und Anmeldung zum Lebendigen Adventskalender in Hessisch Lichtenau.">
   <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+  <!-- Leaflet CSS für die Karte -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <style>
     :root{
       --burgundy:#7b1e36;
@@ -21,21 +23,12 @@
       --card:#ffffff;
       --shadow: 0 10px 20px rgba(0,0,0,.08), 0 6px 6px rgba(0,0,0,.06);
       --radius:18px;
+      --pin-regular:#7b1e36;
+      --pin-service:#d9b36c;
+      --pin-pending:#a7a9a9;
     }
-    html,body{
-      margin:0;
-      padding:0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-      color:var(--ink);
-      background: var(--paper);
-      background-image:
-        linear-gradient(
-          180deg,
-          var(--burgundy) 0%,
-          var(--burgundy-dark) 34%,
-          rgba(95,22,42,0.85) 42%,
-          rgba(95,22,42,0.00) 58%
-        );
+    html,body{ margin:0; padding:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial; color:var(--ink); background: var(--paper);
+      background-image: linear-gradient(180deg, var(--burgundy) 0%, var(--burgundy-dark) 34%, rgba(95,22,42,0.85) 42%, rgba(95,22,42,0.00) 58%);
     }
     header{ color:var(--cream); padding:36px 16px 28px; text-align:center; position:relative; }
     .logo-banner{ display:block; margin:0 auto 8px auto; max-width:min(900px, 92vw); height:auto; filter: drop-shadow(0 6px 18px rgba(0,0,0,.22)); }
@@ -58,10 +51,7 @@
     .weather small{ color:var(--muted); }
 
     .grid{ display:grid; gap:16px; }
-    @media(min-width:850px){
-      .today .row{ grid-template-columns:2fr 1.2fr; align-items:stretch; }
-      .grid.cols-2{ grid-template-columns:1fr 1fr; }
-    }
+    @media(min-width:850px){ .today .row{ grid-template-columns:2fr 1.2fr; align-items:stretch; } .grid.cols-2{ grid-template-columns:1fr 1fr; } }
     h3{ margin:4px 0 12px; font-size:20px; color:var(--forest); }
     .list{ display:flex; flex-direction:column; gap:10px; }
     .item{ display:flex; gap:12px; align-items:flex-start; border:1px solid #eee5da; padding:14px; border-radius:14px; background:#fffefe; }
@@ -95,7 +85,7 @@
     footer{ max-width:1100px; margin:30px auto 80px; padding:0 16px; color:#222; text-align:center; }
     .footlink{ font-size:14px; color:#1f2937; text-decoration:underline; cursor:pointer; }
 
-    dialog{ border:none; border-radius:16px; padding:0; width:min(900px, 92vw); box-shadow:var(--shadow); }
+    dialog{ border:none; border-radius:16px; padding:0; width:min(1100px, 96vw); box-shadow:var(--shadow); }
     .dlg-body{ padding:18px; background:#ffffff; border-radius:16px; }
     .dlg-head{ padding:16px 18px 0 18px; }
     .dlg-title{ margin:0; color:var(--forest); font-size:20px; }
@@ -106,40 +96,18 @@
     .center{ text-align:center; }
 
     /* WhatsApp und Nachrücker Karte */
-    .wa-grid{
-      display:grid;
-      gap:16px;
-      align-items:start;
-    }
-    @media(min-width:900px){
-      .wa-grid.has-waitlist{
-        grid-template-columns: 1fr 1fr;
-      }
-    }
+    .wa-grid{ display:grid; gap:16px; align-items:start; }
+    @media(min-width:900px){ .wa-grid.has-waitlist{ grid-template-columns: 1fr 1fr; } }
     .wa-left{ order:1; }
     .wa-right{ order:2; }
     .wa-grid.has-waitlist .wa-left{ order:2; }
     .wa-grid.has-waitlist .wa-right{ order:1; }
+    .wa-block, .waitlist-block{ background:#fff; border:1px solid #e5e7eb; border-radius:14px; padding:14px; box-shadow:var(--shadow); }
 
-    .wa-block, .waitlist-block{
-      background:#fff;
-      border:1px solid #e5e7eb;
-      border-radius:14px;
-      padding:14px;
-      box-shadow:var(--shadow);
-    }
-
-    /* Kompakter WhatsApp Block: QR links, Text rechts */
-   .wa-content{
-      display:flex;
-      align-items:center;
-      gap:16px;
-    }
+    .wa-content{ display:flex; align-items:center; gap:16px; }
     .wa-text{ flex:1; min-width:0; }
     .wa-text p{ margin:0 0 8px 0; }
-    @media(max-width: 640px){
-      .wa-content{ flex-direction:column; align-items:flex-start; }
-    }
+    @media(max-width: 640px){ .wa-content{ flex-direction:column; align-items:flex-start; } }
     .qr{ width:160px; height:auto; border-radius:12px; border:1px solid #e5e7eb; box-shadow:var(--shadow); }
     @media(min-width:850px){ .qr{ width:180px; } }
 
@@ -162,11 +130,6 @@
     .email-row{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
     .email-area{ width:100%; min-height:90px; border:1px solid #e5e7eb; border-radius:12px; padding:10px; font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size:13px; }
 
-    .drag{ cursor:grab; user-select:none; font-weight:700; padding:6px 8px; border:1px solid #e5e7eb; border-radius:8px; background:#f8fafc; display:inline-block; }
-    tr.dragging{ opacity:.6; }
-    tr.drop-above{ outline:2px solid #cbd5e1; }
-    tr.drop-below{ outline:2px solid #cbd5e1; }
-
     .consent{ background:#fffbf6; border:1px solid #e6d7c6; padding:12px; border-radius:12px; }
     .consent label{ font-weight:500; display:flex; align-items:flex-start; gap:8px; line-height:1.4; }
     .consent input[type="checkbox"]{ margin-top:3px; }
@@ -176,6 +139,19 @@
     table.table{ width:100%; border-collapse:collapse; }
     table.table th, table.table td{ border:1px solid #eee5da; padding:8px; vertical-align:top; }
     table.table thead th{ background:#fffbf6; text-align:left; }
+
+    /* Karten Dialog */
+    #dlgMap{ width:min(1200px, 98vw); }
+    .map-wrap{ display:grid; gap:12px; }
+    .map-legend{ display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+    .dot{ width:14px; height:14px; border-radius:50%; display:inline-block; border:2px solid #fff; box-shadow:var(--shadow); }
+    .dot.regular{ background:var(--pin-regular); }
+    .dot.service{ background:var(--pin-service); }
+    .dot.pending{ background:var(--pin-pending); }
+    #map{ width:100%; height:min(70vh, 720px); border-radius:16px; border:1px solid #e5e7eb; }
+
+    .pin-label{ font-weight:700; font-size:11px; color:#fff; }
+    .leaflet-div-icon{ background:transparent; border:none; }
   </style>
 </head>
 <body>
@@ -250,6 +226,7 @@
       <div class="actions" style="margin-top:12px">
         <button type="button" id="btnPdf" class="secondary">Übersicht als PDF</button>
         <button type="button" id="btnIcs">Alle Termine als Kalenderdatei</button>
+        <button type="button" id="btnMap">Karte</button>
       </div>
     </section>
 
@@ -531,6 +508,28 @@
     </div>
   </dialog>
 
+  <!-- Karten Dialog -->
+  <dialog id="dlgMap">
+    <div class="dlg-body">
+      <div class="dlg-head"><h3 class="dlg-title">Karte der Veranstaltungsorte</h3></div>
+      <div class="dlg-scroll">
+        <div class="map-wrap">
+          <div class="map-legend">
+            <span><span class="dot regular"></span> Veranstaltungen</span>
+            <span><span class="dot service"></span> Gottesdienste am 24. Dezember</span>
+            <label style="margin-left:auto" class="muted">
+              <input type="checkbox" id="mapShowPending"> auch Adressen aus Anmeldungen anzeigen
+            </label>
+          </div>
+          <div id="map" role="region" aria-label="Karte der Veranstaltungsorte"></div>
+        </div>
+      </div>
+      <div class="dlg-foot">
+        <button type="button" class="secondary" data-close="dlgMap">Schließen</button>
+      </div>
+    </div>
+  </dialog>
+
   <dialog id="dlgSubmitConfirm" aria-labelledby="dlgSubmitConfirmTitle">
     <div class="dlg-body">
       <div class="dlg-head"><h3 class="dlg-title" id="dlgSubmitConfirmTitle">Anmeldung bestätigt</h3></div>
@@ -543,11 +542,15 @@
     </div>
   </dialog>
 
+  <!-- Leaflet Script -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- App Script -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-analytics.js";
     import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-    import { getFirestore, collection, addDoc, getDocs, setDoc, doc, deleteDoc, query, orderBy, writeBatch, getDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, getDocs, setDoc, doc, deleteDoc, query, orderBy, getDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCZuvHUy6xMN6WIrHUQBpxuobZkQRKB20s",
@@ -590,6 +593,11 @@
 
     let waitlistActive = false;
 
+    // Karte
+    let mapInstance = null;
+    let markerLayer = null;
+    let geoCache = JSON.parse(localStorage.getItem("LA_GEOCACHE")||"{}");
+
     let app, analytics, auth, db;
 
     init();
@@ -602,20 +610,15 @@
 
       $("#openContact").addEventListener("click", e=>{ e.preventDefault(); $("#dlgContact").showModal(); });
       $("#qrThumb").addEventListener("click", ()=> $("#dlgQr").showModal());
-
       $("#openLegal")?.addEventListener("click", e => { e.preventDefault(); $("#dlgLegal").showModal(); });
       $("#openAdminLogin")?.addEventListener("click", () => $("#dlgAdminLogin").showModal());
 
       $("#openPicker")?.addEventListener("click", openPicker);
       $("#pickerOk").addEventListener("click", ()=>{ updatePreview(); $("#dlgPicker").close(); });
 
-      document.addEventListener("click", e=>{
-        const btn = e.target.closest("[data-close]");
-        if(btn){ const id = btn.getAttribute("data-close"); try{ $("#"+id).close(); }catch(_){} }
-      });
-
       $("#btnPdf").addEventListener("click", ()=> downloadPdfFromData());
       $("#btnIcs").addEventListener("click", ()=> downloadIcsFromData());
+      $("#btnMap").addEventListener("click", openMapDialog);
 
       const sendBtn = $("#sendBtn");
       const consent = $("#consent");
@@ -632,15 +635,13 @@
       $("#waitlistForm").addEventListener("submit", onSubmitWaitlistForm());
       $("#openWaitlist")?.addEventListener("click", ()=> $("#dlgWaitlist").showModal());
 
+      document.addEventListener("click", e=>{
+        const btn = e.target.closest("[data-close]");
+        if(btn){ const id = btn.getAttribute("data-close"); try{ $("#"+id).close(); }catch(_){} }
+      });
+
       $("#btnLogin").addEventListener("click", adminLogin);
       $("#btnLogout").addEventListener("click", async ()=>{ await signOut(auth); $("#dlgAdminPanel").close(); });
-
-      $("#btnChronik").addEventListener("click", ()=>{
-        const box = $("#yearTools");
-        if(!box) return;
-        box.style.display = box.style.display === "none" ? "block" : "none";
-        if(box.style.display === "block"){ $("#yearInput").value = String(ACTIVE_YEAR); }
-      });
 
       onAuthStateChanged(auth, async user=>{
         if(user){
@@ -672,12 +673,10 @@
       const grid = $("#waGrid");
       if(box){ box.style.display = waitlistActive ? "block" : "none"; }
       if(grid){ grid.classList.toggle("has-waitlist", waitlistActive); }
-
       const btn = $("#btnToggleWaitlist");
       const stateText = $("#waitlistStateText");
       if(btn){ btn.textContent = waitlistActive ? "Nachrückerliste deaktivieren" : "Nachrückerliste aktivieren"; }
       if(stateText){ stateText.textContent = waitlistActive ? "Die Nachrückerliste ist aktiv und auf der Hauptseite sichtbar" : "Die Nachrückerliste ist inaktiv und auf der Hauptseite verborgen"; }
-
       const waTitle = $("#wa-title");
       if(waTitle){ waTitle.textContent = waitlistActive ? "Aktuelles und Nachrückerliste" : "WhatsApp Kanal"; }
     }
@@ -687,6 +686,19 @@
         return "settings";
       }
       return `calendars/${ACTIVE_YEAR}/settings`;
+    }
+
+    function colRef(name){
+      if(ACTIVE_YEAR === LEGACY_YEAR && localStorage.getItem("LA_USE_LEGACY_2025") !== "false"){
+        return collection(db, name);
+      }
+      return collection(db, `calendars/${ACTIVE_YEAR}/${name}`);
+    }
+    function docRef(name, id){
+      if(ACTIVE_YEAR === LEGACY_YEAR && localStorage.getItem("LA_USE_LEGACY_2025") !== "false"){
+        return doc(db, name, id);
+      }
+      return doc(db, `calendars/${ACTIVE_YEAR}/${name}/${id}`);
     }
 
     function onSubmitHostForm(){
@@ -776,19 +788,6 @@
       };
     }
 
-    function colRef(name){
-      if(ACTIVE_YEAR === LEGACY_YEAR && localStorage.getItem("LA_USE_LEGACY_2025") !== "false"){
-        return collection(db, name);
-      }
-      return collection(db, `calendars/${ACTIVE_YEAR}/${name}`);
-    }
-    function docRef(name, id){
-      if(ACTIVE_YEAR === LEGACY_YEAR && localStorage.getItem("LA_USE_LEGACY_2025") !== "false"){
-        return doc(db, name, id);
-      }
-      return doc(db, `calendars/${ACTIVE_YEAR}/${name}/${id}`);
-    }
-
     async function loadEventsAndServices(){
       eventsMap.clear();
       services = [];
@@ -796,8 +795,7 @@
         const qy = query(colRef("events"), orderBy("datum","asc"));
         const snap = await getDocs(qy);
         snap.forEach(d => {
-          const e=d.data();
-          if(!e) return;
+          const e=d.data(); if(!e) return;
           if(e.datum === `${ACTIVE_YEAR}-12-24` && e.isService){
             services.push({ id:d.id, ...e });
           }else if(e.datum){
@@ -826,7 +824,7 @@
         const timeForBox = e && e.uhrzeit && /^\d{1,2}:\d{2}$/.test(e.uhrzeit) ? `${e.uhrzeit} Uhr` : "18:00 Uhr";
         let timeHtml = `<div class="time">${timeForBox}</div>`;
         if(key === `${ACTIVE_YEAR}-12-24`){ timeHtml = ""; }
-        day.innerHTML = `<div class="wd">${["So","Mo","Di","Mi","Do","Fr","Sa"][d.getDay()]}</div><div class="date">${String(d.getDate()).padStart(2,"0")}.${String(d.getMonth()+1).padStart(2,"0")}</div>${timeHtml}`;
+        day.innerHTML = `<div class="wd">${WDAY[d.getDay()]}</div><div class="date">${String(d.getDate()).padStart(2,"0")}.${String(d.getMonth()+1).padStart(2,"0")}</div>${timeHtml}`;
         const meta = document.createElement("div"); meta.className = "meta";
 
         if(key === `${ACTIVE_YEAR}-12-24`){
@@ -858,7 +856,7 @@
       const next = computeNextDate();
       const e = eventsMap.get(next);
       const d = new Date(next);
-      $("#heuteDatum").textContent = `${["So","Mo","Di","Mi","Do","Fr","Sa"][d.getDay()]}, ${deDate(d)}`;
+      $("#heuteDatum").textContent = `${WDAY[d.getDay()]}, ${deDate(d)}`;
       const timeStr = e && e.uhrzeit && /^\d{1,2}:\d{2}$/.test(e.uhrzeit) ? e.uhrzeit : "18:00";
       setHeuteTime(timeStr);
 
@@ -938,61 +936,410 @@
       }
     }
 
-    /* Terminpicker Funktionen */
-    function openPicker(){
-      buildPickerGrid();
-      $("#dlgPicker").showModal();
-    }
-
+    /* Terminpicker */
+    function openPicker(){ buildPickerGrid(); $("#dlgPicker").showModal(); }
     function buildPickerGrid(){
-      const grid = $("#pickerGrid");
-      grid.innerHTML = "";
+      const grid = $("#pickerGrid"); grid.innerHTML = "";
       const days = decDates();
-      // Sortiert von Montag bis Sonntag Spaltenweise
       days.forEach(d=>{
         const key = ymd(d);
         const box = document.createElement("div");
         const e = eventsMap.get(key);
         box.className = "pick " + (e && e.hostName ? "booked" : "free");
         if(selected.has(key)) box.classList.add("sel");
-        const wd = ["So","Mo","Di","Mi","Do","Fr","Sa"][d.getDay()];
+        const wd = WDAY[d.getDay()];
         box.innerHTML = `<div class="d">${String(d.getDate()).padStart(2,"0")}.12</div><div class="wd">${wd}</div>`;
-        box.setAttribute("role","button");
-        box.setAttribute("tabindex","0");
+        box.setAttribute("role","button"); box.setAttribute("tabindex","0");
         box.setAttribute("aria-pressed", selected.has(key) ? "true" : "false");
         box.addEventListener("click", ()=> toggleDaySelect(key, box));
-        box.addEventListener("keydown", ev=>{
-          if(ev.key === " " || ev.key === "Enter"){ ev.preventDefault(); toggleDaySelect(key, box); }
-        });
+        box.addEventListener("keydown", ev=>{ if(ev.key === " " || ev.key === "Enter"){ ev.preventDefault(); toggleDaySelect(key, box); }});
         grid.appendChild(box);
       });
     }
-
     function toggleDaySelect(key, el){
       if(selected.has(key)){ selected.delete(key); el.classList.remove("sel"); el.setAttribute("aria-pressed","false"); }
       else { selected.add(key); el.classList.add("sel"); el.setAttribute("aria-pressed","true"); }
       updatePreview();
     }
-
     function updatePreview(){
-      const wrap = $("#wishesPreview");
-      wrap.innerHTML = "";
+      const wrap = $("#wishesPreview"); wrap.innerHTML = "";
       const arr = Array.from(selected).sort();
-      if(arr.length === 0){
-        wrap.innerHTML = `<span class="muted">Noch keine Auswahl</span>`;
-        return;
-      }
+      if(arr.length === 0){ wrap.innerHTML = `<span class="muted">Noch keine Auswahl</span>`; return; }
       arr.forEach(k=>{
         const d = new Date(k);
-        const chip = document.createElement("span");
-        chip.className = "chip";
-        const wd = ["So","Mo","Di","Mi","Do","Fr","Sa"][d.getDay()];
+        const chip = document.createElement("span"); chip.className = "chip";
+        const wd = WDAY[d.getDay()];
         chip.textContent = `${String(d.getDate()).padStart(2,"0")}.12 (${wd})`;
         wrap.appendChild(chip);
       });
     }
     /* Ende Terminpicker */
 
+    function updateProgress(){
+      let count=0;
+      allDates().forEach(d=>{
+        const key = ymd(d);
+        const e = eventsMap.get(key);
+        if(e && e.hostName && key !== `${ACTIVE_YEAR}-12-24`) count++;
+      });
+      const pct = Math.round((count/23)*100);
+      const fill = document.getElementById("progFill"); if(fill) fill.style.width = `${pct}%`;
+      const percent = document.getElementById("progPercent"); if(percent) percent.textContent = `${pct}%`;
+      const meta = document.getElementById("progMeta"); if(meta) meta.textContent = `${count} von 23 Abenden vergeben`;
+    }
+
+    function updateEmailTextarea(){
+      const all = new Set(assignedEmails);
+      if($("#includePending")?.checked){ pendingEmails.forEach(e=> all.add(e)); }
+      $("#emailAll").value = Array.from(all).join(", ");
+    }
+    function copyEmails(){ const ta = $("#emailAll"); ta.select(); document.execCommand("copy"); }
+
+    async function adminLogin(){
+      const e = $("#admEmail").value.trim();
+      const p = $("#admPass").value;
+      $("#authMsg").textContent = "";
+      try{
+        await signInWithEmailAndPassword(auth, e, p);
+        $("#authMsg").textContent = "Angemeldet";
+        $("#dlgAdminLogin").close();
+        await adminLoad();
+        $("#dlgAdminPanel").showModal();
+      }catch(err){
+        console.error(err);
+        $("#authMsg").textContent = "Anmeldung nicht möglich";
+      }
+    }
+
+    async function adminLoad(){
+      assignedEmails = new Set();
+      pendingEmails = new Set();
+
+      await loadWaitlistState();
+
+      const bodyA = $("#tblAnmeldungen tbody"); bodyA.innerHTML = "";
+      try{
+        const qAnm = query(colRef("anmeldungen"), orderBy("createdAt","desc"));
+        const snap = await getDocs(qAnm);
+        const seen = new Set();
+        snap.forEach(d=>{
+          if(seen.has(d.id)) return; seen.add(d.id);
+          const a = d.data();
+          if(a && a.email) pendingEmails.add(a.email.trim());
+          const tr = document.createElement("tr");
+          const wishes = Array.isArray(a.wuensche)? a.wuensche : [];
+          const chips = wishes.map(w=>{
+            const dd = new Date(w);
+            const label = `${String(dd.getDate()).padStart(2,"0")}.12 (${WDAY[dd.getDay()]})`;
+            const title = "Als Termin festlegen";
+            return `<span class="chip-assign" data-assign="${w}" data-id="${d.id}" data-email="${escapeAttr(a.email||"")}" title="${title}">${label}</span>`;
+          }).join("");
+          tr.innerHTML = `
+            <td><strong>${escapeHtml(a.name||"")}</strong><br><span class="muted">${escapeHtml(a.email||"")}</span><br><span class="muted">${escapeHtml(a.telefon||"")}</span></td>
+            <td>${escapeHtml(a.adresse||"")}</td>
+            <td>${chips || "<span class='muted'>Keine Auswahl</span>"}</td>
+            <td>${escapeHtml(a.bemerkung||"")}${a.barrierefrei ? "<div class='badge' style='margin-top:8px'>♿ barrierefrei</div>" : ""}</td>
+            <td><button class="warn" data-del="${d.id}">Löschen</button></td>
+          `;
+          bodyA.appendChild(tr);
+        });
+      }catch(e){
+        const tr = document.createElement("tr");
+        tr.innerHTML = `<td colspan="5" class="center">Anmeldungen konnten nicht geladen werden</td>`;
+        bodyA.appendChild(tr);
+      }
+
+      bodyA.querySelectorAll(".chip-assign").forEach(ch=>{
+        ch.addEventListener("click", async ()=>{
+          const dateKey = ch.getAttribute("data-assign");
+          const row = ch.closest("tr");
+          const name = row.querySelector("td:first-child strong").textContent;
+          const addr = row.children[1].textContent.trim();
+          const email = ch.getAttribute("data-email") || "";
+          const bfBadge = row.children[3].querySelector(".badge");
+          const bf = !!bfBadge && /barrierefrei/.test(bfBadge.textContent);
+          try{
+            await setDoc(docRef("events", dateKey), {
+              datum: dateKey,
+              wochentag: WDAY[new Date(dateKey).getDay()],
+              hostName: name,
+              hostAdresse: addr,
+              hostEmail: email,
+              barrierefrei: bf,
+              info: "Aus Anmeldung gesetzt",
+              changed: true
+            }, { merge: true });
+            ch.classList.add("assigned");
+            await loadEventsAndServices();
+            await adminLoad();
+          }catch(e){
+            alert("Zuweisung nicht möglich");
+          }
+        });
+      });
+
+      bodyA.querySelectorAll("button[data-del]").forEach(btn=>{
+        btn.addEventListener("click", async ()=>{
+          if(confirm("Diesen Eintrag wirklich löschen")){
+            await deleteDoc(docRef("anmeldungen", btn.dataset.del));
+            adminLoad();
+          }
+        });
+      });
+
+      const bodyE = $("#tblEvents tbody"); bodyE.innerHTML = "";
+      const dates = allDates().filter(d => ymd(d) !== `${ACTIVE_YEAR}-12-24`);
+      const map = new Map(eventsMap);
+      for(const d of dates){
+        const id = ymd(d);
+        const e = map.get(id) || { datum: id, uhrzeit:"", hostName:"", hostAdresse:"", hostEmail:"", info:"", changed:false, barrierefrei:false };
+        if(e.hostEmail) assignedEmails.add(e.hostEmail.trim());
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${deDate(new Date(id))}</td>
+          <td>${WDAY[new Date(id).getDay()]}</td>
+          <td><input type="text" value="${escapeAttr(e.uhrzeit||"")}" data-f="uhrzeit" placeholder="z. B. 17:30"></td>
+          <td><input type="text" value="${escapeAttr(e.hostName||"")}" data-f="hostName"></td>
+          <td><input type="text" value="${escapeAttr(e.hostAdresse||"")}" data-f="hostAdresse"></td>
+          <td><input type="text" value="${escapeAttr(e.info||"")}" data-f="info"></td>
+          <td><label><input type="checkbox" ${e.barrierefrei ? "checked" : ""} data-f="barrierefrei"> ♿</label></td>
+          <td><label><input type="checkbox" ${e.changed ? "checked" : ""} data-f="changed"> markiert</label></td>
+          <td><button data-save="${id}">Speichern</button></td>
+        `;
+        bodyE.appendChild(tr);
+      }
+      bodyE.addEventListener("click", async ev=>{
+        const btn = ev.target.closest("button[data-save]");
+        if(!btn) return;
+        const row = btn.closest("tr");
+        const inputs = row.querySelectorAll("input[data-f]");
+        const payload = { datum: btn.dataset.save, wochentag: WDAY[new Date(btn.dataset.save).getDay()] };
+        let timeInvalid = false;
+        inputs.forEach(i=>{
+          if(i.type === "checkbox"){ payload[i.dataset.f] = i.checked; }
+          else {
+            const v = i.value.trim();
+            if(i.dataset.f === "uhrzeit" && v && !/^\d{1,2}:\d{2}$/.test(v)){ timeInvalid = true; }
+            payload[i.dataset.f] = v;
+          }
+        });
+        if(timeInvalid){ alert("Uhrzeit bitte als HH:MM eintragen"); return; }
+        try{
+          await setDoc(docRef("events", btn.dataset.save), payload, { merge:true });
+          btn.textContent = "Gespeichert"; btn.disabled = true;
+          setTimeout(()=>{ btn.textContent = "Speichern"; btn.disabled = false; }, 900);
+          await loadEventsAndServices(); updateProgress(); updateEmailTextarea();
+
+          const next = computeNextDate();
+          if(btn.dataset.save === next){
+            const e = eventsMap.get(next);
+            const t = e && e.uhrzeit ? e.uhrzeit : "18:00";
+            setHeuteTime(t);
+            await loadWeatherForDate(next, t);
+          }
+        }catch(e){ alert("Speichern nicht möglich"); }
+      });
+
+      await renderServiceTable();
+      updateProgress();
+      $("#includePending").addEventListener("change", updateEmailTextarea);
+      $("#btnCopyEmails").addEventListener("click", copyEmails);
+      updateEmailTextarea();
+
+      await renderWaitlistTable();
+    }
+
+    async function renderServiceTable(){
+      const bodyS = $("#tblServices tbody"); bodyS.innerHTML = "";
+      services.forEach((s, idx)=> bodyS.appendChild(buildServiceRow(s, idx)));
+      bodyS.appendChild(buildServiceRow(null, services.length));
+    }
+    function buildServiceRow(s, idx){
+      const tr = document.createElement("tr");
+      const id = s && s.id ? s.id : "";
+      tr.innerHTML = `
+        <td style="width:40px">${s ? `<span class="drag" title="Ziehen zum Sortieren">≡</span>` : ""}</td>
+        <td><input type="text" value="${escapeAttr(s?.gemeinde||"")}" data-f="gemeinde" placeholder="Gemeinde oder Kirche"></td>
+        <td><input type="text" value="${escapeAttr(s?.uhrzeit||"")}" data-f="uhrzeit" placeholder="z. B. 16:00"></td>
+        <td><input type="text" value="${escapeAttr(s?.adresse||"")}" data-f="adresse" placeholder="Adresse"></td>
+        <td><input type="text" value="${escapeAttr(s?.info||"")}" data-f="info" placeholder="Notiz"></td>
+        <td>
+          ${id
+            ? `<button data-act="save" data-sid="${id}">Speichern</button> <button class="warn" data-act="del" data-sid="${id}">Löschen</button>`
+            : `<button data-act="save-new">Speichern</button>`}
+        </td>
+      `;
+      return tr;
+    }
+
+    async function renderWaitlistTable(){
+      const body = $("#tblWaitlist tbody"); body.innerHTML = "";
+      try{
+        const qy = query(colRef("nachruecker"), orderBy("createdAt","desc"));
+        const snap = await getDocs(qy);
+        if(snap.empty){
+          const tr = document.createElement("tr");
+          tr.innerHTML = `<td colspan="4" class="center muted">Keine Einträge</td>`;
+          body.appendChild(tr);
+        }else{
+          snap.forEach(d=>{
+            const a = d.data();
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+              <td><strong>${escapeHtml(a.name||"")}</strong><br><span class="muted">${escapeHtml(a.email||"")}</span><br><span class="muted">${escapeHtml(a.telefon||"")}</span></td>
+              <td>${escapeHtml(a.adresse||"")}</td>
+              <td>${escapeHtml(a.bemerkung||"")}</td>
+              <td><button class="warn" data-wdel="${d.id}">Löschen</button></td>
+            `;
+            body.appendChild(tr);
+          });
+          body.querySelectorAll("button[data-wdel]").forEach(btn=>{
+            btn.addEventListener("click", async ()=>{
+              if(confirm("Diesen Eintrag wirklich löschen")){
+                await deleteDoc(docRef("nachruecker", btn.dataset.wdel));
+                renderWaitlistTable();
+              }
+            });
+          });
+        }
+      }catch(e){
+        const tr = document.createElement("tr");
+        tr.innerHTML = `<td colspan="4" class="center">Nachrückerliste konnte nicht geladen werden</td>`;
+        body.appendChild(tr);
+      }
+    }
+
+    /* Kartenlogik */
+    function openMapDialog(){
+      $("#dlgMap").showModal();
+      setTimeout(initOrUpdateMap, 50);
+    }
+
+    async function initOrUpdateMap(){
+      if(!mapInstance){
+        mapInstance = L.map("map").setView([51.195, 9.713], 14);
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          maxZoom: 19,
+          attribution: "&copy; OpenStreetMap Mitwirkende"
+        }).addTo(mapInstance);
+        markerLayer = L.layerGroup().addTo(mapInstance);
+        $("#mapShowPending").addEventListener("change", initOrUpdateMap);
+      }
+      markerLayer.clearLayers();
+
+      // Vergebene Termine
+      const features = [];
+      allDates().forEach(d=>{
+        const key = ymd(d);
+        const e = eventsMap.get(key);
+        if(key !== `${ACTIVE_YEAR}-12-24` && e && e.hostAdresse && e.hostName){
+          features.push({
+            type: "event",
+            date: deDate(d),
+            dateShort: `${String(d.getDate()).padStart(2,"0")}.12.`,
+            time: e.uhrzeit || "18:00",
+            host: e.hostName,
+            addr: e.hostAdresse
+          });
+        }
+      });
+      // Gottesdienste
+      services.forEach(s=>{
+        if(s.adresse){
+          features.push({
+            type: "service",
+            date: "24.12."+ACTIVE_YEAR,
+            dateShort: "24.12.",
+            time: s.uhrzeit || "",
+            host: s.gemeinde || "Gottesdienst",
+            addr: s.adresse
+          });
+        }
+      });
+
+      // Optional: Adressen aus Anmeldungen
+      if($("#mapShowPending")?.checked){
+        try{
+          const qAnm = query(colRef("anmeldungen"), orderBy("createdAt","desc"));
+          const snap = await getDocs(qAnm);
+          const seenAddr = new Set(features.map(f=>f.addr));
+          snap.forEach(d=>{
+            const a = d.data();
+            const addr = a?.adresse || "";
+            if(addr && !seenAddr.has(addr)){
+              features.push({
+                type: "pending",
+                date: "offen",
+                dateShort: "",
+                time: "",
+                host: a?.name || "Anmeldung",
+                addr
+              });
+              seenAddr.add(addr);
+            }
+          });
+        }catch(e){ console.warn("Anmeldungen für Karte nicht geladen", e); }
+      }
+
+      // Geocoding und Marker
+      for(const f of features){
+        try{
+          const {lat, lon} = await geocodeCached(`${f.addr}, 37235 Hessisch Lichtenau, Deutschland`);
+          const icon = buildDivIcon(f.dateShort || "?", f.type);
+          const m = L.marker([lat, lon], { icon });
+          const title = f.type === "service" ? "Gottesdienst" : (f.type === "pending" ? "Anmeldung" : "Veranstaltung");
+          const timeRow = f.time ? `<div class="popup-time">${escapeHtml(f.time)} Uhr</div>` : "";
+          m.bindPopup(`
+            <div style="font-family:system-ui;min-width:220px">
+              <div class="popup-date" style="color:${f.type==="service" ? "var(--pin-service)" : "var(--pin-regular)"}">${escapeHtml(f.date)} ${escapeHtml(f.time)}</div>
+              <div class="popup-host"><strong>${escapeHtml(title)}</strong> · ${escapeHtml(f.host)}</div>
+              <div class="popup-address">${escapeHtml(f.addr)}</div>
+              ${timeRow}
+            </div>
+          `);
+          m.addTo(markerLayer);
+        }catch(err){
+          console.warn("Geocoding fehlgeschlagen für", f.addr);
+        }
+        await sleep(300); // freundlich zur API
+      }
+
+      // Karte an Marker anpassen
+      const g = markerLayer.getLayers();
+      if(g.length){ 
+        const group = L.featureGroup(g);
+        mapInstance.fitBounds(group.getBounds().pad(0.15));
+      }else{
+        mapInstance.setView([51.195, 9.713], 14);
+      }
+    }
+
+    function buildDivIcon(text, type){
+      const color = type==="service" ? getCss("--pin-service") : type==="pending" ? getCss("--pin-pending") : getCss("--pin-regular");
+      const txt = text || "";
+      const html = `
+        <div style="background:${color}; width:42px; height:42px; border-radius:50% 50% 50% 0; border:3px solid #ffffff; transform:rotate(-45deg); box-shadow:0 2px 8px rgba(0,0,0,.3); display:flex; align-items:center; justify-content:center;">
+          <span style="transform:rotate(45deg); color:#fff; font-weight:800; font-size:11px; line-height:1">${escapeHtml(txt.replace(/\.$/, ""))}</span>
+        </div>`;
+      return L.divIcon({ className:"", html, iconSize:[42,42], iconAnchor:[21,42], popupAnchor:[0,-40] });
+    }
+    function getCss(varName){ return getComputedStyle(document.documentElement).getPropertyValue(varName).trim() || "#7b1e36"; }
+    function sleep(ms){ return new Promise(r=>setTimeout(r, ms)); }
+
+    async function geocodeCached(query){
+      const key = query.trim();
+      if(geoCache[key]) return geoCache[key];
+      const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(key)}&limit=1&addressdetails=0`;
+      const res = await fetch(url, { headers:{ "Accept":"application/json" }});
+      const data = await res.json();
+      if(!Array.isArray(data) || data.length===0) throw new Error("Not found");
+      const out = { lat: parseFloat(data[0].lat), lon: parseFloat(data[0].lon) };
+      geoCache[key] = out;
+      localStorage.setItem("LA_GEOCACHE", JSON.stringify(geoCache));
+      return out;
+    }
+
+    /* PDF und ICS wie gehabt */
     function downloadPdfFromData(){
       const rows = [];
       allDates().forEach(d=>{
@@ -1001,17 +1348,17 @@
           if(services.length){
             services.forEach(s=>{
               const time = s.uhrzeit ? `${s.uhrzeit} Uhr` : "Heiligabend";
-              rows.push(`<tr><td>${deDate(d)}</td><td>${["So","Mo","Di","Mi","Do","Fr","Sa"][d.getDay()]}</td><td>${escapeHtml(s.gemeinde||"Gemeinde")} ${time}</td><td>${escapeHtml(s.adresse||"")}</td></tr>`);
+              rows.push(`<tr><td>${deDate(d)}</td><td>${WDAY[d.getDay()]}</td><td>${escapeHtml(s.gemeinde||"Gemeinde")} ${time}</td><td>${escapeHtml(s.adresse||"")}</td></tr>`);
             });
           }else{
-            rows.push(`<tr><td>${deDate(d)}</td><td>${["So","Mo","Di","Mi","Do","Fr","Sa"][d.getDay()]}</td><td>Gottesdienste folgen</td><td></td></tr>`);
+            rows.push(`<tr><td>${deDate(d)}</td><td>${WDAY[d.getDay()]}</td><td>Gottesdienste folgen</td><td></td></tr>`);
           }
         }else{
           const e = eventsMap.get(key);
           const host = e && e.hostName ? e.hostName : "Noch frei";
           const addr = e && e.hostAdresse ? e.hostAdresse : "";
           const time = e && e.uhrzeit ? `${e.uhrzeit} Uhr` : "18:00 Uhr";
-          rows.push(`<tr><td>${deDate(d)}</td><td>${["So","Mo","Di","Mi","Do","Fr","Sa"][d.getDay()]}</td><td>${escapeHtml(host)} (${time})</td><td>${escapeHtml(addr)}</td></tr>`);
+          rows.push(`<tr><td>${deDate(d)}</td><td>${WDAY[d.getDay()]}</td><td>${escapeHtml(host)} (${time})</td><td>${escapeHtml(addr)}</td></tr>`);
         }
       });
 
@@ -1031,7 +1378,6 @@
         <table><thead><tr><th>Datum</th><th>Tag</th><th>Gastgeber oder Gottesdienst</th><th>Adresse</th></tr></thead>
         <tbody>${rows.join("")}</tbody></table>
         </body></html>`;
-
       const w = window.open("", "_blank");
       if(w){ w.document.open(); w.document.write(html); w.document.close(); w.addEventListener("load", ()=> { try{ w.focus(); w.print(); }catch(e){} }); }
     }
@@ -1109,354 +1455,6 @@
       }
     }
 
-    async function adminLogin(){
-      const e = $("#admEmail").value.trim();
-      const p = $("#admPass").value;
-      $("#authMsg").textContent = "";
-      try{
-        await signInWithEmailAndPassword(auth, e, p);
-        $("#authMsg").textContent = "Angemeldet";
-        $("#dlgAdminLogin").close();
-        await adminLoad();
-        $("#dlgAdminPanel").showModal();
-      }catch(err){
-        console.error(err);
-        $("#authMsg").textContent = "Anmeldung nicht möglich";
-      }
-    }
-
-    async function adminLoad(){
-      assignedEmails = new Set();
-      pendingEmails = new Set();
-
-      await loadWaitlistState();
-
-      const bodyA = $("#tblAnmeldungen tbody"); bodyA.innerHTML = "";
-      try{
-        const qAnm = query(colRef("anmeldungen"), orderBy("createdAt","desc"));
-        const snap = await getDocs(qAnm);
-        const seen = new Set();
-        snap.forEach(d=>{
-          if(seen.has(d.id)) return; seen.add(d.id);
-          const a = d.data();
-          if(a && a.email) pendingEmails.add(a.email.trim());
-          const tr = document.createElement("tr");
-          const wishes = Array.isArray(a.wuensche)? a.wuensche : [];
-          const chips = wishes.map(w=>{
-            const dd = new Date(w);
-            const label = `${String(dd.getDate()).padStart(2,"0")}.12 (${["So","Mo","Di","Mi","Do","Fr","Sa"][dd.getDay()]})`;
-            const title = "Als Termin festlegen";
-            return `<span class="chip-assign" data-assign="${w}" data-id="${d.id}" data-email="${escapeAttr(a.email||"")}" title="${title}">${label}</span>`;
-          }).join("");
-          tr.innerHTML = `
-            <td><strong>${escapeHtml(a.name||"")}</strong><br><span class="muted">${escapeHtml(a.email||"")}</span><br><span class="muted">${escapeHtml(a.telefon||"")}</span></td>
-            <td>${escapeHtml(a.adresse||"")}</td>
-            <td>${chips || "<span class='muted'>Keine Auswahl</span>"}</td>
-            <td>${escapeHtml(a.bemerkung||"")}${a.barrierefrei ? "<div class='badge' style='margin-top:8px'>♿ barrierefrei</div>" : ""}</td>
-            <td><button class="warn" data-del="${d.id}">Löschen</button></td>
-          `;
-          bodyA.appendChild(tr);
-        });
-      }catch(e){
-        const tr = document.createElement("tr");
-        tr.innerHTML = `<td colspan="5" class="center">Anmeldungen konnten nicht geladen werden</td>`;
-        bodyA.appendChild(tr);
-      }
-
-      bodyA.querySelectorAll(".chip-assign").forEach(ch=>{
-        ch.addEventListener("click", async ()=>{
-          const dateKey = ch.getAttribute("data-assign");
-          const row = ch.closest("tr");
-          const name = row.querySelector("td:first-child strong").textContent;
-          const addr = row.children[1].textContent.trim();
-          const email = ch.getAttribute("data-email") || "";
-          const bfBadge = row.children[3].querySelector(".badge");
-          const bf = !!bfBadge && /barrierefrei/.test(bfBadge.textContent);
-          try{
-            await setDoc(docRef("events", dateKey), {
-              datum: dateKey,
-              wochentag: ["So","Mo","Di","Mi","Do","Fr","Sa"][new Date(dateKey).getDay()],
-              hostName: name,
-              hostAdresse: addr,
-              hostEmail: email,
-              barrierefrei: bf,
-              info: "Aus Anmeldung gesetzt",
-              changed: true
-            }, { merge: true });
-            ch.classList.add("assigned");
-            await loadEventsAndServices();
-            await adminLoad();
-          }catch(e){
-            alert("Zuweisung nicht möglich");
-          }
-        });
-      });
-
-      bodyA.querySelectorAll("button[data-del]").forEach(btn=>{
-        btn.addEventListener("click", async ()=>{
-          if(confirm("Diesen Eintrag wirklich löschen")){
-            await deleteDoc(docRef("anmeldungen", btn.dataset.del));
-            adminLoad();
-          }
-        });
-      });
-
-      const bodyE = $("#tblEvents tbody"); bodyE.innerHTML = "";
-      const dates = allDates().filter(d => ymd(d) !== `${ACTIVE_YEAR}-12-24`);
-      const map = new Map(eventsMap);
-      for(const d of dates){
-        const id = ymd(d);
-        const e = map.get(id) || { datum: id, uhrzeit:"", hostName:"", hostAdresse:"", hostEmail:"", info:"", changed:false, barrierefrei:false };
-        if(e.hostEmail) assignedEmails.add(e.hostEmail.trim());
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${deDate(new Date(id))}</td>
-          <td>${["So","Mo","Di","Mi","Do","Fr","Sa"][new Date(id).getDay()]}</td>
-          <td><input type="text" value="${escapeAttr(e.uhrzeit||"")}" data-f="uhrzeit" placeholder="z. B. 17:30"></td>
-          <td><input type="text" value="${escapeAttr(e.hostName||"")}" data-f="hostName"></td>
-          <td><input type="text" value="${escapeAttr(e.hostAdresse||"")}" data-f="hostAdresse"></td>
-          <td><input type="text" value="${escapeAttr(e.info||"")}" data-f="info"></td>
-          <td><label><input type="checkbox" ${e.barrierefrei ? "checked" : ""} data-f="barrierefrei"> ♿</label></td>
-          <td><label><input type="checkbox" ${e.changed ? "checked" : ""} data-f="changed"> markiert</label></td>
-          <td><button data-save="${id}">Speichern</button></td>
-        `;
-        bodyE.appendChild(tr);
-      }
-      bodyE.addEventListener("click", async ev=>{
-        const btn = ev.target.closest("button[data-save]");
-        if(!btn) return;
-        const row = btn.closest("tr");
-        const inputs = row.querySelectorAll("input[data-f]");
-        const payload = { datum: btn.dataset.save, wochentag: ["So","Mo","Di","Mi","Do","Fr","Sa"][new Date(btn.dataset.save).getDay()] };
-        let timeInvalid = false;
-        inputs.forEach(i=>{
-          if(i.type === "checkbox"){ payload[i.dataset.f] = i.checked; }
-          else {
-            const v = i.value.trim();
-            if(i.dataset.f === "uhrzeit" && v && !/^\d{1,2}:\d{2}$/.test(v)){ timeInvalid = true; }
-            payload[i.dataset.f] = v;
-          }
-        });
-        if(timeInvalid){ alert("Uhrzeit bitte als HH:MM eintragen"); return; }
-        try{
-          await setDoc(docRef("events", btn.dataset.save), payload, { merge:true });
-          btn.textContent = "Gespeichert"; btn.disabled = true;
-          setTimeout(()=>{ btn.textContent = "Speichern"; btn.disabled = false; }, 900);
-          await loadEventsAndServices(); updateProgress(); updateEmailTextarea();
-
-          const next = computeNextDate();
-          if(btn.dataset.save === next){
-            const e = eventsMap.get(next);
-            const t = e && e.uhrzeit ? e.uhrzeit : "18:00";
-            setHeuteTime(t);
-            await loadWeatherForDate(next, t);
-          }
-        }catch(e){ alert("Speichern nicht möglich"); }
-      });
-
-      await renderServiceTable();
-      updateProgress();
-      $("#includePending").addEventListener("change", updateEmailTextarea);
-      $("#btnCopyEmails").addEventListener("click", copyEmails);
-      updateEmailTextarea();
-
-      await renderWaitlistTable();
-
-      $("#btnToggleWaitlist").onclick = async ()=>{
-        if(!waitlistActive){
-          if(!confirm("Möchtest du die Nachrückerliste jetzt wirklich aktivieren")) return;
-        }
-        try{
-          const ref = doc(db, settingsPath(), "nachruecker");
-          await setDoc(ref, { active: !waitlistActive }, { merge:true });
-          await loadWaitlistState();
-        }catch(e){
-          alert("Einstellung konnte nicht gespeichert werden");
-        }
-      };
-    }
-
-    async function renderServiceTable(){
-      const bodyS = $("#tblServices tbody"); bodyS.innerHTML = "";
-      services.forEach((s, idx)=> bodyS.appendChild(buildServiceRow(s, idx)));
-      bodyS.appendChild(buildServiceRow(null, services.length));
-      bodyS.addEventListener("click", onServiceButtonClick);
-      enableDragAndDrop(bodyS);
-    }
-
-    function onServiceButtonClick(e){
-      const btn = e.target.closest("button[data-act]");
-      if(!btn) return;
-      const act = btn.getAttribute("data-act");
-      const id = btn.getAttribute("data-sid") || "";
-      const row = btn.closest("tr");
-      saveOrDeleteService(act, id, row);
-    }
-
-    async function saveOrDeleteService(act, id, row){
-      const payload = readServiceRow(row);
-      if(act !== "del"){
-        const v = validateService(payload);
-        if(!v.ok){ alert(v.msg); return; }
-        payload.datum = `${ACTIVE_YEAR}-12-24`;
-        payload.isService = true;
-        if(typeof payload.order !== "number"){ payload.order = guessOrder(payload.uhrzeit); }
-      }
-      try{
-        if(act === "save" && id){
-          await setDoc(docRef("events", id), payload, { merge:true });
-          row.querySelector('[data-act="save"]').textContent = "Gespeichert";
-          setTimeout(()=> row.querySelector('[data-act="save"]').textContent = "Speichern", 900);
-        }
-        if(act === "save-new"){
-          const ref = await addDoc(colRef("events"), payload);
-          row.querySelector('[data-act="save-new"]').setAttribute("data-sid", ref.id);
-          row.querySelector('[data-act="save-new"]').setAttribute("data-act","save");
-          row.querySelector('[data-act="del"]').setAttribute("data-sid", ref.id);
-        }
-        if(act === "del" && id){
-          if(confirm("Diesen Gottesdienst löschen")){
-            await deleteDoc(docRef("events", id));
-            row.remove();
-          }
-        }
-        await loadEventsAndServices();
-        await renderServiceTable();
-      }catch(err){
-        console.error(err);
-        alert("Gottesdienst konnte nicht gespeichert werden");
-      }
-    }
-
-    function buildServiceRow(s, idx){
-      const tr = document.createElement("tr");
-      const id = s && s.id ? s.id : "";
-      tr.setAttribute("draggable", s ? "true" : "false");
-      tr.dataset.sid = id;
-      tr.dataset.index = String(idx);
-      tr.innerHTML = `
-        <td style="width:40px">${s ? `<span class="drag" title="Ziehen zum Sortieren">≡</span>` : ""}</td>
-        <td><input type="text" value="${escapeAttr(s?.gemeinde||"")}" data-f="gemeinde" placeholder="Gemeinde oder Kirche"></td>
-        <td><input type="text" value="${escapeAttr(s?.uhrzeit||"")}" data-f="uhrzeit" placeholder="z. B. 16:00"></td>
-        <td><input type="text" value="${escapeAttr(s?.adresse||"")}" data-f="adresse" placeholder="Adresse"></td>
-        <td><input type="text" value="${escapeAttr(s?.info||"")}" data-f="info" placeholder="Notiz"></td>
-        <td>
-          ${id
-            ? `<button data-act="save" data-sid="${id}">Speichern</button> <button class="warn" data-act="del" data-sid="${id}">Löschen</button>`
-            : `<button data-act="save-new">Speichern</button>`}
-        </td>
-      `;
-      return tr;
-    }
-
-    function readServiceRow(row){
-      return {
-        gemeinde: row.querySelector('input[data-f="gemeinde"]').value.trim(),
-        uhrzeit: row.querySelector('input[data-f="uhrzeit"]').value.trim(),
-        adresse: row.querySelector('input[data-f="adresse"]').value.trim(),
-        info: row.querySelector('input[data-f="info"]').value.trim(),
-      };
-    }
-    function validateService(p){
-      if(!p.gemeinde) return {ok:false, msg:"Bitte Gemeinde eintragen"};
-      if(p.uhrzeit && !/^\d{1,2}:\d{2}$/.test(p.uhrzeit)) return {ok:false, msg:"Uhrzeit bitte als HH:MM"};
-      return {ok:true};
-    }
-    function guessOrder(hhmm){
-      const t = parseTime(hhmm||"23:59");
-      return t;
-    }
-    function parseTime(hhmm){
-      const m = /^(\d{1,2}):(\d{2})$/.exec(hhmm||"");
-      if(!m) return 2359;
-      return parseInt(m[1].padStart(2,"0")+m[2],10);
-    }
-
-    async function renderWaitlistTable(){
-      const body = $("#tblWaitlist tbody"); body.innerHTML = "";
-      try{
-        const qy = query(colRef("nachruecker"), orderBy("createdAt","desc"));
-        const snap = await getDocs(qy);
-        if(snap.empty){
-          const tr = document.createElement("tr");
-          tr.innerHTML = `<td colspan="4" class="center muted">Keine Einträge</td>`;
-          body.appendChild(tr);
-        }else{
-          snap.forEach(d=>{
-            const a = d.data();
-            const tr = document.createElement("tr");
-            tr.innerHTML = `
-              <td><strong>${escapeHtml(a.name||"")}</strong><br><span class="muted">${escapeHtml(a.email||"")}</span><br><span class="muted">${escapeHtml(a.telefon||"")}</span></td>
-              <td>${escapeHtml(a.adresse||"")}</td>
-              <td>${escapeHtml(a.bemerkung||"")}</td>
-              <td><button class="warn" data-wdel="${d.id}">Löschen</button></td>
-            `;
-            body.appendChild(tr);
-          });
-          body.querySelectorAll("button[data-wdel]").forEach(btn=>{
-            btn.addEventListener("click", async ()=>{
-              if(confirm("Diesen Eintrag wirklich löschen")){
-                await deleteDoc(docRef("nachruecker", btn.dataset.wdel));
-                renderWaitlistTable();
-              }
-            });
-          });
-        }
-      }catch(e){
-        const tr = document.createElement("tr");
-        tr.innerHTML = `<td colspan="4" class="center">Nachrückerliste konnte nicht geladen werden</td>`;
-        body.appendChild(tr);
-      }
-    }
-
-    function enableDragAndDrop(tbody){
-      let dragging=null;
-      tbody.addEventListener("dragstart", e=>{
-        dragging = e.target.closest("tr"); if(dragging) dragging.classList.add("dragging");
-      });
-      tbody.addEventListener("dragend", ()=>{
-        if(dragging) dragging.classList.remove("dragging");
-        $$("tr.drop-above, tr.drop-below", tbody).forEach(el=> el.classList.remove("drop-above","drop-below"));
-        dragging=null;
-      });
-      tbody.addEventListener("dragover", e=>{
-        e.preventDefault();
-        const target = e.target.closest("tr");
-        if(!dragging || !target || dragging===target) return;
-        const rect = target.getBoundingClientRect();
-        const before = e.clientY < rect.top + rect.height/2;
-        target.classList.toggle("drop-above", before);
-        target.classList.toggle("drop-below", !before);
-      });
-    }
-
-    function updateProgress(){
-      let count=0;
-      allDates().forEach(d=>{
-        const key = ymd(d);
-        const e = eventsMap.get(key);
-        if(e && e.hostName && key !== `${ACTIVE_YEAR}-12-24`) count++;
-      });
-      const pct = Math.round((count/23)*100);
-      $("#progFill").style.width = `${pct}%`;
-      $("#progPercent").textContent = `${pct}%`;
-      $("#progMeta").textContent = `${count} von 23 Abenden vergeben`;
-    }
-
-    function updateEmailTextarea(){
-      const all = new Set(assignedEmails);
-      if($("#includePending")?.checked){
-        pendingEmails.forEach(e=> all.add(e));
-      }
-      $("#emailAll").value = Array.from(all).join(", ");
-    }
-
-    function copyEmails(){
-      const ta = $("#emailAll");
-      ta.select();
-      document.execCommand("copy");
-    }
-
     function setHeuteFromFirst(){
       const next = computeNextDate();
       const e = eventsMap.get(next);
@@ -1466,6 +1464,11 @@
 
     function escapeHtml(s){ return String(s||"").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
     function escapeAttr(s){ return escapeHtml(s).replace(/"/g, "&quot;"); }
+    function parseTime(hhmm){
+      const m = /^(\d{1,2}):(\d{2})$/.exec(hhmm||"");
+      if(!m) return 2359;
+      return parseInt(m[1].padStart(2,"0")+m[2],10);
+    }
     function parseHm(s){
       const m = /^(\d{1,2}):(\d{2})$/.exec((s||"").trim());
       if(!m) return {h:18,m:0};
