@@ -106,24 +106,47 @@
     .muted{ color:var(--muted); }
     .center{ text-align:center; }
 
-    /* WhatsApp Abschnitt neu ausgerichtet */
+    /* WhatsApp und Nachrücker Karte */
     .wa-grid{
       display:grid;
       gap:16px;
-      align-items:center;
+      align-items:start;
     }
-    @media(min-width:780px){
-      .wa-grid{
-        grid-template-columns: 1fr 1.4fr; /* links QR, rechts Text */
+    @media(min-width:900px){
+      .wa-grid.has-waitlist{
+        grid-template-columns: 1fr 1fr;
       }
     }
-    .wa-left{ display:flex; justify-content:flex-start; }
-    .wa-right{ display:flex; flex-direction:column; justify-content:center; gap:10px; }
-    .qr-wrap{ text-align:left; }
+    .wa-left{ order:1; }
+    .wa-right{ order:2; }
+    .wa-grid.has-waitlist .wa-left{ order:2; }   /* WhatsApp rechts */
+    .wa-grid.has-waitlist .wa-right{ order:1; }  /* Nachrücker links */
+
+    .wa-block, .waitlist-block{
+      background:#fff;
+      border:1px solid #e5e7eb;
+      border-radius:14px;
+      padding:14px;
+      box-shadow:var(--shadow);
+    }
+
+    /* Kompakter WhatsApp Block: QR links, Text rechts */
+    .wa-content{
+      display:flex;
+      align-items:center;
+      gap:16px;
+    }
+    .wa-text{ flex:1; min-width:0; }
+    .wa-text p{ margin:0 0 8px 0; }
+    @media(max-width: 640px){
+      .wa-content{ flex-direction:column; align-items:flex-start; }
+    }
+
+    .qr-wrap{ display:flex; align-items:center; justify-content:center; }
     .qr{ width:160px; height:auto; border-radius:12px; border:1px solid #e5e7eb; box-shadow:var(--shadow); }
     @media(min-width:850px){ .qr{ width:180px; } }
 
-    /* Picker Wochenraster Mo bis So */
+    /* Picker Wochenraster */
     .picker-wrap{ margin:10px 0; }
     .week-head{ display:grid; grid-template-columns:repeat(7, 1fr); gap:8px; font-weight:700; color:#334155; font-size:12px; text-align:center; }
     .picker-grid{ display:grid; gap:8px; grid-template-columns:repeat(7, minmax(70px, 1fr)); margin-top:8px; }
@@ -168,6 +191,17 @@
     .consent{ background:#fffbf6; border:1px solid #e6d7c6; padding:12px; border-radius:12px; }
     .consent label{ font-weight:500; display:flex; align-items:flex-start; gap:8px; line-height:1.4; }
     .consent input[type="checkbox"]{ margin-top:3px; }
+
+    .waitlist-note{
+      border:1px dashed #e6d7c6;
+      background:#fffbf6;
+      border-radius:14px;
+      padding:12px;
+    }
+
+    table.table{ width:100%; border-collapse:collapse; }
+    table.table th, table.table td{ border:1px solid #eee5da; padding:8px; vertical-align:top; }
+    table.table thead th{ background:#fffbf6; text-align:left; }
   </style>
 </head>
 <body>
@@ -187,16 +221,34 @@
   <main>
     <section id="whatsapp" class="card" aria-labelledby="wa-title">
       <h3 id="wa-title">WhatsApp Kanal</h3>
-      <div class="wa-grid">
-        <div class="wa-left">
-          <div class="qr-wrap">
-            <img src="qrcode.jpg" alt="QR Code zum WhatsApp Kanal" class="qr" id="qrThumb">
+
+      <div id="waGrid" class="wa-grid">
+        <!-- Nachrücker Box, links bei aktiver Liste -->
+        <div class="wa-right">
+          <div id="waitlistBox" class="waitlist-block" style="display:none">
+            <h4 style="margin:0 0 10px 0">Nachrückerliste</h4>
+            <div class="waitlist-note" id="waitlistText">
+              Alle Termine sind vergeben. Es kann vorkommen, dass kurzfristig ein Termin frei wird. Wenn Sie in diesem Fall einspringen möchten, können Sie sich hier eintragen. Wir melden uns bei Ihnen, sobald eine Vertretung gebraucht wird.
+            </div>
+            <div class="actions" style="margin-top:10px">
+              <button type="button" id="openWaitlist" class="secondary">Auf Nachrückerliste eintragen</button>
+            </div>
           </div>
         </div>
-        <div class="wa-right">
-          <p>Kurze Hinweise und die abendlichen Treffpunkte kommen hier direkt auf das Handy. Sie können den QR Code scannen oder den Link öffnen.</p>
-          <p><a class="link-as-btn" id="waLink" href="https://whatsapp.com/channel/0029VbBLGb31CYoMJfdTh60w" target="_blank" rel="noopener">Kanal in WhatsApp öffnen</a></p>
-          <small class="muted">Mit der Kamera scannen. Ein Klick auf den QR Code öffnet eine vergrößerte Ansicht.</small>
+
+        <!-- WhatsApp Box, rechts bei aktiver Liste, sonst volle Breite -->
+        <div class="wa-left">
+          <div class="wa-block">
+            <h4 style="margin:0 0 10px 0">WhatsApp Kanal</h4>
+            <div class="wa-content">
+              <img src="qrcode.jpg" alt="QR Code zum WhatsApp Kanal" class="qr" id="qrThumb">
+              <div class="wa-text">
+                <p>Kurze Hinweise und die abendlichen Treffpunkte kommen hier direkt auf das Handy. Sie können den QR Code scannen oder den Link öffnen.</p>
+                <p><a class="link-as-btn" id="waLink" href="https://whatsapp.com/channel/0029VbBLGb31CYoMJfdTh60w" target="_blank" rel="noopener">Kanal in WhatsApp öffnen</a></p>
+                <small class="muted">Ein Klick auf den QR Code öffnet eine vergrößerte Ansicht.</small>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -317,7 +369,7 @@
       <div class="dlg-head"><h3 class="dlg-title">Kontakt</h3></div>
       <div class="dlg-scroll">
         <p>Sie haben Fragen oder möchten eine Anregung weitergeben. Schreiben Sie uns gern. Wir melden uns zeitnah.</p>
-        <p><a class="link-as-btn" href="mailto:Dominik.Teminski@ekkw.de">Dominik.Teminski@ekkw.de</a></p>
+        <p><a class="link-as-btn" href="mailto:Dominik.Teminski@ekkw.de">Hier klicken und E Mail schreiben</a></p>
         <p class="muted">Vielen Dank für Ihre Nachricht.</p>
       </div>
       <div class="dlg-foot"><button type="button" class="secondary" data-close="dlgContact">Schließen</button></div>
@@ -375,13 +427,59 @@
     </div>
   </dialog>
 
+  <!-- Nachrückerliste Dialog -->
+  <dialog id="dlgWaitlist">
+    <div class="dlg-body">
+      <div class="dlg-head"><h3 class="dlg-title">Eintrag in die Nachrückerliste</h3></div>
+      <div class="dlg-scroll">
+        <form id="waitlistForm" novalidate>
+          <div>
+            <label for="wName">Name oder Gruppe</label>
+            <input id="wName" name="wName" type="text" required placeholder="Zum Beispiel Familie Müller oder Verein">
+          </div>
+          <div class="grid cols-2">
+            <div>
+              <label for="wEmail">E Mail</label>
+              <input id="wEmail" name="wEmail" type="email" required placeholder="beispiel@mail.de">
+            </div>
+            <div>
+              <label for="wTel">Telefon</label>
+              <input id="wTel" name="wTel" type="tel" required placeholder="Zum Beispiel 0151 12345678">
+            </div>
+          </div>
+          <div class="grid cols-2">
+            <div>
+              <label for="wStreet">Straße und Hausnummer</label>
+              <input id="wStreet" name="wStreet" type="text" required placeholder="Zum Beispiel Musterstraße 5">
+            </div>
+            <div>
+              <label for="wCity">PLZ Ort</label>
+              <input id="wCity" name="wCity" type="text" required placeholder="Zum Beispiel 37235 Hessisch Lichtenau">
+            </div>
+          </div>
+          <div>
+            <label for="wNote">Bemerkungen optional</label>
+            <textarea id="wNote" name="wNote" placeholder="Hinweise, Besonderheiten oder Wünsche"></textarea>
+          </div>
+          <div class="actions">
+            <button type="submit" id="wSend">Eintragen</button>
+            <button type="button" class="secondary" data-close="dlgWaitlist">Abbrechen</button>
+            <span id="wMsg" role="status" aria-live="polite"></span>
+          </div>
+        </form>
+      </div>
+      <div class="dlg-foot">
+        <button type="button" class="secondary" data-close="dlgWaitlist">Schließen</button>
+      </div>
+    </div>
+  </dialog>
+
   <!-- Admin Panel -->
   <dialog id="dlgAdminPanel">
     <div class="dlg-body">
       <div class="dlg-head"><h3 class="dlg-title">Admin Bereich</h3></div>
       <div class="dlg-scroll">
 
-        <!-- Jahresverwaltung ist nun am Ende versteckt und wird über den Chronik Button dort geöffnet -->
         <div class="prog-wrap" id="progWrap" aria-live="polite">
           <div class="prog-label"><span>Belegung 1 bis 23 Dezember</span><span id="progPercent">0%</span></div>
           <div class="prog-bar"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
@@ -413,7 +511,6 @@
           <button type="button" id="addService" class="secondary">Neuen Gottesdienst hinzufügen</button>
         </div>
 
-        <!-- E Mail Block am Ende -->
         <div class="email-box">
           <div class="email-row">
             <label for="emailAll">E Mail Adressen der Gastgeber</label>
@@ -424,25 +521,15 @@
           <div class="muted">Tipp: In deinem Mailprogramm im Feld BCC nutzen.</div>
         </div>
 
-        <!-- Jahresverwaltung unten, ausgeblendet bis Klick auf Chronik -->
-        <div id="yearTools" class="card" style="padding:14px; border:1px dashed #e5e7eb; display:none; margin-top:16px">
-          <h4 style="margin:6px 0 10px 0">Jahresverwaltung</h4>
-          <div class="actions" style="justify-content:space-between; flex-wrap:wrap">
-            <div>
-              <label for="yearInput">Aktives Jahr</label>
-              <input type="number" id="yearInput" style="width:120px; margin-left:8px">
-              <button type="button" id="btnLoadYear" class="secondary">Jahr laden</button>
-            </div>
-            <div>
-              <button type="button" id="btnNewYear" class="secondary">Neues Jahr anlegen</button>
-              <button type="button" id="btnArchiveLegacy" class="secondary" title="Kopiert 2025 in calendars/2025 ohne zu löschen">2025 archivieren</button>
-            </div>
-          </div>
-          <p class="help" style="margin-top:8px">Archiv legt eine Kopie in <code>calendars/Jahr</code> an. Umschalten auf ein Jahr lädt fortan Daten aus <code>calendars/{Jahr}/events</code> und <code>calendars/{Jahr}/anmeldungen</code>. Die alte 2025 Struktur bleibt erhalten.</p>
-        </div>
+        <h4 style="margin-top:18px">Nachrückerliste</h4>
+        <p class="muted" id="waitlistStateText">Status wird geladen</p>
+        <table class="table" id="tblWaitlist">
+          <thead><tr><th>Name und Kontakt</th><th>Adresse</th><th>Bemerkung</th><th>Aktion</th></tr></thead>
+          <tbody></tbody>
+        </table>
 
-        <!-- Chronik Button ganz unten -->
-        <div class="actions" style="margin-top:12px; justify-content:flex-end">
+        <div class="actions" style="margin-top:12px; justify-content:flex-end; gap:8px">
+          <button type="button" class="secondary" id="btnToggleWaitlist">Nachrückerliste aktivieren</button>
           <button type="button" class="secondary" id="btnChronik">Chronik</button>
         </div>
 
@@ -474,7 +561,6 @@
     </div>
   </dialog>
 
-  <!-- Bestätigungsdialog -->
   <dialog id="dlgSubmitConfirm" aria-labelledby="dlgSubmitConfirmTitle">
     <div class="dlg-body">
       <div class="dlg-head"><h3 class="dlg-title" id="dlgSubmitConfirmTitle">Anmeldung bestätigt</h3></div>
@@ -491,7 +577,7 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-analytics.js";
     import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-    import { getFirestore, collection, addDoc, getDocs, setDoc, doc, deleteDoc, query, orderBy, writeBatch } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, getDocs, setDoc, doc, deleteDoc, query, orderBy, writeBatch, getDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCZuvHUy6xMN6WIrHUQBpxuobZkQRKB20s",
@@ -532,6 +618,8 @@
     let assignedEmails = new Set();
     let pendingEmails = new Set();
 
+    let waitlistActive = false;
+
     let app, analytics, auth, db;
 
     init();
@@ -545,10 +633,8 @@
       $("#openContact").addEventListener("click", e=>{ e.preventDefault(); $("#dlgContact").showModal(); });
       $("#qrThumb").addEventListener("click", ()=> $("#dlgQr").showModal());
 
-      document.getElementById("openLegal")
-        ?.addEventListener("click", e => { e.preventDefault(); document.getElementById("dlgLegal").showModal(); });
-      document.getElementById("openAdminLogin")
-        ?.addEventListener("click", () => document.getElementById("dlgAdminLogin").showModal());
+      $("#openLegal")?.addEventListener("click", e => { e.preventDefault(); $("#dlgLegal").showModal(); });
+      $("#openAdminLogin")?.addEventListener("click", () => $("#dlgAdminLogin").showModal());
 
       $("#openPicker")?.addEventListener("click", openPicker);
       $("#pickerOk").addEventListener("click", ()=>{ updatePreview(); $("#dlgPicker").close(); });
@@ -573,66 +659,16 @@
         if(consent){ consent.checked = false; updateSendDisabled(); }
       });
 
+      $("#waitlistForm").addEventListener("submit", onSubmitWaitlistForm());
+      $("#openWaitlist")?.addEventListener("click", ()=> $("#dlgWaitlist").showModal());
+
       $("#btnLogin").addEventListener("click", adminLogin);
       $("#btnLogout").addEventListener("click", async ()=>{ await signOut(auth); $("#dlgAdminPanel").close(); });
 
-      // Chronik unten ein und aus
       $("#btnChronik").addEventListener("click", ()=>{
         const box = $("#yearTools");
         box.style.display = box.style.display === "none" ? "block" : "none";
         if(box.style.display === "block"){ $("#yearInput").value = String(ACTIVE_YEAR); }
-      });
-
-      // Jahr Verwaltung Listener
-      $("#btnLoadYear").addEventListener("click", async ()=>{
-        const y = parseInt($("#yearInput").value,10) || ACTIVE_YEAR;
-        ACTIVE_YEAR = y;
-        localStorage.setItem("LA_ACTIVE_YEAR", String(ACTIVE_YEAR));
-        await loadEventsAndServices();
-        renderLists();
-        setHeuteFromFirst();
-        alert(`Jahr ${ACTIVE_YEAR} geladen`);
-      });
-
-      $("#btnNewYear").addEventListener("click", async ()=>{
-        const pre = prompt("Für welches Jahr soll vorbereitet werden", String(ACTIVE_YEAR+1));
-        const y = parseInt(pre||"",10);
-        if(!y || y<2025 || y>2100) return;
-        if(!confirm(`Soll das Jahr ${y} wirklich angelegt werden`)) return;
-        const batch = writeBatch(db);
-        decDates(y).forEach(d=>{
-          const key = ymd(d);
-          batch.set(doc(collection(db, `calendars/${y}/events`), key), {
-            datum:key,
-            wochentag: ["So","Mo","Di","Mi","Do","Fr","Sa"][d.getDay()],
-            hostName:"",
-            hostAdresse:"",
-            hostEmail:"",
-            uhrzeit:"18:00",
-            info:"",
-            barrierefrei:false,
-            changed:false
-          }, { merge:true });
-        });
-        await batch.commit();
-        ACTIVE_YEAR = y;
-        localStorage.setItem("LA_ACTIVE_YEAR", String(ACTIVE_YEAR));
-        localStorage.setItem("LA_USE_LEGACY_2025", "false");
-        USE_LEGACY_2025 = false;
-        await loadEventsAndServices();
-        renderLists();
-        setHeuteFromFirst();
-        alert(`Neues Jahr ${y} wurde vorbereitet`);
-      });
-
-      $("#btnArchiveLegacy").addEventListener("click", async ()=>{
-        if(ACTIVE_YEAR !== 2025){ alert("Archivieren ist nur für 2025 relevant"); return; }
-        if(!confirm("Möchten Sie das Jahr 2025 wirklich archivieren")) return;
-        if(!confirm("Sicher. Es wird eine Kopie unter calendars/2025 erstellt")) return;
-        await archiveYear2025();
-        USE_LEGACY_2025 = false;
-        localStorage.setItem("LA_USE_LEGACY_2025","false");
-        alert("Archiv erstellt. Ab jetzt kannst du auf ein neues Jahr umschalten.");
       });
 
       onAuthStateChanged(auth, async user=>{
@@ -650,22 +686,36 @@
       renderLists();
       setHeuteFromFirst();
       await loadWeatherForDate(computeNextDate(), currentTimeForNext());
+      await loadWaitlistState();
     }
 
-    async function adminLogin(){
-      const e = $("#admEmail").value.trim();
-      const p = $("#admPass").value;
-      $("#authMsg").textContent = "";
+    async function loadWaitlistState(){
       try{
-        await signInWithEmailAndPassword(auth, e, p);
-        $("#authMsg").textContent = "Angemeldet";
-        $("#dlgAdminLogin").close();
-        await adminLoad();
-        $("#dlgAdminPanel").showModal();
-      }catch(err){
-        console.error(err);
-        $("#authMsg").textContent = "Anmeldung nicht möglich";
+        const ref = doc(db, settingsPath(), "nachruecker");
+        const snap = await getDoc(ref);
+        waitlistActive = !!(snap.exists() && snap.data().active === true);
+      }catch(e){
+        waitlistActive = false;
       }
+      const box = $("#waitlistBox");
+      const grid = $("#waGrid");
+      if(box){ box.style.display = waitlistActive ? "block" : "none"; }
+      if(grid){ grid.classList.toggle("has-waitlist", waitlistActive); }
+
+      const btn = $("#btnToggleWaitlist");
+      const stateText = $("#waitlistStateText");
+      if(btn){ btn.textContent = waitlistActive ? "Nachrückerliste deaktivieren" : "Nachrückerliste aktivieren"; }
+      if(stateText){ stateText.textContent = waitlistActive ? "Die Nachrückerliste ist aktiv und auf der Hauptseite sichtbar" : "Die Nachrückerliste ist inaktiv und auf der Hauptseite verborgen"; }
+
+      const waTitle = $("#wa-title");
+      if(waTitle){ waTitle.textContent = waitlistActive ? "Aktuelles und Nachrückerliste" : "WhatsApp Kanal"; }
+    }
+
+    function settingsPath(){
+      if(ACTIVE_YEAR === LEGACY_YEAR && localStorage.getItem("LA_USE_LEGACY_2025") !== "false"){
+        return "settings";
+      }
+      return `calendars/${ACTIVE_YEAR}/settings`;
     }
 
     function onSubmitHostForm(){
@@ -719,73 +769,53 @@
       };
     }
 
+    function onSubmitWaitlistForm(){
+      return async ev=>{
+        ev.preventDefault();
+        const msg = $("#wMsg"); msg.textContent = ""; msg.className = "";
+        const name   = $("#wName").value.trim();
+        const email  = $("#wEmail").value.trim();
+        const tel    = $("#wTel").value.trim();
+        const street = $("#wStreet").value.trim();
+        const city   = $("#wCity").value.trim();
+        const note   = $("#wNote").value.trim();
+
+        if(!name || !email || !tel || !street || !city){
+          msg.textContent = "Bitte füllen Sie alle Pflichtfelder aus"; msg.className = "error"; return;
+        }
+        const btn = $("#wSend"); btn.disabled = true;
+        try{
+          await addDoc(colRef("nachruecker"), {
+            year: ACTIVE_YEAR,
+            name,
+            email,
+            telefon: tel,
+            adresse: `${street}, ${city}`,
+            bemerkung: note || "",
+            createdAt: new Date().toISOString()
+          });
+          msg.textContent = "Vielen Dank. Sie stehen nun auf der Nachrückerliste"; msg.className = "success";
+          $("#waitlistForm").reset();
+        }catch(err){
+          console.error(err);
+          msg.textContent = "Eintrag konnte nicht gespeichert werden"; msg.className = "error";
+        }finally{
+          btn.disabled = false;
+        }
+      };
+    }
+
     function colRef(name){
-      if(ACTIVE_YEAR === LEGACY_YEAR && USE_LEGACY_2025){
+      if(ACTIVE_YEAR === LEGACY_YEAR && localStorage.getItem("LA_USE_LEGACY_2025") !== "false"){
         return collection(db, name);
       }
       return collection(db, `calendars/${ACTIVE_YEAR}/${name}`);
     }
     function docRef(name, id){
-      if(ACTIVE_YEAR === LEGACY_YEAR && USE_LEGACY_2025){
+      if(ACTIVE_YEAR === LEGACY_YEAR && localStorage.getItem("LA_USE_LEGACY_2025") !== "false"){
         return doc(db, name, id);
       }
       return doc(db, `calendars/${ACTIVE_YEAR}/${name}/${id}`);
-    }
-
-    async function archiveYear2025(){
-      const evSnap = await getDocs(collection(db, "events"));
-      const anSnap = await getDocs(collection(db, "anmeldungen"));
-      const batch = writeBatch(db);
-      evSnap.forEach(dref=>{
-        batch.set(doc(db, "calendars/2025/events/"+dref.id), dref.data(), { merge:true });
-      });
-      anSnap.forEach(dref=>{
-        batch.set(doc(db, "calendars/2025/anmeldungen/"+dref.id), dref.data(), { merge:true });
-      });
-      await batch.commit();
-    }
-
-    function openPicker(){
-      const grid = $("#pickerGrid"); grid.innerHTML = "";
-
-      const first = new Date(ACTIVE_YEAR,11,1);
-      const js = first.getDay();
-      const blanks = (js === 0) ? 6 : (js - 1);
-      for(let i=0;i<blanks;i++){
-        const spacer = document.createElement("div");
-        grid.appendChild(spacer);
-      }
-
-      decDates().forEach(d=>{
-        const key = ymd(d);
-        const el = document.createElement("div");
-        const ev = eventsMap.get(key);
-        const hasHost = !!(ev && typeof ev.hostName === "string" && ev.hostName.trim().length > 0);
-        el.className = "pick" + (selected.has(key) ? " sel" : "") + (hasHost ? " booked" : " free");
-        el.dataset.key = key;
-        el.innerHTML = `
-          <div class="d">${String(d.getDate()).padStart(2,"0")}.</div>
-          <div class="wd">${["So","Mo","Di","Mi","Do","Fr","Sa"][d.getDay()]}</div>
-        `;
-        el.addEventListener("click", ()=>{
-          if(selected.has(key)){ selected.delete(key); el.classList.remove("sel"); }
-          else{ selected.add(key); el.classList.add("sel"); }
-        });
-        grid.appendChild(el);
-      });
-
-      $("#dlgPicker").showModal();
-    }
-
-    function updatePreview(){
-      const prev = $("#wishesPreview"); prev.innerHTML = "";
-      Array.from(selected).sort().forEach(k=>{
-        const d = new Date(k);
-        const chip = document.createElement("span");
-        chip.className = "chip";
-        chip.textContent = `${["So","Mo","Di","Mi","Do","Fr","Sa"][d.getDay()]}, ${String(d.getDate()).padStart(2,"0")}.12.${d.getFullYear()}`;
-        prev.appendChild(chip);
-      });
     }
 
     async function loadEventsAndServices(){
@@ -1051,6 +1081,11 @@
         return `${y}${m}${da}T${h}${mi}00`;
       }
       function escapeIcs(s){ return String(s).replace(/([,;])/g,"\\$1").replace(/\n/g,"\\n"); }
+      function parseIcsHm(s){
+        const m = /^(\d{1,2}):(\d{2})$/.exec((s||"").trim());
+        if(!m) return {h:18,m:0};
+        return { h: Math.max(0, Math.min(23, parseInt(m[1],10))), m: Math.max(0, Math.min(59, parseInt(m[2],10))) };
+      }
       function parseHm(s){
         const m = /^(\d{1,2}):(\d{2})$/.exec((s||"").trim());
         if(!m) return {h:18,m:0};
@@ -1058,9 +1093,27 @@
       }
     }
 
+    async function adminLogin(){
+      const e = $("#admEmail").value.trim();
+      const p = $("#admPass").value;
+      $("#authMsg").textContent = "";
+      try{
+        await signInWithEmailAndPassword(auth, e, p);
+        $("#authMsg").textContent = "Angemeldet";
+        $("#dlgAdminLogin").close();
+        await adminLoad();
+        $("#dlgAdminPanel").showModal();
+      }catch(err){
+        console.error(err);
+        $("#authMsg").textContent = "Anmeldung nicht möglich";
+      }
+    }
+
     async function adminLoad(){
       assignedEmails = new Set();
       pendingEmails = new Set();
+
+      await loadWaitlistState();
 
       const bodyA = $("#tblAnmeldungen tbody"); bodyA.innerHTML = "";
       try{
@@ -1143,7 +1196,7 @@
         tr.innerHTML = `
           <td>${deDate(new Date(id))}</td>
           <td>${["So","Mo","Di","Mi","Do","Fr","Sa"][new Date(id).getDay()]}</td>
-          <td><input type="text" value="${escapeAttr(e.uhrzeit||"")}" data-f="uhrzeit" placeholder="z. B. 17:30"></td>
+          <td><input type="text" value="${escapeAttr(e.uhrzeit||"")} " data-f="uhrzeit" placeholder="z. B. 17:30"></td>
           <td><input type="text" value="${escapeAttr(e.hostName||"")}" data-f="hostName"></td>
           <td><input type="text" value="${escapeAttr(e.hostAdresse||"")}" data-f="hostAdresse"></td>
           <td><input type="text" value="${escapeAttr(e.info||"")}" data-f="info"></td>
@@ -1190,6 +1243,21 @@
       $("#includePending").addEventListener("change", updateEmailTextarea);
       $("#btnCopyEmails").addEventListener("click", copyEmails);
       updateEmailTextarea();
+
+      await renderWaitlistTable();
+
+      $("#btnToggleWaitlist").onclick = async ()=>{
+        if(!waitlistActive){
+          if(!confirm("Möchtest du die Nachrückerliste jetzt wirklich aktivieren")) return;
+        }
+        try{
+          const ref = doc(db, settingsPath(), "nachruecker");
+          await setDoc(ref, { active: !waitlistActive }, { merge:true });
+          await loadWaitlistState();
+        }catch(e){
+          alert("Einstellung konnte nicht gespeichert werden");
+        }
+      };
     }
 
     async function renderServiceTable(){
@@ -1254,11 +1322,12 @@
         <td style="width:40px">${s ? `<span class="drag" title="Ziehen zum Sortieren">≡</span>` : ""}</td>
         <td><input type="text" value="${escapeAttr(s?.gemeinde||"")}" data-f="gemeinde" placeholder="Gemeinde oder Kirche"></td>
         <td><input type="text" value="${escapeAttr(s?.uhrzeit||"")}" data-f="uhrzeit" placeholder="z. B. 16:00"></td>
-        <td><input type="text" value="${escapeAttr(s?.adresse||"")}" data-f="adresse" placeholder="Ort, Straße, Nummer"></td>
-        <td><input type="text" value="${escapeAttr(s?.info||"")}" data-f="info" placeholder="Hinweis optional"></td>
+        <td><input type="text" value="${escapeAttr(s?.adresse||"")}" data-f="adresse" placeholder="Adresse"></td>
+        <td><input type="text" value="${escapeAttr(s?.info||"")}" data-f="info" placeholder="Notiz"></td>
         <td>
-          <button data-sid="${id}" data-act="${id ? "save" : "save-new"}">Speichern</button>
-          <button class="warn" data-sid="${id}" data-act="del">Löschen</button>
+          ${id
+            ? `<button data-act="save" data-sid="${id}">Speichern</button> <button class="warn" data-act="del" data-sid="${id}">Löschen</button>`
+            : `<button data-act="save-new">Speichern</button>`}
         </td>
       `;
       return tr;
@@ -1269,138 +1338,107 @@
         gemeinde: row.querySelector('input[data-f="gemeinde"]').value.trim(),
         uhrzeit: row.querySelector('input[data-f="uhrzeit"]').value.trim(),
         adresse: row.querySelector('input[data-f="adresse"]').value.trim(),
-        info: row.querySelector('input[data-f="info"]').value.trim()
+        info: row.querySelector('input[data-f="info"]').value.trim(),
       };
     }
     function validateService(p){
-      if(!p.gemeinde) return { ok:false, msg:"Bitte Gemeinde angeben" };
-      if(p.uhrzeit && !/^\d{1,2}:\d{2}$/.test(p.uhrzeit)) return { ok:false, msg:"Uhrzeit bitte als HH:MM eintragen" };
-      return { ok:true, msg:"" };
+      if(!p.gemeinde) return {ok:false, msg:"Bitte Gemeinde eintragen"};
+      if(p.uhrzeit && !/^\d{1,2}:\d{2}$/.test(p.uhrzeit)) return {ok:false, msg:"Uhrzeit bitte als HH:MM"};
+      return {ok:true};
     }
-    function guessOrder(hm){
-      const m = /^(\d{1,2}):(\d{2})$/.exec(hm||"");
-      if(!m) return 9999;
-      return parseInt(m[1],10)*60+parseInt(m[2],10);
+    function guessOrder(hhmm){
+      const t = parseTime(hhmm||"23:59");
+      return t;
+    }
+    function parseTime(hhmm){
+      const m = /^(\d{1,2}):(\d{2})$/.exec(hhmm||"");
+      if(!m) return 2359;
+      return parseInt(m[1].padStart(2,"0")+m[2],10);
+    }
+
+    async function renderWaitlistTable(){
+      const body = $("#tblWaitlist tbody"); body.innerHTML = "";
+      try{
+        const qy = query(colRef("nachruecker"), orderBy("createdAt","desc"));
+        const snap = await getDocs(qy);
+        if(snap.empty){
+          const tr = document.createElement("tr");
+          tr.innerHTML = `<td colspan="4" class="center muted">Keine Einträge</td>`;
+          body.appendChild(tr);
+        }else{
+          snap.forEach(d=>{
+            const a = d.data();
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+              <td><strong>${escapeHtml(a.name||"")}</strong><br><span class="muted">${escapeHtml(a.email||"")}</span><br><span class="muted">${escapeHtml(a.telefon||"")}</span></td>
+              <td>${escapeHtml(a.adresse||"")}</td>
+              <td>${escapeHtml(a.bemerkung||"")}</td>
+              <td><button class="warn" data-wdel="${d.id}">Löschen</button></td>
+            `;
+            body.appendChild(tr);
+          });
+          body.querySelectorAll("button[data-wdel]").forEach(btn=>{
+            btn.addEventListener("click", async ()=>{
+              if(confirm("Diesen Eintrag wirklich löschen")){
+                await deleteDoc(docRef("nachruecker", btn.dataset.wdel));
+                renderWaitlistTable();
+              }
+            });
+          });
+        }
+      }catch(e){
+        const tr = document.createElement("tr");
+        tr.innerHTML = `<td colspan="4" class="center">Nachrückerliste konnte nicht geladen werden</td>`;
+        body.appendChild(tr);
+      }
     }
 
     function enableDragAndDrop(tbody){
-      let dragRow = null;
-
+      let dragging=null;
       tbody.addEventListener("dragstart", e=>{
-        const tr = e.target.closest("tr[draggable='true']");
-        if(!tr) return;
-        dragRow = tr;
-        tr.classList.add("dragging");
-        e.dataTransfer.effectAllowed = "move";
+        dragging = e.target.closest("tr"); if(dragging) dragging.classList.add("dragging");
       });
-
+      tbody.addEventListener("dragend", ()=>{
+        if(dragging) dragging.classList.remove("dragging");
+        $$("tr.drop-above, tr.drop-below", tbody).forEach(el=> el.classList.remove("drop-above","drop-below"));
+        dragging=null;
+      });
       tbody.addEventListener("dragover", e=>{
         e.preventDefault();
-        const tr = e.target.closest("tr");
-        if(!dragRow || !tr || tr === dragRow) return;
-        const rect = tr.getBoundingClientRect();
-        const before = e.clientY < rect.top + rect.height / 2;
-        tr.classList.toggle("drop-above", before);
-        tr.classList.toggle("drop-below", !before);
+        const target = e.target.closest("tr");
+        if(!dragging || !target || dragging===target) return;
+        const rect = target.getBoundingClientRect();
+        const before = e.clientY < rect.top + rect.height/2;
+        target.classList.toggle("drop-above", before);
+        target.classList.toggle("drop-below", !before);
       });
-
-      tbody.addEventListener("dragleave", e=>{
-        const tr = e.target.closest("tr");
-        if(tr){ tr.classList.remove("drop-above","drop-below"); }
-      });
-
-      tbody.addEventListener("drop", async e=>{
-        e.preventDefault();
-        const targetRow = e.target.closest("tr");
-        if(!dragRow || !targetRow || dragRow === targetRow) return;
-        const rect = targetRow.getBoundingClientRect();
-        const before = e.clientY < rect.top + rect.height / 2;
-        targetRow.classList.remove("drop-above","drop-below");
-        if(before){
-          targetRow.parentNode.insertBefore(dragRow, targetRow);
-        }else{
-          targetRow.parentNode.insertBefore(dragRow, targetRow.nextSibling);
-        }
-        dragRow.classList.remove("dragging");
-        await persistServiceOrder(tbody);
-        await loadEventsAndServices();
-        await renderServiceTable();
-      });
-
-      tbody.addEventListener("dragend", ()=>{
-        const rows = tbody.querySelectorAll("tr");
-        rows.forEach(r=> r.classList.remove("dragging","drop-above","drop-below"));
-        dragRow = null;
-      });
-    }
-
-    async function persistServiceOrder(tbody){
-      const rows = Array.from(tbody.querySelectorAll("tr[draggable='true']"));
-      const batch = writeBatch(db);
-      rows.forEach((tr, idx)=>{
-        const sid = tr.dataset.sid;
-        if(sid){
-          batch.set(docRef("events", sid), { order: idx }, { merge:true });
-        }
-      });
-      await batch.commit();
     }
 
     function updateProgress(){
-      const total = 23;
-      let assigned = 0;
-      for(let d=1; d<=23; d++){
-        const key = `${ACTIVE_YEAR}-12-${String(d).padStart(2,"0")}`;
+      let count=0;
+      allDates().forEach(d=>{
+        const key = ymd(d);
         const e = eventsMap.get(key);
-        if(e && typeof e.hostName === "string" && e.hostName.trim().length > 0){
-          assigned++;
-        }
-      }
-      const percent = Math.round((assigned / total) * 100);
-      const fill = document.getElementById("progFill");
-      const pct  = document.getElementById("progPercent");
-      const meta = document.getElementById("progMeta");
-      if(fill) fill.style.width = `${percent}%`;
-      if(pct)  pct.textContent  = `${percent}%`;
-      if(meta) meta.textContent = `${assigned} von ${total} Abenden vergeben`;
+        if(e && e.hostName && key !== `${ACTIVE_YEAR}-12-24`) count++;
+      });
+      const pct = Math.round((count/23)*100);
+      $("#progFill").style.width = `${pct}%`;
+      $("#progPercent").textContent = `${pct}%`;
+      $("#progMeta").textContent = `${count} von 23 Abenden vergeben`;
     }
-
-    function parseTime(hm){
-      const m = /^(\d{1,2}):(\d{2})$/.exec(hm || "");
-      if(!m) return 9999;
-      return parseInt(m[1],10) * 60 + parseInt(m[2],10);
-    }
-    function parseHm(s){
-      const m = /^(\d{1,2}):(\d{2})$/.exec((s||"").trim());
-      if(!m) return {h:18,m:0};
-      return { h: Math.max(0, Math.min(23, parseInt(m[1],10))), m: Math.max(0, Math.min(59, parseInt(m[2],10))) };
-    }
-
-    function escapeHtml(s){ return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
-    function escapeAttr(s){ return escapeHtml(s); }
 
     function updateEmailTextarea(){
-      const includePending = $("#includePending").checked;
-      const emails = new Set();
-      for(const e of eventsMap.values()){
-        if(e && e.hostEmail) emails.add(e.hostEmail.trim());
+      const all = new Set(assignedEmails);
+      if($("#includePending")?.checked){
+        pendingEmails.forEach(e=> all.add(e));
       }
-      if(includePending){ pendingEmails.forEach(x=> emails.add(x)); }
-      $("#emailAll").value = Array.from(emails).filter(Boolean).join(", ");
+      $("#emailAll").value = Array.from(all).join(", ");
     }
 
-    async function copyEmails(){
-      const txt = $("#emailAll").value.trim();
-      if(!txt){ alert("Keine E Mail Adressen vorhanden"); return; }
-      try{
-        await navigator.clipboard.writeText(txt);
-        alert("E Mail Adressen kopiert");
-      }catch(e){
-        const ta = $("#emailAll");
-        ta.focus(); ta.select();
-        const ok = document.execCommand ? document.execCommand("copy") : false;
-        alert(ok ? "E Mail Adressen kopiert" : "Kopieren nicht möglich");
-      }
+    function copyEmails(){
+      const ta = $("#emailAll");
+      ta.select();
+      document.execCommand("copy");
     }
 
     function setHeuteFromFirst(){
@@ -1409,7 +1447,14 @@
       const t = e && e.uhrzeit ? e.uhrzeit : "18:00";
       setHeuteTime(t);
     }
-  </script>
 
+    function escapeHtml(s){ return String(s||"").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+    function escapeAttr(s){ return escapeHtml(s).replace(/"/g, "&quot;"); }
+    function parseHm(s){
+      const m = /^(\d{1,2}):(\d{2})$/.exec((s||"").trim());
+      if(!m) return {h:18,m:0};
+      return { h: Math.max(0, Math.min(23, parseInt(m[1],10))), m: Math.max(0, Math.min(59, parseInt(m[2],10))) };
+    }
+  </script>
 </body>
 </html>
