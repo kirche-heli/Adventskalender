@@ -152,7 +152,7 @@
     .date-badge{ min-width:94px; text-align:center; background:var(--burgundy); color:var(--cream); padding:6px 8px; border-radius:9px; line-height:1.1; box-shadow:var(--shadow); font-weight:800; font-size:14px; }
     .event-body{ display:grid; gap:6px; }
     @media(min-width:900px){
-      .event-body{ grid-template-columns: 0.6fr 1fr 1fr 0.8fr 0.6fr; align-items:start; }
+      .event-body{ grid-template-columns: 0.6fr 1fr 1fr 0.8fr 0.7fr; align-items:start; }
     }
     .event-field{ display:flex; flex-direction:column; gap:4px; }
     .event-actions{ display:flex; justify-content:flex-end; gap:8px; margin-top:6px; }
@@ -298,7 +298,7 @@
         <div class="consent">
           <label for="consent">
             <input id="consent" name="consent" type="checkbox" required>
-            Ich stimme mit meiner Anmeldung zu, dass mein Name und meine Adresse als Gastgeberin oder Gastgeber des Lebendigen Adventskalenders veröffentlicht werden dürfen. Die Veröffentlichung kann in Aushängen, sozialen Medien, auf digitalen Kanälen, im Gemeindebrief und in Printmedien erfolgen. Diese Zustimmung ist Voraussetzung für die Anmeldung.
+            Ich stimme mit meiner Anmeldung zu, dass mein Name und meine Adresse als Gastgeberin oder Gastgeber veröffentlicht werden dürfen. Die Veröffentlichung kann in Aushängen, sozialen Medien, auf digitalen Kanälen, im Gemeindebrief und in Printmedien erfolgen. Diese Zustimmung ist Voraussetzung für die Anmeldung.
           </label>
           <div class="help">Ohne diese Zustimmung kann die Anmeldung nicht abgesendet werden.</div>
         </div>
@@ -314,7 +314,7 @@
     <section id="info" class="card" aria-labelledby="info-title">
       <h3 id="info-title">Was ist ein lebendiger Adventskalender</h3>
       <p>An jedem Abend im Advent öffnet sich ein Fenster, ein Garten oder eine Haustür. Gastgeberinnen und Gastgeber laden für etwa 30 Minuten zu einer adventlichen Begegnung ein. Gemeinschaft und Vorfreude stehen im Mittelpunkt.</p>
-      <p>Die Gestaltung kann vielfältig sein. Möglich sind eine kurze Geschichte oder ein Impuls, gemeinsames Singen von Weihnachtsliedern, leise Musik oder ein offenes Zusammensein bei Kerzenschein. Gäste bringen nach Möglichkeit eine eigene Tasse mit.</p>
+      <p>Die Gestaltung kann vielfältig sein. Möglich sind eine kurze Geschichte oder ein Impuls, gemeinsames Singen, leise Musik oder ein offenes Zusammensein bei Kerzenschein. Gäste bringen nach Möglichkeit eine eigene Tasse mit.</p>
       <details>
         <summary>Organisation und nächste Schritte</summary>
         <p>Zum Auftakt eröffnen wir am Sonntag, 30. November, an der Stadtkirche die Krippe im Freien. Danach trifft sich die Stadtgemeinschaft jeden Abend an einem anderen Ort. Gruppen, Familien, Vereine, Kirchengemeinden oder Einzelpersonen können einen Abend übernehmen. Auf Wunsch stellen wir Materialien und Gestaltungsideen bereit.</p>
@@ -459,7 +459,7 @@
         <p id="anmeldHelp" class="muted">Nach der Zuweisung kannst du den Antrag optional löschen.</p>
 
         <h4>Termine pflegen</h4>
-        <p class="muted">Kompakte Kartenansicht. Uhrzeit, Gastgeber, Adresse und Hinweise bearbeiten. Änderungen speichern.</p>
+        <p class="muted">Kompakte Kartenansicht. Uhrzeit, Gastgeber, Adresse, Notiz und Markierungen bearbeiten. Änderungen speichern. Das Kästchen „auf Karte als Gottesdienst markieren“ färbt diesen Termin auf der Karte wie einen Gottesdienst.</p>
         <div class="event-cards" id="eventCards"></div>
 
         <h4>Gottesdienste am 24. Dezember</h4>
@@ -477,7 +477,7 @@
             <button type="button" class="secondary" id="btnCopyEmails">Adressen kopieren</button>
           </div>
           <textarea id="emailAll" class="email-area" readonly></textarea>
-          <div class="muted">Tipp: In deinem Mailprogramm im Feld BCC nutzen.</div>
+          <div class="muted">Tipp: Im Mailprogramm das Feld BCC nutzen.</div>
         </div>
 
         <!-- Nachrückerliste Abschnitt nur sichtbar, wenn aktiv -->
@@ -530,7 +530,7 @@
       <div class="dlg-scroll">
         <div class="map-legend">
           <span><span class="dot regular"></span> Veranstaltungen</span>
-          <span><span class="dot service"></span> Gottesdienste am 24. Dezember</span>
+          <span><span class="dot service"></span> Gottesdienste</span>
           <label style="margin-left:auto" class="muted">
             <input type="checkbox" id="mapShowPending"> auch Adressen aus Anmeldungen anzeigen
           </label>
@@ -605,7 +605,7 @@
 
     let waitlistActive = false;
 
-    // Karte
+    // Karte und Geocache nur einmal definieren
     let mapInstance = null;
     let markerLayer = null;
     let geoCache = JSON.parse(localStorage.getItem("LA_GEOCACHE")||"{}");
@@ -666,6 +666,7 @@
         }
       });
 
+      // Daten laden und anzeigen
       await loadEventsAndServices();
       renderLists();
       setHeuteFromFirst();
@@ -677,7 +678,6 @@
     }
 
     function settingsPath(){
-      // Einfache Struktur für 2025
       if(ACTIVE_YEAR === LEGACY_YEAR){ return "settings"; }
       return `calendars/${ACTIVE_YEAR}/settings`;
     }
@@ -825,6 +825,7 @@
         const snap = await getDocs(qy);
         snap.forEach(d => {
           const e=d.data(); if(!e) return;
+          // mapAsService für normale Termine berücksichtigen
           if(e.datum === `${ACTIVE_YEAR}-12-24` && e.isService){
             services.push({ id:d.id, ...e });
           }else if(e.datum){
@@ -834,7 +835,6 @@
       }catch(err){
         console.warn("Termine konnten nicht geladen werden.", err);
       }
-      // Sortierung der Gottesdienste: zuerst nach order, sonst nach Uhrzeit
       services.sort((a,b)=>{
         const oa = typeof a.order === "number" ? a.order : 9999;
         const ob = typeof b.order === "number" ? b.order : 9999;
@@ -1141,7 +1141,7 @@
       const dates = allDates().filter(d => ymd(d) !== `${ACTIVE_YEAR}-12-24`);
       dates.forEach(d=>{
         const id = ymd(d);
-        const e = eventsMap.get(id) || { datum: id, uhrzeit:"", hostName:"", hostAdresse:"", hostEmail:"", info:"", changed:false, barrierefrei:false };
+        const e = eventsMap.get(id) || { datum: id, uhrzeit:"", hostName:"", hostAdresse:"", hostEmail:"", info:"", changed:false, barrierefrei:false, mapAsService:false };
         const card = document.createElement("div"); card.className = "event-card";
         const wd = WDAY[new Date(id).getDay()];
         card.innerHTML = `
@@ -1170,7 +1170,8 @@
               <label>Markierungen</label>
               <div>
                 <label style="margin-right:8px"><input type="checkbox" ${e.barrierefrei ? "checked" : ""} data-f="barrierefrei"> ♿</label>
-                <label><input type="checkbox" ${e.changed ? "checked" : ""} data-f="changed"> geändert</label>
+                <label style="margin-right:8px"><input type="checkbox" ${e.changed ? "checked" : ""} data-f="changed"> geändert</label>
+                <label><input type="checkbox" ${e.mapAsService ? "checked" : ""} data-f="mapAsService"> auf Karte als Gottesdienst markieren</label>
               </div>
             </div>
           </div>
@@ -1218,9 +1219,7 @@
       services.forEach((s, idx)=>{
         list.appendChild(buildServiceRow(s, idx));
       });
-      // leere Eingabe
       list.appendChild(buildServiceRow(null, services.length));
-
       enableServiceDrag(list);
 
       list.addEventListener("click", async ev=>{
@@ -1232,7 +1231,7 @@
           if(!payload.gemeinde && !payload.uhrzeit){ alert("Bitte Angaben ergänzen"); return; }
           payload.isService = true;
           payload.datum = `${ACTIVE_YEAR}-12-24`;
-          payload.order = services.length; // hinten anhängen
+          payload.order = services.length;
           try{
             await addDoc(colRef("events"), payload);
             await loadEventsAndServices();
@@ -1258,7 +1257,7 @@
 
       function buildServiceRow(s, idx){
         const row = document.createElement("div"); row.className = "service-row";
-        row.draggable = !!s; // nur bestehende sind ziehbar
+        row.draggable = !!s;
         row.dataset.sid = s?.id || "";
         row.dataset.order = typeof s?.order === "number" ? String(s.order) : String(idx);
         row.innerHTML = `
@@ -1296,14 +1295,13 @@
         const row = e.target.closest(".service-row.dragging");
         if(row) row.classList.remove("dragging");
         dragEl = null;
-        // Reihen neu nummerieren in der Anzeige
         renumberServiceHandles(container);
       });
       container.addEventListener("dragover", e=>{
         if(!dragEl) return;
         e.preventDefault();
         const after = getDragAfterElement(container, e.clientY);
-        if(after == null) container.insertBefore(dragEl, container.querySelector(".service-row:last-child")); // vor die leere Eingabe
+        if(after == null) container.insertBefore(dragEl, container.querySelector(".service-row:last-child"));
         else container.insertBefore(dragEl, after);
       });
 
@@ -1353,32 +1351,32 @@
       const body = $("#tblWaitlist tbody"); body.innerHTML = "";
       try{
         const qy = query(colRef("nachruecker"), orderBy("createdAt","desc"));
-          const snap = await getDocs(qy);
-          if(snap.empty){
+        const snap = await getDocs(qy);
+        if(snap.empty){
+          const tr = document.createElement("tr");
+          tr.innerHTML = `<td colspan="4" class="center muted">Keine Einträge</td>`;
+          body.appendChild(tr);
+        }else{
+          snap.forEach(d=>{
+            const a = d.data();
             const tr = document.createElement("tr");
-            tr.innerHTML = `<td colspan="4" class="center muted">Keine Einträge</td>`;
+            tr.innerHTML = `
+              <td><strong>${escapeHtml(a.name||"")}</strong><br><span class="muted">${escapeHtml(a.email||"")}</span><br><span class="muted">${escapeHtml(a.telefon||"")}</span></td>
+              <td>${escapeHtml(a.adresse||"")}</td>
+              <td>${escapeHtml(a.bemerkung||"")}</td>
+              <td><button class="warn" data-wdel="${d.id}">Löschen</button></td>
+            `;
             body.appendChild(tr);
-          }else{
-            snap.forEach(d=>{
-              const a = d.data();
-              const tr = document.createElement("tr");
-              tr.innerHTML = `
-                <td><strong>${escapeHtml(a.name||"")}</strong><br><span class="muted">${escapeHtml(a.email||"")}</span><br><span class="muted">${escapeHtml(a.telefon||"")}</span></td>
-                <td>${escapeHtml(a.adresse||"")}</td>
-                <td>${escapeHtml(a.bemerkung||"")}</td>
-                <td><button class="warn" data-wdel="${d.id}">Löschen</button></td>
-              `;
-              body.appendChild(tr);
+          });
+          body.querySelectorAll("button[data-wdel]").forEach(btn=>{
+            btn.addEventListener("click", async ()=>{
+              if(confirm("Diesen Eintrag wirklich löschen")){
+                await deleteDoc(docRef("nachruecker", btn.dataset.wdel));
+                renderWaitlistTable();
+              }
             });
-            body.querySelectorAll("button[data-wdel]").forEach(btn=>{
-              btn.addEventListener("click", async ()=>{
-                if(confirm("Diesen Eintrag wirklich löschen")){
-                  await deleteDoc(docRef("nachruecker", btn.dataset.wdel));
-                  renderWaitlistTable();
-                }
-              });
-            });
-          }
+          });
+        }
       }catch(e){
         const tr = document.createElement("tr");
         tr.innerHTML = `<td colspan="4" class="center">Nachrückerliste konnte nicht geladen werden</td>`;
@@ -1390,9 +1388,6 @@
       $("#dlgMap").showModal();
       setTimeout(initOrUpdateMap, 50);
     }
-
-    let mapInstance = null, markerLayer = null;
-    let geoCache = JSON.parse(localStorage.getItem("LA_GEOCACHE")||"{}");
 
     async function initOrUpdateMap(){
       if(!mapInstance){
@@ -1412,7 +1407,7 @@
         const e = eventsMap.get(key);
         if(key !== `${ACTIVE_YEAR}-12-24` && e && e.hostAdresse && e.hostName){
           features.push({
-            type: "event",
+            type: e.mapAsService ? "service" : "event",
             date: deDate(d),
             dateShort: `${String(d.getDate()).padStart(2,"0")}.12.`,
             time: e.uhrzeit || "18:00",
@@ -1459,9 +1454,9 @@
 
       for(const f of features){
         try{
-          const {lat, lon} = await geocodeCached(`${f.addr}, 37235 Hessisch Lichtenau, Deutschland`);
+          const geo = await geocodeCached(`${f.addr}, 37235 Hessisch Lichtenau, Deutschland`);
           const icon = buildDivIcon(f.dateShort || "?", f.type);
-          const m = L.marker([lat, lon], { icon });
+          const m = L.marker([geo.lat, geo.lon], { icon });
           const title = f.type === "service" ? "Gottesdienst" : (f.type === "pending" ? "Anmeldung" : "Veranstaltung");
           const timeRow = f.time ? `<div class="popup-time">${escapeHtml(f.time)} Uhr</div>` : "";
           m.bindPopup(`
@@ -1501,17 +1496,16 @@
     function sleep(ms){ return new Promise(r=>setTimeout(r, ms)); }
 
     async function geocodeCached(query){
-      if(!window.LA_GEOCACHE){ window.LA_GEOCACHE = JSON.parse(localStorage.getItem("LA_GEOCACHE")||"{}"); }
-      const cache = window.LA_GEOCACHE;
+      if(!geoCache) geoCache = JSON.parse(localStorage.getItem("LA_GEOCACHE")||"{}");
       const key = query.trim();
-      if(cache[key]) return cache[key];
+      if(geoCache[key]) return geoCache[key];
       const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(key)}&limit=1&addressdetails=0`;
       const res = await fetch(url, { headers:{ "Accept":"application/json" }});
       const data = await res.json();
       if(!Array.isArray(data) || data.length===0) throw new Error("Not found");
       const out = { lat: parseFloat(data[0].lat), lon: parseFloat(data[0].lon) };
-      cache[key] = out;
-      localStorage.setItem("LA_GEOCACHE", JSON.stringify(cache));
+      geoCache[key] = out;
+      localStorage.setItem("LA_GEOCACHE", JSON.stringify(geoCache));
       return out;
     }
 
