@@ -6,7 +6,6 @@
   <title>Lebendiger Adventskalender Hessisch Lichtenau</title>
   <meta name="description" content="Informationen, Termine und Anmeldung zum Lebendigen Adventskalender in Hessisch Lichtenau.">
   <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
-  <!-- Leaflet CSS für die Karte -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <style>
     :root{
@@ -27,7 +26,9 @@
       --pin-service:#d9b36c;
       --pin-pending:#a7a9a9;
     }
-    html,body{ margin:0; padding:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial; color:var(--ink); background: var(--paper);
+    html,body{
+      margin:0; padding:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial;
+      color:var(--ink); background: var(--paper);
       background-image: linear-gradient(180deg, var(--burgundy) 0%, var(--burgundy-dark) 34%, rgba(95,22,42,0.85) 42%, rgba(95,22,42,0.00) 58%);
     }
     header{ color:var(--cream); padding:36px 16px 28px; text-align:center; position:relative; }
@@ -111,7 +112,7 @@
     .qr{ width:160px; height:auto; border-radius:12px; border:1px solid #e5e7eb; box-shadow:var(--shadow); }
     @media(min-width:850px){ .qr{ width:180px; } }
 
-    /* Picker */
+    /* Termin Picker */
     .picker-wrap{ margin:10px 0; }
     .week-head{ display:grid; grid-template-columns:repeat(7, 1fr); gap:8px; font-weight:700; color:#334155; font-size:12px; text-align:center; }
     .picker-grid{ display:grid; gap:8px; grid-template-columns:repeat(7, minmax(70px, 1fr)); margin-top:8px; }
@@ -142,16 +143,43 @@
 
     /* Karten Dialog */
     #dlgMap{ width:min(1200px, 98vw); }
-    .map-wrap{ display:grid; gap:12px; }
-    .map-legend{ display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+    #map{ width:100%; height:min(70vh, 720px); border-radius:16px; border:1px solid #e5e7eb; }
+    .map-legend{ display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-bottom:8px; }
     .dot{ width:14px; height:14px; border-radius:50%; display:inline-block; border:2px solid #fff; box-shadow:var(--shadow); }
     .dot.regular{ background:var(--pin-regular); }
     .dot.service{ background:var(--pin-service); }
     .dot.pending{ background:var(--pin-pending); }
-    #map{ width:100%; height:min(70vh, 720px); border-radius:16px; border:1px solid #e5e7eb; }
-
-    .pin-label{ font-weight:700; font-size:11px; color:#fff; }
     .leaflet-div-icon{ background:transparent; border:none; }
+
+    /* Admin Fortschritt */
+    .prog-wrap{ background:#fff; border:1px solid #eee5da; border-radius:14px; padding:14px; margin-bottom:14px; }
+    .prog-label{ display:flex; justify-content:space-between; align-items:center; font-weight:700; color:#334155; margin-bottom:8px; }
+    .prog-bar{ width:100%; height:10px; background:#f1e8dc; border-radius:999px; overflow:hidden; }
+    .prog-fill{ height:100%; width:0%; background:linear-gradient(90deg, var(--gold), #f3d38f); }
+
+    /* Admin Terminpflege als Kartenliste */
+    .event-cards{ display:grid; gap:12px; }
+    .event-card{ border:1px solid #eee5da; border-radius:14px; padding:12px; background:#fff; box-shadow:var(--shadow); }
+    .event-head{ display:flex; align-items:center; gap:12px; margin-bottom:10px; }
+    .date-badge{ min-width:110px; text-align:center; background:var(--burgundy); color:var(--cream); padding:8px 10px; border-radius:10px; line-height:1.1; box-shadow:var(--shadow); font-weight:800; }
+    .event-body{ display:grid; gap:10px; }
+    @media(min-width:900px){
+      .event-body{ grid-template-columns: 0.7fr 1.1fr 1fr 0.6fr 0.6fr; align-items:start; }
+    }
+    .event-field{ display:flex; flex-direction:column; gap:6px; }
+    .event-field label{ font-weight:600; font-size:12px; color:#334155; }
+    .event-actions{ display:flex; justify-content:flex-end; gap:8px; margin-top:10px; }
+
+    /* Admin Gottesdienste kompakt */
+    .service-list{ display:grid; gap:10px; }
+    .service-row{ border:1px solid #eee5da; border-radius:12px; padding:10px; background:#fff; }
+    .service-grid{ display:grid; gap:8px; }
+    @media(min-width:900px){
+      .service-grid{ grid-template-columns: 1fr 0.5fr 1fr 1fr auto; align-items:center; }
+    }
+
+    /* Utility */
+    .sr-only{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); border:0; }
   </style>
 </head>
 <body>
@@ -173,10 +201,10 @@
       <h3 id="wa-title">WhatsApp Kanal</h3>
       <div id="waGrid" class="wa-grid">
         <div class="wa-right">
-          <div id="waitlistBox" class="waitlist-block" style="display:none">
+          <div class="waitlist-block" id="waitlistBox" style="display:none">
             <h4 style="margin:0 0 10px 0">Nachrückerliste</h4>
             <div class="waitlist-note" id="waitlistText">
-              Alle Termine sind vergeben. Manchmal wird kurzfristig ein Platz frei. Wenn Sie einspringen möchten, können Sie sich hier eintragen. Wir melden uns, sobald eine Vertretung gebraucht wird.
+              Alle Termine sind vergeben. Es kann kurzfristig ein Platz frei werden. Wenn Sie einspringen möchten, tragen Sie sich ein. Bei Bedarf melden wir uns und stimmen den Termin mit Ihnen ab.
             </div>
             <div class="actions" style="margin-top:10px">
               <button type="button" id="openWaitlist" class="secondary">Auf Nachrückerliste eintragen</button>
@@ -185,11 +213,11 @@
         </div>
         <div class="wa-left">
           <div class="wa-block">
-            <h4 style="margin:0 0 10px 0">WhatsApp Kanal</h4>
+            <!-- keine zweite Überschrift mehr, nur der Inhalt -->
             <div class="wa-content">
               <img src="qrcode.jpg" alt="QR Code zum WhatsApp Kanal" class="qr" id="qrThumb">
               <div class="wa-text">
-                <p>Kurze Hinweise und die abendlichen Treffpunkte kommen hier direkt auf das Handy. Sie können den QR Code scannen oder den Link öffnen.</p>
+                <p>Kurze Hinweise und abendliche Treffpunkte kommen hier direkt auf das Handy. Scannen Sie den QR Code oder öffnen Sie den Link.</p>
                 <p><a class="link-as-btn" id="waLink" href="https://whatsapp.com/channel/0029VbBLGb31CYoMJfdTh60w" target="_blank" rel="noopener">Kanal in WhatsApp öffnen</a></p>
                 <small class="muted">Ein Klick auf den QR Code öffnet eine vergrößerte Ansicht.</small>
               </div>
@@ -427,9 +455,10 @@
       <div class="dlg-head"><h3 class="dlg-title">Admin Bereich</h3></div>
       <div class="dlg-scroll">
 
+        <!-- Fortschritt -->
         <div class="prog-wrap" id="progWrap" aria-live="polite">
           <div class="prog-label"><span>Belegung 1 bis 23 Dezember</span><span id="progPercent">0%</span></div>
-          <div class="prog-bar"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+          <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
           <div class="muted" id="progMeta">0 von 23 Abenden vergeben</div>
         </div>
 
@@ -442,18 +471,12 @@
         <p id="anmeldHelp" class="muted">Nach der Zuweisung kannst du den Antrag optional löschen.</p>
 
         <h4>Termine pflegen</h4>
-        <p class="muted">Gastgeber, Adresse, Uhrzeit und Hinweise bearbeiten oder einen Termin als geändert markieren.</p>
-        <table class="table" id="tblEvents">
-          <thead><tr><th>Datum</th><th>Wochentag</th><th>Uhrzeit</th><th>Gastgeber</th><th>Adresse</th><th>Notiz</th><th>Barrierefrei</th><th>Änderung</th><th>Aktion</th></tr></thead>
-          <tbody></tbody>
-        </table>
+        <p class="muted">Jeder Abend als Karte. Uhrzeit, Gastgeber, Adresse und Hinweise bearbeiten. Änderungen speichern.</p>
+        <div class="event-cards" id="eventCards"></div>
 
         <h4>Gottesdienste am 24. Dezember</h4>
-        <p class="muted">Lege die Gottesdienste an, speichere sie und sortiere sie danach per Ziehen in die gewünschte Reihenfolge.</p>
-        <table class="table" id="tblServices">
-          <thead><tr><th></th><th>Gemeinde</th><th>Uhrzeit</th><th>Adresse</th><th>Notiz</th><th>Aktion</th></tr></thead>
-          <tbody></tbody>
-        </table>
+        <p class="muted">Einträge bearbeiten und speichern. Die Reihenfolge ergibt sich aus der Uhrzeit.</p>
+        <div class="service-list" id="serviceList"></div>
         <div class="actions" style="margin-top:8px">
           <button type="button" id="addService" class="secondary">Neuen Gottesdienst hinzufügen</button>
         </div>
@@ -468,12 +491,15 @@
           <div class="muted">Tipp: In deinem Mailprogramm im Feld BCC nutzen.</div>
         </div>
 
-        <h4 style="margin-top:18px">Nachrückerliste</h4>
-        <p class="muted" id="waitlistStateText">Status wird geladen</p>
-        <table class="table" id="tblWaitlist">
-          <thead><tr><th>Name und Kontakt</th><th>Adresse</th><th>Bemerkung</th><th>Aktion</th></tr></thead>
-          <tbody></tbody>
-        </table>
+        <!-- Nachrückerliste Abschnitt nur sichtbar, wenn aktiv -->
+        <div id="waitlistSection" style="display:none">
+          <h4 style="margin-top:18px">Nachrückerliste</h4>
+          <p class="muted" id="waitlistStateText">Status wird geladen</p>
+          <table class="table" id="tblWaitlist">
+            <thead><tr><th>Name und Kontakt</th><th>Adresse</th><th>Bemerkung</th><th>Aktion</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
 
         <div class="actions" style="margin-top:12px; justify-content:flex-end; gap:8px">
           <button type="button" class="secondary" id="btnToggleWaitlist">Nachrückerliste aktivieren</button>
@@ -513,16 +539,14 @@
     <div class="dlg-body">
       <div class="dlg-head"><h3 class="dlg-title">Karte der Veranstaltungsorte</h3></div>
       <div class="dlg-scroll">
-        <div class="map-wrap">
-          <div class="map-legend">
-            <span><span class="dot regular"></span> Veranstaltungen</span>
-            <span><span class="dot service"></span> Gottesdienste am 24. Dezember</span>
-            <label style="margin-left:auto" class="muted">
-              <input type="checkbox" id="mapShowPending"> auch Adressen aus Anmeldungen anzeigen
-            </label>
-          </div>
-          <div id="map" role="region" aria-label="Karte der Veranstaltungsorte"></div>
+        <div class="map-legend">
+          <span><span class="dot regular"></span> Veranstaltungen</span>
+          <span><span class="dot service"></span> Gottesdienste am 24. Dezember</span>
+          <label style="margin-left:auto" class="muted">
+            <input type="checkbox" id="mapShowPending"> auch Adressen aus Anmeldungen anzeigen
+          </label>
         </div>
+        <div id="map" role="region" aria-label="Karte der Veranstaltungsorte"></div>
       </div>
       <div class="dlg-foot">
         <button type="button" class="secondary" data-close="dlgMap">Schließen</button>
@@ -542,10 +566,8 @@
     </div>
   </dialog>
 
-  <!-- Leaflet Script -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-  <!-- App Script -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-analytics.js";
@@ -679,6 +701,8 @@
       if(stateText){ stateText.textContent = waitlistActive ? "Die Nachrückerliste ist aktiv und auf der Hauptseite sichtbar" : "Die Nachrückerliste ist inaktiv und auf der Hauptseite verborgen"; }
       const waTitle = $("#wa-title");
       if(waTitle){ waTitle.textContent = waitlistActive ? "Aktuelles und Nachrückerliste" : "WhatsApp Kanal"; }
+      const wlSection = $("#waitlistSection");
+      if(wlSection){ wlSection.style.display = waitlistActive ? "block" : "none"; }
     }
 
     function settingsPath(){
@@ -806,10 +830,8 @@
         console.warn("Termine konnten nicht geladen werden.", err);
       }
       services.sort((a,b)=>{
-        const oa = typeof a.order === "number" ? a.order : 9999;
-        const ob = typeof b.order === "number" ? b.order : 9999;
-        const ta = parseTime(a.uhrzeit); const tb = parseTime(b.uhrzeit);
-        if(oa !== ob) return oa - ob;
+        const ta = parseTime(a.uhrzeit||"23:59");
+        const tb = parseTime(b.uhrzeit||"23:59");
         return ta - tb;
       });
     }
@@ -936,7 +958,6 @@
       }
     }
 
-    /* Terminpicker */
     function openPicker(){ buildPickerGrid(); $("#dlgPicker").showModal(); }
     function buildPickerGrid(){
       const grid = $("#pickerGrid"); grid.innerHTML = "";
@@ -973,7 +994,6 @@
         wrap.appendChild(chip);
       });
     }
-    /* Ende Terminpicker */
 
     function updateProgress(){
       let count=0;
@@ -1017,6 +1037,7 @@
 
       await loadWaitlistState();
 
+      // Anmeldungen
       const bodyA = $("#tblAnmeldungen tbody"); bodyA.innerHTML = "";
       try{
         const qAnm = query(colRef("anmeldungen"), orderBy("createdAt","desc"));
@@ -1087,32 +1108,76 @@
         });
       });
 
-      const bodyE = $("#tblEvents tbody"); bodyE.innerHTML = "";
-      const dates = allDates().filter(d => ymd(d) !== `${ACTIVE_YEAR}-12-24`);
-      const map = new Map(eventsMap);
-      for(const d of dates){
-        const id = ymd(d);
-        const e = map.get(id) || { datum: id, uhrzeit:"", hostName:"", hostAdresse:"", hostEmail:"", info:"", changed:false, barrierefrei:false };
-        if(e.hostEmail) assignedEmails.add(e.hostEmail.trim());
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${deDate(new Date(id))}</td>
-          <td>${WDAY[new Date(id).getDay()]}</td>
-          <td><input type="text" value="${escapeAttr(e.uhrzeit||"")}" data-f="uhrzeit" placeholder="z. B. 17:30"></td>
-          <td><input type="text" value="${escapeAttr(e.hostName||"")}" data-f="hostName"></td>
-          <td><input type="text" value="${escapeAttr(e.hostAdresse||"")}" data-f="hostAdresse"></td>
-          <td><input type="text" value="${escapeAttr(e.info||"")}" data-f="info"></td>
-          <td><label><input type="checkbox" ${e.barrierefrei ? "checked" : ""} data-f="barrierefrei"> ♿</label></td>
-          <td><label><input type="checkbox" ${e.changed ? "checked" : ""} data-f="changed"> markiert</label></td>
-          <td><button data-save="${id}">Speichern</button></td>
-        `;
-        bodyE.appendChild(tr);
+      // Terminpflege als Karten
+      renderEventCards();
+
+      // Gottesdienste kompakt
+      renderServiceList();
+
+      // E Mailliste
+      updateProgress();
+      $("#includePending").addEventListener("change", updateEmailTextarea);
+      $("#btnCopyEmails").addEventListener("click", copyEmails);
+      updateEmailTextarea();
+
+      // Nachrückerliste Tabelle nur bei aktiver Liste
+      if(waitlistActive){
+        await renderWaitlistTable();
+      }else{
+        const body = $("#tblWaitlist tbody"); if(body) body.innerHTML = "";
       }
-      bodyE.addEventListener("click", async ev=>{
+    }
+
+    function renderEventCards(){
+      const wrap = $("#eventCards"); wrap.innerHTML = "";
+      const dates = allDates().filter(d => ymd(d) !== `${ACTIVE_YEAR}-12-24`);
+      dates.forEach(d=>{
+        const id = ymd(d);
+        const e = eventsMap.get(id) || { datum: id, uhrzeit:"", hostName:"", hostAdresse:"", hostEmail:"", info:"", changed:false, barrierefrei:false };
+        const card = document.createElement("div"); card.className = "event-card";
+        const wd = WDAY[new Date(id).getDay()];
+        card.innerHTML = `
+          <div class="event-head">
+            <div class="date-badge">${String(new Date(id).getDate()).padStart(2,"0")}.12<br><span style="font-size:12px;font-weight:600;">${wd}</span></div>
+            <div><strong>${e.hostName ? escapeHtml(e.hostName) : "Noch frei"}</strong><br><span class="muted">${e.hostAdresse ? escapeHtml(e.hostAdresse) : "Adresse folgt"}</span></div>
+          </div>
+          <div class="event-body">
+            <div class="event-field">
+              <label>Uhrzeit</label>
+              <input type="text" value="${escapeAttr(e.uhrzeit||"")}" data-f="uhrzeit" placeholder="z. B. 17:30">
+            </div>
+            <div class="event-field">
+              <label>Gastgeber</label>
+              <input type="text" value="${escapeAttr(e.hostName||"")}" data-f="hostName">
+            </div>
+            <div class="event-field">
+              <label>Adresse</label>
+              <input type="text" value="${escapeAttr(e.hostAdresse||"")}" data-f="hostAdresse">
+            </div>
+            <div class="event-field">
+              <label>Notiz</label>
+              <input type="text" value="${escapeAttr(e.info||"")}" data-f="info" placeholder="Hinweise">
+            </div>
+            <div class="event-field">
+              <label>Markierungen</label>
+              <div>
+                <label style="margin-right:8px"><input type="checkbox" ${e.barrierefrei ? "checked" : ""} data-f="barrierefrei"> ♿</label>
+                <label><input type="checkbox" ${e.changed ? "checked" : ""} data-f="changed"> geändert</label>
+              </div>
+            </div>
+          </div>
+          <div class="event-actions">
+            <button data-save="${id}">Speichern</button>
+          </div>
+        `;
+        wrap.appendChild(card);
+      });
+
+      wrap.addEventListener("click", async ev=>{
         const btn = ev.target.closest("button[data-save]");
         if(!btn) return;
-        const row = btn.closest("tr");
-        const inputs = row.querySelectorAll("input[data-f]");
+        const card = btn.closest(".event-card");
+        const inputs = card.querySelectorAll("input[data-f]");
         const payload = { datum: btn.dataset.save, wochentag: WDAY[new Date(btn.dataset.save).getDay()] };
         let timeInvalid = false;
         inputs.forEach(i=>{
@@ -1128,8 +1193,7 @@
           await setDoc(docRef("events", btn.dataset.save), payload, { merge:true });
           btn.textContent = "Gespeichert"; btn.disabled = true;
           setTimeout(()=>{ btn.textContent = "Speichern"; btn.disabled = false; }, 900);
-          await loadEventsAndServices(); updateProgress(); updateEmailTextarea();
-
+          await loadEventsAndServices(); updateProgress();
           const next = computeNextDate();
           if(btn.dataset.save === next){
             const e = eventsMap.get(next);
@@ -1139,37 +1203,66 @@
           }
         }catch(e){ alert("Speichern nicht möglich"); }
       });
-
-      await renderServiceTable();
-      updateProgress();
-      $("#includePending").addEventListener("change", updateEmailTextarea);
-      $("#btnCopyEmails").addEventListener("click", copyEmails);
-      updateEmailTextarea();
-
-      await renderWaitlistTable();
     }
 
-    async function renderServiceTable(){
-      const bodyS = $("#tblServices tbody"); bodyS.innerHTML = "";
-      services.forEach((s, idx)=> bodyS.appendChild(buildServiceRow(s, idx)));
-      bodyS.appendChild(buildServiceRow(null, services.length));
-    }
-    function buildServiceRow(s, idx){
-      const tr = document.createElement("tr");
-      const id = s && s.id ? s.id : "";
-      tr.innerHTML = `
-        <td style="width:40px">${s ? `<span class="drag" title="Ziehen zum Sortieren">≡</span>` : ""}</td>
-        <td><input type="text" value="${escapeAttr(s?.gemeinde||"")}" data-f="gemeinde" placeholder="Gemeinde oder Kirche"></td>
-        <td><input type="text" value="${escapeAttr(s?.uhrzeit||"")}" data-f="uhrzeit" placeholder="z. B. 16:00"></td>
-        <td><input type="text" value="${escapeAttr(s?.adresse||"")}" data-f="adresse" placeholder="Adresse"></td>
-        <td><input type="text" value="${escapeAttr(s?.info||"")}" data-f="info" placeholder="Notiz"></td>
-        <td>
-          ${id
-            ? `<button data-act="save" data-sid="${id}">Speichern</button> <button class="warn" data-act="del" data-sid="${id}">Löschen</button>`
-            : `<button data-act="save-new">Speichern</button>`}
-        </td>
-      `;
-      return tr;
+    function renderServiceList(){
+      const list = $("#serviceList"); list.innerHTML = "";
+      services.forEach(s=>{
+        list.appendChild(buildServiceRow(s));
+      });
+      list.appendChild(buildServiceRow(null));
+      list.addEventListener("click", async ev=>{
+        const btn = ev.target.closest("button[data-act]");
+        if(!btn) return;
+        const row = btn.closest(".service-row");
+        if(btn.dataset.act === "save-new"){
+          const payload = getServicePayload(row);
+          if(!payload.gemeinde && !payload.uhrzeit){ alert("Bitte Angaben ergänzen"); return; }
+          payload.isService = true;
+          payload.datum = `${ACTIVE_YEAR}-12-24`;
+          try{
+            await addDoc(colRef("events"), payload);
+            await loadEventsAndServices();
+            renderServiceList();
+          }catch(e){ alert("Speichern nicht möglich"); }
+        }else if(btn.dataset.act === "save"){
+          const payload = getServicePayload(row);
+          payload.isService = true;
+          try{
+            await setDoc(docRef("events", btn.dataset.sid), payload, { merge:true });
+            btn.textContent = "Gespeichert"; btn.disabled = true;
+            setTimeout(()=>{ btn.textContent = "Speichern"; btn.disabled = false; }, 900);
+            await loadEventsAndServices();
+          }catch(e){ alert("Speichern nicht möglich"); }
+        }else if(btn.dataset.act === "del"){
+          if(confirm("Diesen Eintrag wirklich löschen")){
+            try{ await deleteDoc(docRef("events", btn.dataset.sid)); await loadEventsAndServices(); renderServiceList(); }catch(e){ alert("Löschen nicht möglich"); }
+          }
+        }
+      });
+
+      function buildServiceRow(s){
+        const row = document.createElement("div"); row.className = "service-row";
+        row.innerHTML = `
+          <div class="service-grid">
+            <input type="text" value="${escapeAttr(s?.gemeinde||"")}" data-f="gemeinde" placeholder="Gemeinde oder Kirche">
+            <input type="text" value="${escapeAttr(s?.uhrzeit||"")}" data-f="uhrzeit" placeholder="z. B. 16:00">
+            <input type="text" value="${escapeAttr(s?.adresse||"")}" data-f="adresse" placeholder="Adresse">
+            <input type="text" value="${escapeAttr(s?.info||"")}" data-f="info" placeholder="Notiz">
+            <div>
+              ${s?.id
+                ? `<button data-act="save" data-sid="${s.id}">Speichern</button> <button class="warn" data-act="del" data-sid="${s.id}">Löschen</button>`
+                : `<button data-act="save-new">Speichern</button>`}
+            </div>
+          </div>
+        `;
+        return row;
+      }
+      function getServicePayload(row){
+        const f = {};
+        row.querySelectorAll("[data-f]").forEach(i=> f[i.dataset.f] = i.value.trim());
+        return f;
+      }
     }
 
     async function renderWaitlistTable(){
@@ -1209,7 +1302,6 @@
       }
     }
 
-    /* Kartenlogik */
     function openMapDialog(){
       $("#dlgMap").showModal();
       setTimeout(initOrUpdateMap, 50);
@@ -1227,7 +1319,6 @@
       }
       markerLayer.clearLayers();
 
-      // Vergebene Termine
       const features = [];
       allDates().forEach(d=>{
         const key = ymd(d);
@@ -1243,7 +1334,6 @@
           });
         }
       });
-      // Gottesdienste
       services.forEach(s=>{
         if(s.adresse){
           features.push({
@@ -1257,7 +1347,6 @@
         }
       });
 
-      // Optional: Adressen aus Anmeldungen
       if($("#mapShowPending")?.checked){
         try{
           const qAnm = query(colRef("anmeldungen"), orderBy("createdAt","desc"));
@@ -1281,7 +1370,6 @@
         }catch(e){ console.warn("Anmeldungen für Karte nicht geladen", e); }
       }
 
-      // Geocoding und Marker
       for(const f of features){
         try{
           const {lat, lon} = await geocodeCached(`${f.addr}, 37235 Hessisch Lichtenau, Deutschland`);
@@ -1301,12 +1389,11 @@
         }catch(err){
           console.warn("Geocoding fehlgeschlagen für", f.addr);
         }
-        await sleep(300); // freundlich zur API
+        await sleep(300);
       }
 
-      // Karte an Marker anpassen
       const g = markerLayer.getLayers();
-      if(g.length){ 
+      if(g.length){
         const group = L.featureGroup(g);
         mapInstance.fitBounds(group.getBounds().pad(0.15));
       }else{
@@ -1339,7 +1426,6 @@
       return out;
     }
 
-    /* PDF und ICS wie gehabt */
     function downloadPdfFromData(){
       const rows = [];
       allDates().forEach(d=>{
