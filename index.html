@@ -2,212 +2,97 @@
 <html lang="de">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Lebendiger Adventskalender Hessisch Lichtenau</title>
-  <meta name="description" content="Informationen, Termine und Anmeldung zum Lebendigen Adventskalender in Hessisch Lichtenau.">
-  <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-  <style>
-    :root{
-      --burgundy:#7b1e36;
-      --burgundy-dark:#5f162a;
-      --cream:#f8efe9;
-      --paper:#fff8f1;
-      --gold:#d9b36c;
-      --forest:#0d3b2e;
-      --ink:#2b2b2b;
-      --muted:#6b7280;
-      --ok:#146c43;
-      --danger:#a61b1b;
-      --card:#ffffff;
-      --shadow: 0 10px 20px rgba(0,0,0,.08), 0 6px 6px rgba(0,0,0,.06);
-      --radius:16px;
-      --pin-regular:#7b1e36;
-      --pin-service:#d9b36c;
-      --pin-pending:#a7a9a9;
-    }
-    html,body{
-      margin:0; padding:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial;
-      color:var(--ink); background: var(--paper);
-      background-image: linear-gradient(180deg, var(--burgundy) 0%, var(--burgundy-dark) 34%, rgba(95,22,42,0.85) 42%, rgba(95,22,42,0.00) 58%);
-    }
-    header{ color:var(--cream); padding:36px 16px 28px; text-align:center; position:relative; }
-    .logo-banner{ display:block; margin:0 auto 8px auto; max-width:min(900px, 92vw); height:auto; filter: drop-shadow(0 6px 18px rgba(0,0,0,.22)); }
-    .subtitle{ font-size:clamp(14px, 2.4vw, 18px); opacity:.95; max-width:900px; margin:6px auto 0 auto; line-height:1.5; }
-    nav{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:18px; margin-bottom:14px; }
-    nav a{ display:inline-block; text-decoration:none; color:var(--burgundy); background:var(--gold); padding:10px 14px; border-radius:999px; font-weight:600; box-shadow:var(--shadow); }
-
-    main{ max-width:1100px; margin:-12px auto 60px; padding:0 16px; }
-    .card{ background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:18px; margin-bottom:16px; }
-
-    .today{ display:grid; gap:12px; }
-    .today h2{ margin:0 0 6px; font-size:22px; color:var(--forest); }
-    .today .row{ display:grid; gap:12px; }
-    .today .pill{ display:inline-block; padding:6px 10px; background:var(--paper); border:1px solid #efe2d6; border-radius:999px; font-size:13px; color:var(--muted); }
-    .weather{ display:flex; align-items:center; gap:12px; padding:10px; border:1px dashed #e6d7c6; border-radius:12px; background:#fffbf6; }
-    .weather .big{ font-size:26px; font-weight:700; color:var(--burgundy-dark); min-width:60px; text-align:center; }
-
-    .grid{ display:grid; gap:12px; }
-    @media(min-width:850px){ .today .row{ grid-template-columns:2fr 1.2fr; } .grid.cols-2{ grid-template-columns:1fr 1fr; } }
-    h3{ margin:4px 0 12px; font-size:20px; color:var(--forest); }
-
-    .list{ display:flex; flex-direction:column; gap:8px; }
-    .item{ display:flex; gap:10px; align-items:flex-start; border:1px solid #eee5da; padding:12px; border-radius:12px; background:#fffefe; }
-    .day{ min-width:86px; text-align:center; background:var(--burgundy); color:var(--cream); padding:8px 8px; border-radius:10px; line-height:1.2; box-shadow:var(--shadow); }
-    .day .date{ font-size:16px; font-weight:800; }
-    .day .wd{ font-size:11px; opacity:.95; }
-    .day .time{ font-size:12px; margin-top:4px; font-weight:800; color:var(--gold); }
-    .meta .host{ font-weight:700; font-size:16px; }
-    .meta .addr{ color:#444; margin-top:2px; }
-    .badge{ display:inline-block; font-size:12px; padding:3px 7px; border-radius:999px; background:#eef2ff; color:#334155; margin-top:6px; }
-    .free{ background:#fff1f1; color:#7a1d1d; }
-    .changed{ background:#fff7cc; color:#7a5600; }
-
-    label{ font-weight:600; }
-    input[type="text"], input[type="email"], input[type="tel"], textarea{
-      width:100%; padding:10px 12px; border-radius:10px; border:1px solid #e5e7eb; background:#fff; font-size:16px;
-    }
-    textarea{ min-height:100px; resize:vertical; }
-    .help{ color:var(--muted); font-size:14px; }
-    .actions{ display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
-    button{ border:none; padding:10px 14px; border-radius:10px; background:var(--forest); color:#fff; font-weight:700; cursor:pointer; box-shadow:var(--shadow); }
-    button.secondary{ background:var(--burgundy); }
-    button.warn{ background:var(--danger); }
-    .success{ color:var(--ok); font-weight:600; }
-    .error{ color:var(--danger); font-weight:600; }
-
-    details{ background:#fffdf9; border:1px solid #f0e6d9; padding:12px; border-radius:12px; }
-
-    footer{ max-width:1100px; margin:30px auto 80px; padding:0 16px; color:#222; text-align:center; }
-    .footlink{ font-size:14px; color:#1f2937; text-decoration:underline; cursor:pointer; }
-
-    dialog{ border:none; border-radius:16px; padding:0; width:min(1100px, 96vw); box-shadow:var(--shadow); }
-    .dlg-body{ padding:16px; background:#ffffff; border-radius:16px; }
-    .dlg-head{ padding:12px 16px 0 16px; }
-    .dlg-title{ margin:0; color:var(--forest); font-size:20px; }
-    .dlg-foot{ padding:10px 16px 16px 16px; display:flex; justify-content:flex-end; gap:8px; }
-    .dlg-scroll{ max-height:80vh; overflow:auto; padding:0 16px 0 16px; }
-    .link-as-btn{ background:#e5e7eb; color:#111827; border-radius:10px; padding:7px 10px; cursor:pointer; display:inline-block; }
-    .muted{ color:var(--muted); }
-    .center{ text-align:center; }
-
-    /* WhatsApp und Nachrücker */
-    .wa-grid{ display:grid; gap:12px; align-items:start; }
-    @media(min-width:900px){ .wa-grid.has-waitlist{ grid-template-columns: 1fr 1fr; } }
-    .wa-left{ order:1; }
-    .wa-right{ order:2; }
-    .wa-grid.has-waitlist .wa-left{ order:2; }
-    .wa-grid.has-waitlist .wa-right{ order:1; }
-    .wa-block, .waitlist-block{ background:#fff; border:1px solid #e5e7eb; border-radius:12px; padding:12px; box-shadow:var(--shadow); }
-    .wa-content{ display:flex; align-items:center; gap:14px; }
-    .wa-text{ flex:1; min-width:0; }
-    .wa-text p{ margin:0 0 6px 0; }
-    @media(max-width: 640px){ .wa-content{ flex-direction:column; align-items:flex-start; } }
-    .qr{ width:160px; height:auto; border-radius:10px; border:1px solid #e5e7eb; box-shadow:var(--shadow); }
-    @media(min-width:850px){ .qr{ width:180px; } }
-
-    /* Termin Picker */
-    .picker-wrap{ margin:8px 0; }
-    .week-head{ display:grid; grid-template-columns:repeat(7, 1fr); gap:6px; font-weight:700; color:#334155; font-size:12px; text-align:center; }
-    .picker-grid{ display:grid; gap:6px; grid-template-columns:repeat(7, minmax(66px, 1fr)); margin-top:6px; }
-    .pick{ border:1px solid #e5e7eb; border-radius:10px; padding:6px; text-align:center; cursor:pointer; user-select:none; background:#fff; position:relative; padding-bottom:14px; min-height:60px; }
-    .pick .d{ font-weight:800; font-size:15px; }
-    .pick .wd{ font-size:11px; color:#64748b; }
-    .pick.sel{ outline:3px solid var(--gold); background:#fffaf0; }
-    .pick::after{ content:""; position:absolute; left:6px; right:6px; bottom:6px; height:3px; border-radius:3px; background:#e5e7eb; }
-    .pick.free::after{ background: linear-gradient(90deg,#22c55e,#16a34a); }
-    .pick.booked::after{ background: linear-gradient(90deg,#f87171,#b91c1c); }
-
-    .preview-chips{ display:flex; gap:6px; flex-wrap:wrap; margin-top:6px; }
-    .chip{ background:#eef2ff; color:#334155; padding:3px 7px; border-radius:999px; font-size:12px; }
-
-    .consent{ background:#fffbf6; border:1px solid #e6d7c6; padding:10px; border-radius:10px; }
-    .consent label{ font-weight:500; display:flex; align-items:flex-start; gap:8px; line-height:1.4; }
-    .consent input[type="checkbox"]{ margin-top:3px; }
-
-    table.table{ width:100%; border-collapse:collapse; }
-    table.table th, table.table td{ border:1px solid #eee5da; padding:8px; vertical-align:top; }
-    table.table thead th{ background:#fffbf6; text-align:left; }
-
-    /* Karten Dialog */
-    #dlgMap{ width:min(1200px, 98vw); }
-    #map{ width:100%; height:min(70vh, 720px); border-radius:16px; border:1px solid #e5e7eb; }
-    .map-legend{ display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-bottom:8px; }
-    .dot{ width:14px; height:14px; border-radius:50%; display:inline-block; border:2px solid #fff; box-shadow:var(--shadow); }
-    .dot.regular{ background:var(--pin-regular); }
-    .dot.service{ background:var(--pin-service); }
-    .dot.pending{ background:var(--pin-pending); }
-    .leaflet-div-icon{ background:transparent; border:none; }
-
-    /* Admin Fortschritt */
-    .prog-wrap{ background:#fff; border:1px solid #eee5da; border-radius:12px; padding:12px; margin-bottom:12px; }
-    .prog-label{ display:flex; justify-content:space-between; align-items:center; font-weight:700; color:#334155; margin-bottom:6px; }
-    .prog-bar{ width:100%; height:10px; background:#f1e8dc; border-radius:999px; overflow:hidden; }
-    .prog-fill{ height:100%; width:0%; background:linear-gradient(90deg, var(--gold), #f3d38f); }
-
-    /* Kompakte Terminpflege als Kartenliste */
-    .event-cards{ display:grid; gap:8px; }
-    .event-card{ border:1px solid #eee5da; border-radius:12px; padding:10px; background:#fff; box-shadow:var(--shadow); }
-    .event-head{ display:flex; align-items:center; gap:10px; margin-bottom:6px; }
-    .date-badge{ min-width:94px; text-align:center; background:var(--burgundy); color:var(--cream); padding:6px 8px; border-radius:9px; line-height:1.1; box-shadow:var(--shadow); font-weight:800; font-size:14px; }
-    .event-body{ display:grid; gap:6px; }
-    @media(min-width:900px){
-      .event-body{ grid-template-columns: 0.6fr 1fr 1fr 0.8fr 0.7fr; align-items:start; }
-    }
-    .event-field{ display:flex; flex-direction:column; gap:4px; }
-    .event-actions{ display:flex; justify-content:flex-end; gap:8px; margin-top:6px; }
-
-    /* Gottesdienste Drag and Drop */
-    .service-list{ display:grid; gap:8px; }
-    .service-row{ border:1px solid #eee5da; border-radius:10px; padding:8px; background:#fff; }
-    .service-row[draggable="true"]{ cursor:grab; }
-    .service-row.dragging{ opacity:.6; }
-    .service-grid{ display:grid; gap:6px; }
-    @media(min-width:900px){
-      .service-grid{ grid-template-columns: 1fr 0.5fr 1fr 1fr auto; align-items:center; }
-    }
-    .handle{ font-size:12px; color:var(--muted); user-select:none; }
-
-    .sr-only{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); border:0; }
-  </style>
+  <meta name="description" content="Der Lebendige Adventskalender in Hessisch Lichtenau: Jeden Abend im Advent öffnet sich ein Fenster. Alle Termine, Orte und die Anmeldung als Gastgeberin oder Gastgeber.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://tile.openstreetmap.org https://*.tile.openstreetmap.org; connect-src 'self' https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://api.open-meteo.com; font-src 'self'; base-uri 'self'; form-action 'self'; object-src 'none'">
+  <meta name="referrer" content="no-referrer">
+  <meta name="theme-color" content="#7a1733">
+  <link rel="icon" href="assets/favicon.png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta property="og:title" content="Lebendiger Adventskalender Hessisch Lichtenau">
+  <meta property="og:description" content="Jeden Abend im Advent öffnet sich ein Fenster. Termine, Orte und Anmeldung.">
+  <meta property="og:image" content="assets/titelbild.png">
+  <meta property="og:type" content="website">
+  <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
 
-  <header>
-    <img src="Logo.png" alt="Lebendiger Adventskalender Hessisch Lichtenau" class="logo-banner">
-    <div class="subtitle">Vom ersten Advent bis kurz vor Heiligabend. Tägliche Begegnungen mit Licht, Musik, Geschichten und guten Gesprächen.</div>
-    <nav aria-label="Hauptnavigation">
-      <a href="#heute">Heute</a>
-      <a href="#termine">Termine</a>
-      <a href="#anmeldung">Gastgeber werden</a>
-      <a href="#info">Information</a>
-      <a href="#" id="openContact">Kontakt</a>
-    </nav>
+  <!-- Kopfleiste -->
+  <div class="topbar">
+    <div class="topbar-innen">
+      <a class="marke" href="#start" aria-label="Zum Seitenanfang">
+        <svg width="30" height="30" viewBox="0 0 100 100" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="4.5">
+          <rect x="30" y="26" width="40" height="48"/>
+          <line x1="30" y1="78" x2="70" y2="78"/>
+          <polygon points="30,26 12,20 12,80 30,74"/>
+          <polygon points="70,26 88,20 88,80 70,74"/>
+          <line x1="21" y1="23" x2="21" y2="77" stroke-width="2.5"/>
+          <line x1="79" y1="23" x2="79" y2="77" stroke-width="2.5"/>
+        </svg>
+        <span class="marke-text">Lebendiger Adventskalender</span>
+      </a>
+      <button id="burger" class="burger" aria-label="Menü öffnen" aria-expanded="false" aria-controls="topnav">☰</button>
+      <nav id="topnav" class="topnav" aria-label="Hauptnavigation">
+        <a href="#heute">Heute</a>
+        <a href="#kalender">Kalender</a>
+        <a href="#mitmachen">Gastgeber werden</a>
+        <a href="#whatsapp">WhatsApp</a>
+        <a href="#info">Was ist das?</a>
+        <a href="#kontakt">Kontakt</a>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Ankündigung -->
+  <div id="banner" class="banner hidden" role="status"></div>
+
+  <!-- Hero -->
+  <header id="start" class="hero">
+    <svg class="hero-blob" viewBox="0 0 600 420" aria-hidden="true">
+      <path fill="#69132d" d="M300 14c86-20 208 18 244 96 34 74-16 142-52 196-38 57-116 106-198 100C204 400 118 356 74 288 28 216 40 130 104 78 156 36 226 31 300 14Z"/>
+    </svg>
+    <span class="hero-stern" style="left:12%;top:18%"></span>
+    <span class="hero-stern s2" style="left:85%;top:24%"></span>
+    <span class="hero-stern s3" style="left:22%;top:70%"></span>
+    <span class="hero-stern s2" style="left:74%;top:64%"></span>
+    <div class="hero-innen">
+      <img class="hero-logo" src="assets/logo.png" alt="Lebendiger Adventskalender – Schriftzug">
+      <p id="heroUntertitel" class="hero-untertitel"></p>
+      <div class="hero-pillen">
+        <span id="heroZeitraum" class="hero-pille">Advent</span>
+        <span id="heroCountdown" class="hero-pille hidden"></span>
+      </div>
+      <div class="hero-aktionen">
+        <a id="ctaMitmachen" class="btn btn-gold" href="#mitmachen">Gastgeber werden</a>
+        <a class="btn btn-ghost" href="#kalender">Zu den Terminen</a>
+      </div>
+    </div>
+    <div class="hero-bogen" aria-hidden="true"></div>
   </header>
 
   <main>
-    <section id="whatsapp" class="card" aria-labelledby="wa-title">
-      <h3 id="wa-title">WhatsApp Kanal</h3>
-      <div id="waGrid" class="wa-grid">
-        <div class="wa-right">
-          <div class="waitlist-block" id="waitlistBox" style="display:none">
-            <h4 style="margin:0 0 8px 0">Nachrückerliste</h4>
-            <div class="waitlist-note" id="waitlistText">
-              Alle Termine sind vergeben. Es kann kurzfristig ein Platz frei werden. Wenn Sie einspringen möchten, tragen Sie sich ein. Bei Bedarf melden wir uns und stimmen den Termin mit Ihnen ab.
-            </div>
-            <div class="actions" style="margin-top:8px">
-              <button type="button" id="openWaitlist" class="secondary">Auf Nachrückerliste eintragen</button>
-            </div>
+    <!-- Heute / Nächster Abend -->
+    <section id="heute" class="block">
+      <div class="container">
+        <div class="card">
+          <div class="heute-kopf">
+            <h2 id="heuteBadge" style="margin:0">Nächster Abend</h2>
+            <span id="heuteDatum" class="chip"></span>
+            <span id="heuteZeit" class="chip chip-gold"></span>
           </div>
-        </div>
-        <div class="wa-left">
-          <div class="wa-block">
-            <div class="wa-content">
-              <img src="qrcode.jpg" alt="QR Code zum WhatsApp Kanal" class="qr" id="qrThumb">
-              <div class="wa-text">
-                <p>Kurze Hinweise und abendliche Treffpunkte kommen hier direkt auf das Handy. Scannen Sie den QR Code oder öffnen Sie den Link.</p>
-                <p><a class="link-as-btn" id="waLink" href="https://whatsapp.com/channel/0029VbBLGb31CYoMJfdTh60w" target="_blank" rel="noopener">Kanal in WhatsApp öffnen</a></p>
-                <small class="muted">Ein Klick auf den QR Code öffnet eine vergrößerte Ansicht.</small>
+          <div class="heute-zeile">
+            <div>
+              <div id="heuteTitel" class="heute-titel">Wird geladen …</div>
+              <div id="heuteAdresse" class="heute-adresse"></div>
+              <div id="heuteHinweis" class="muted"></div>
+            </div>
+            <div id="wetter" class="wetter" aria-live="polite">
+              <div id="wetterTemp" class="wetter-temp">–</div>
+              <div>
+                <div id="wetterText">Wetter wird geladen …</div>
+                <small id="wetterMeta"></small>
               </div>
             </div>
           </div>
@@ -215,1434 +100,242 @@
       </div>
     </section>
 
-    <section id="heute" class="card today" aria-labelledby="heute-title">
-      <h2 id="heute-title">Nächster Termin</h2>
-      <div class="row">
-        <div>
-          <span class="pill" id="heuteDatum">Datum wird geladen</span>
-          <span class="pill" id="heuteZeit" style="display:none"></span>
-          <div class="title" id="heuteTitel">Noch kein Eintrag ausgewählt</div>
-          <div class="addr" id="heuteAdresse"></div>
-          <div class="help" id="heuteHinweis"></div>
+    <!-- Kalender: Fensterwand -->
+    <section id="kalender" class="block">
+      <div class="container">
+        <div class="abschnitt-kopf">
+          <span class="schnoerkel" aria-hidden="true">Alle Fenster</span>
+          <h2>Der Kalender</h2>
+          <p>Ein Tipp auf ein Fenster zeigt Ort, Uhrzeit und Hinweise. Freie Fenster warten noch auf Gastgeberinnen und Gastgeber.</p>
         </div>
-        <div class="weather" aria-live="polite">
-          <div class="big" id="wTemp">n. a.</div>
-          <div>
-            <div id="wText">Wetter wird geladen</div>
-            <small id="wMeta"></small>
+        <div class="wand-kopf" aria-hidden="true">
+          <span>Mo</span><span>Di</span><span>Mi</span><span>Do</span><span>Fr</span><span>Sa</span><span>So</span>
+        </div>
+        <div id="fensterWand" class="fenster-wand" aria-label="Kalender mit allen Abenden"></div>
+        <div class="legende" aria-hidden="true">
+          <span><i class="l-belegt"></i> vergeben</span>
+          <span><i class="l-frei"></i> noch frei</span>
+          <span><i class="l-heute"></i> heute</span>
+        </div>
+        <div class="kalender-aktionen">
+          <button id="btnIcs" class="btn btn-wein btn-klein" type="button">Alle Termine in meinen Kalender</button>
+          <button id="btnPdf" class="btn btn-line btn-klein" type="button">Übersicht drucken (PDF)</button>
+          <button id="btnKarte" class="btn btn-line btn-klein" type="button">Karte ansehen</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- WhatsApp -->
+    <section id="whatsapp" class="block">
+      <div class="container">
+        <div class="card">
+          <h3>Auf dem Laufenden bleiben</h3>
+          <div class="wa-zeile">
+            <div id="waQr" class="wa-qr" role="button" tabindex="0" aria-label="QR-Code vergrößern"></div>
+            <div class="wa-text">
+              <p>Kurze Hinweise und der abendliche Treffpunkt kommen direkt aufs Handy: Einfach den QR-Code scannen oder den Kanal öffnen.</p>
+              <a id="waLink" class="btn btn-wa" target="_blank" rel="noopener" href="#">
+                <img src="assets/whatsapp.png" alt="">Kanal in WhatsApp öffnen
+              </a>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <section id="termine" class="card" aria-labelledby="termine-title">
-      <h3 id="termine-title">Alle Termine</h3>
-      <p class="help">Zeitraum von Sonntag, 30. November, bis Mittwoch, 24. Dezember. Beginn in der Regel um 18 Uhr. Abweichungen stehen beim Datum.</p>
-      <div class="list" id="terminListe" role="list"></div>
-      <div class="actions" style="margin-top:10px">
-        <button type="button" id="btnPdf" class="secondary">Übersicht als PDF</button>
-        <button type="button" id="btnIcs">Alle Termine als Kalenderdatei</button>
-        <button type="button" id="btnMap">Karte</button>
+    <!-- Mitmachen -->
+    <section id="mitmachen" class="block">
+      <div class="container">
+        <div class="abschnitt-kopf">
+          <span class="schnoerkel" aria-hidden="true">Mitmachen</span>
+          <h2>Gastgeber werden</h2>
+          <p id="formIntro"></p>
+        </div>
+
+        <div id="formZu" class="card center hidden">
+          <h3>Die Anmeldung ist zurzeit geschlossen</h3>
+          <p class="muted">Alle Fenster sind vergeben oder die Planung hat noch nicht begonnen. Fragen beantwortet das Organisationsteam gern – siehe <a href="#kontakt">Kontakt</a>.</p>
+        </div>
+
+        <div id="formOffen" class="card">
+          <form id="hostForm" novalidate>
+            <div class="feld">
+              <label for="fName">Name oder Gruppe *</label>
+              <input id="fName" name="name" type="text" autocomplete="name" required placeholder="z. B. Familie Müller oder Posaunenchor">
+            </div>
+            <div class="form-grid zwei">
+              <div class="feld">
+                <label for="fEmail">E-Mail *</label>
+                <input id="fEmail" name="email" type="email" autocomplete="email" required placeholder="beispiel@mail.de">
+              </div>
+              <div class="feld">
+                <label for="fTelefon">Telefon *</label>
+                <input id="fTelefon" name="telefon" type="tel" autocomplete="tel" required placeholder="z. B. 0151 12345678">
+              </div>
+            </div>
+            <div class="form-grid zwei">
+              <div class="feld">
+                <label for="fStreet">Straße und Hausnummer *</label>
+                <input id="fStreet" name="street" type="text" autocomplete="street-address" required placeholder="z. B. Musterstraße 5">
+              </div>
+              <div class="feld">
+                <label for="fCity">PLZ und Ort *</label>
+                <input id="fCity" name="city" type="text" required placeholder="z. B. 37235 Hessisch Lichtenau">
+              </div>
+            </div>
+
+            <div class="feld">
+              <label>Wunschtermine *</label>
+              <div class="hilfe">Bitte alle passenden Abende antippen – eine Mehrfachauswahl hilft bei der Planung. Beginn ist in der Regel um 18 Uhr für etwa 20 bis 30 Minuten.</div>
+              <div class="picker-kopf" aria-hidden="true"><div>Mo</div><div>Di</div><div>Mi</div><div>Do</div><div>Fr</div><div>Sa</div><div>So</div></div>
+              <div id="picker" class="picker"></div>
+              <div class="picker-legende" aria-hidden="true">
+                <span><i style="background:var(--ok)"></i>frei</span>
+                <span><i style="background:var(--fehler)"></i>bereits vergeben</span>
+              </div>
+              <div id="wunschChips" class="wunsch-chips" aria-live="polite"></div>
+            </div>
+
+            <div class="feld">
+              <label for="fNote">Bemerkungen <span class="muted" style="font-weight:400">(optional)</span></label>
+              <textarea id="fNote" name="note" placeholder="Ideen, Hinweise oder Besonderheiten"></textarea>
+            </div>
+
+            <div class="feld">
+              <label class="check"><input type="checkbox" name="barrierefrei" id="fBf"> <span>♿ Unser Veranstaltungsort ist barrierefrei erreichbar. <span class="muted">Diese Angabe erscheint in der Terminübersicht.</span></span></label>
+            </div>
+
+            <div class="consent">
+              <label class="check" for="fConsent">
+                <input type="checkbox" name="consent" id="fConsent" required>
+                <span>Ich stimme zu, dass mein Name (bzw. der Gruppenname) und die Adresse des Veranstaltungsorts als Gastgeberin oder Gastgeber veröffentlicht werden – auf dieser Website sowie in Aushängen, im Gemeindebrief, in sozialen Medien und in der Presse. Diese Zustimmung ist für die Teilnahme als Gastgeber erforderlich und kann für die Zukunft jederzeit widerrufen werden. E-Mail-Adresse und Telefonnummer werden <strong>nicht</strong> veröffentlicht, sondern nur vom Organisationsteam für Rückfragen genutzt. Näheres in der <a href="datenschutz.html" target="_blank" rel="noopener">Datenschutzerklärung</a>.</span>
+              </label>
+            </div>
+
+            <div class="hp-feld" aria-hidden="true">
+              <label for="fWebsite">Bitte frei lassen</label>
+              <input id="fWebsite" name="website" type="text" tabindex="-1" autocomplete="off">
+            </div>
+
+            <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+              <button id="btnSenden" class="btn btn-gold" type="submit">Anmeldung senden</button>
+              <span id="formMsg" class="form-status" role="status" aria-live="polite"></span>
+            </div>
+          </form>
+        </div>
+
+        <!-- Nachrückerliste -->
+        <div id="nachruecker" class="card hidden" style="margin-top:14px">
+          <h3>Nachrückerliste</h3>
+          <p class="muted">Es kann kurzfristig ein Abend frei werden. Wer einspringen möchte, trägt sich hier ein – bei Bedarf melden wir uns und stimmen den Termin ab.</p>
+          <form id="nrForm" novalidate>
+            <div class="form-grid zwei">
+              <div class="feld"><label for="nrName">Name oder Gruppe *</label><input id="nrName" name="nrName" type="text" required></div>
+              <div class="feld"><label for="nrEmail">E-Mail *</label><input id="nrEmail" name="nrEmail" type="email" required></div>
+            </div>
+            <div class="form-grid zwei">
+              <div class="feld"><label for="nrTelefon">Telefon *</label><input id="nrTelefon" name="nrTelefon" type="tel" required></div>
+              <div class="feld"><label for="nrStreet">Straße und Hausnummer *</label><input id="nrStreet" name="nrStreet" type="text" required></div>
+            </div>
+            <div class="form-grid zwei">
+              <div class="feld"><label for="nrCity">PLZ und Ort *</label><input id="nrCity" name="nrCity" type="text" required></div>
+              <div class="feld"><label for="nrNote">Bemerkung</label><input id="nrNote" name="nrNote" type="text"></div>
+            </div>
+            <div class="hp-feld" aria-hidden="true"><label for="nrWebsite">Bitte frei lassen</label><input id="nrWebsite" name="nrWebsite" type="text" tabindex="-1" autocomplete="off"></div>
+            <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+              <button class="btn btn-wein" type="submit">Auf die Nachrückerliste</button>
+              <span id="nrMsg" class="form-status" role="status" aria-live="polite"></span>
+            </div>
+          </form>
+        </div>
       </div>
     </section>
 
-    <section id="anmeldung" class="card" aria-labelledby="anmeldung-title">
-      <h3 id="anmeldung-title">Gastgeber werden</h3>
-      <p>Sie möchten einen Abend ausrichten. Das freut uns. Tragen Sie bitte Ihre Kontaktdaten ein und wählen Sie mehrere mögliche Termine im Dezember. Die endgültige Vergabe erfolgt durch das Organisationsteam. Sie erhalten im Anschluss eine Rückmeldung.</p>
-      <form id="hostForm" novalidate>
-        <div>
-          <label for="name">Name oder Gruppe</label>
-          <input id="name" name="name" type="text" autocomplete="name" required placeholder="Zum Beispiel Familie Müller oder Gesangverein Heimatklang">
+    <!-- Info -->
+    <section id="info" class="block">
+      <div class="container">
+        <div class="card">
+          <h3>Was ist ein Lebendiger Adventskalender?</h3>
+          <p id="intro1"></p>
+          <p id="intro2"></p>
+          <details>
+            <summary style="cursor:pointer;font-weight:700;color:var(--wein)">Organisation und nächste Schritte</summary>
+            <p id="orgaText" style="margin-top:8px"></p>
+          </details>
         </div>
-        <div class="grid cols-2">
-          <div>
-            <label for="email">E Mail</label>
-            <input id="email" name="email" type="email" autocomplete="email" required placeholder="beispiel@mail.de">
-          </div>
-          <div>
-            <label for="tel">Telefon</label>
-            <input id="tel" name="tel" type="tel" autocomplete="tel" required placeholder="Zum Beispiel 0151 12345678">
-          </div>
-        </div>
-
-        <div class="grid cols-2">
-          <div>
-            <label for="street">Straße und Hausnummer</label>
-            <input id="street" name="street" type="text" required placeholder="Zum Beispiel Musterstraße 5">
-          </div>
-          <div>
-            <label for="city">PLZ Ort</label>
-            <input id="city" name="city" type="text" required placeholder="Zum Beispiel 37235 Hessisch Lichtenau">
-          </div>
-        </div>
-
-        <div>
-          <label>Wunschtermine im Dezember 2025</label>
-          <div class="actions">
-            <button type="button" id="openPicker" class="secondary">Wunschtermine auswählen</button>
-          </div>
-          <div class="help">Wochenraster von Montag bis Sonntag. Mehrfachauswahl ist gewünscht.</div>
-          <div id="wishesPreview" class="preview-chips"></div>
-        </div>
-
-        <div>
-          <label for="note">Bemerkungen optional</label>
-          <textarea id="note" name="note" placeholder="Ideen, Hinweise oder Besonderheiten"></textarea>
-        </div>
-
-        <div>
-          <label><input id="barrierefrei" name="barrierefrei" type="checkbox"> ♿ Veranstaltungsort barrierefrei</label>
-          <div class="help">Diese Info erscheint in der Terminübersicht.</div>
-        </div>
-
-        <div class="consent">
-          <label for="consent">
-            <input id="consent" name="consent" type="checkbox" required>
-            Ich stimme mit meiner Anmeldung zu, dass mein Name und meine Adresse als Gastgeberin oder Gastgeber veröffentlicht werden dürfen. Die Veröffentlichung kann in Aushängen, sozialen Medien, auf digitalen Kanälen, im Gemeindebrief und in Printmedien erfolgen. Diese Zustimmung ist Voraussetzung für die Anmeldung.
-          </label>
-          <div class="help">Ohne diese Zustimmung kann die Anmeldung nicht abgesendet werden.</div>
-        </div>
-
-        <div class="actions">
-          <button type="submit" id="sendBtn">Anmeldung senden</button>
-          <button type="reset" class="secondary" id="resetBtn">Eingaben zurücksetzen</button>
-          <span id="formMsg" role="status" aria-live="polite"></span>
-        </div>
-      </form>
+      </div>
     </section>
 
-    <section id="info" class="card" aria-labelledby="info-title">
-      <h3 id="info-title">Was ist ein lebendiger Adventskalender</h3>
-      <p>An jedem Abend im Advent öffnet sich ein Fenster, ein Garten oder eine Haustür. Gastgeberinnen und Gastgeber laden für etwa 30 Minuten zu einer adventlichen Begegnung ein. Gemeinschaft und Vorfreude stehen im Mittelpunkt.</p>
-      <p>Die Gestaltung kann vielfältig sein. Möglich sind eine kurze Geschichte oder ein Impuls, gemeinsames Singen, leise Musik oder ein offenes Zusammensein bei Kerzenschein. Gäste bringen nach Möglichkeit eine eigene Tasse mit.</p>
-      <details>
-        <summary>Organisation und nächste Schritte</summary>
-        <p>Zum Auftakt eröffnen wir am Sonntag, 30. November, an der Stadtkirche die Krippe im Freien. Danach trifft sich die Stadtgemeinschaft jeden Abend an einem anderen Ort. Gruppen, Familien, Vereine, Kirchengemeinden oder Einzelpersonen können einen Abend übernehmen. Auf Wunsch stellen wir Materialien und Gestaltungsideen bereit.</p>
-      </details>
+    <!-- Kontakt -->
+    <section id="kontakt" class="block">
+      <div class="container">
+        <div class="card center">
+          <h3>Kontakt</h3>
+          <p id="kontaktText"></p>
+          <a id="kontaktMail" class="btn btn-wein" href="#">E-Mail schreiben</a>
+        </div>
+      </div>
     </section>
   </main>
 
-  <footer>
-    <span class="footlink" id="openLegal">Impressum und Datenschutz</span>
+  <footer class="fuss">
+    <div style="font-family:var(--schrift-schnoerkel);font-size:30px;color:var(--gold-hell)">Wir freuen uns auf Sie!</div>
+    <div class="fuss-links">
+      <a href="impressum.html">Impressum</a>
+      <a href="datenschutz.html">Datenschutz</a>
+      <a href="admin.html">Verwaltung</a>
+    </div>
+    <div class="fuss-klein">Ev. Kirchengemeinde Hessisch Lichtenau · © <span id="jahrFuss"></span></div>
   </footer>
 
-  <!-- Kontakt Dialog -->
-  <dialog id="dlgContact">
-    <div class="dlg-body">
-      <div class="dlg-head"><h3 class="dlg-title">Kontakt</h3></div>
-      <div class="dlg-scroll">
-        <p>Sie haben Fragen oder möchten eine Anregung weitergeben. Schreiben Sie uns gern. Wir melden uns zeitnah.</p>
-        <p><a class="link-as-btn" href="mailto:Dominik.Teminski@ekkw.de">Hier klicken und E Mail schreiben</a></p>
-        <p class="muted">Vielen Dank für Ihre Nachricht.</p>
+  <!-- Dialog: Tagesdetails -->
+  <dialog id="dlgTag" class="unten">
+    <div class="sheet">
+      <div class="sheet-kopf">
+        <h3 id="dlgTagTitel"></h3>
+        <button type="button" class="sheet-zu" data-dialog-zu aria-label="Schließen">✕</button>
       </div>
-      <div class="dlg-foot"><button type="button" class="secondary" data-close="dlgContact">Schließen</button></div>
+      <div id="dlgTagInhalt"></div>
+      <div id="dlgTagAktionen" class="sheet-aktionen"></div>
     </div>
   </dialog>
 
-  <!-- QR Zoom Dialog -->
-  <dialog id="dlgQr">
-    <div class="dlg-body">
-      <div class="dlg-head"><h3 class="dlg-title">QR Code zum WhatsApp Kanal</h3></div>
-      <div class="dlg-scroll center">
-        <p><img src="qrcode.jpg" alt="QR Code vergrößert" style="max-width:min(540px, 88vw); height:auto; border-radius:16px; border:1px solid #e5e7eb; box-shadow:var(--shadow)"></p>
-        <p><a class="link-as-btn" href="https://whatsapp.com/channel/0029VbBLGb31CYoMJfdTh60w" target="_blank" rel="noopener">Kanal in WhatsApp öffnen</a></p>
+  <!-- Dialog: Danke -->
+  <dialog id="dlgDanke" class="unten">
+    <div class="sheet center">
+      <div style="font-family:var(--schrift-schnoerkel);font-size:40px;color:var(--gold)">Danke!</div>
+      <p id="dlgDankeText"></p>
+      <div class="sheet-aktionen" style="justify-content:center">
+        <button type="button" class="btn btn-wein" data-dialog-zu>Schließen</button>
       </div>
-      <div class="dlg-foot"><button type="button" class="secondary" data-close="dlgQr">Schließen</button></div>
     </div>
   </dialog>
 
-  <!-- Impressum und Admin -->
-  <dialog id="dlgLegal">
-    <div class="dlg-body">
-      <div class="dlg-head"><h3 class="dlg-title">Impressum und Datenschutz</h3></div>
-      <div class="dlg-scroll">
-        <p><strong>Impressum</strong></p>
-        <p>Ev. Kirchengemeinde Hessisch Lichtenau<br>Mühlweg 21, 37235 Hessisch Lichtenau<br>Telefon 05602 2403<br>E Mail hessischlichtenau.gemeindebuero@ekkw.de</p>
-        <p>Die Ev. Kirchengemeinde Hessisch Lichtenau ist eine Körperschaft des öffentlichen Rechts. Vertretungsberechtigt ist der Kirchenvorstand.</p>
-        <p><strong>Verantwortlich nach §18 MStV</strong><br>Pfarrerin Anja Peters, Mühlweg 21, 37235 Hessisch Lichtenau</p>
-        <p><strong>Datenschutz</strong></p>
-        <p>Es werden keine Tracking Dienste oder Cookies eingesetzt. Technisch notwendige Protokolle des Hosts werden nur kurz gespeichert. Die lokale Speicherung erfolgt ausschließlich im Browser und kann jederzeit gelöscht werden.</p>
-        <hr>
-        <p class="muted">Nur für das Organisationsteam</p>
-        <div class="actions" style="gap:6px">
-          <span class="link-as-btn" id="openAdminLogin">Admin</span>
+  <!-- Dialog: QR groß -->
+  <dialog id="dlgQrGross" class="unten"></dialog>
+
+  <!-- Dialog: Karte -->
+  <dialog id="dlgKarte">
+    <div class="sheet sheet-breit">
+      <div class="sheet-kopf">
+        <h3>Karte der Veranstaltungsorte</h3>
+        <button type="button" class="sheet-zu" data-dialog-zu aria-label="Schließen">✕</button>
+      </div>
+      <div id="karteConsent" class="karte-consent">
+        <p>Für die Karte werden Kartenbilder von <strong>OpenStreetMap</strong> geladen. Dabei wird Ihre IP-Adresse an die Server der OpenStreetMap Foundation übertragen. Details in der <a href="datenschutz.html" target="_blank" rel="noopener">Datenschutzerklärung</a>.</p>
+        <button id="btnKarteOk" class="btn btn-gold" type="button">Einverstanden, Karte laden</button>
+      </div>
+      <div id="karteBereich" class="hidden">
+        <div class="karte-legende">
+          <span><i class="punkt punkt-wein"></i>Adventsfenster</span>
+          <span><i class="punkt punkt-gold"></i>Gottesdienste</span>
         </div>
-      </div>
-      <div class="dlg-foot"><button type="button" class="secondary" data-close="dlgLegal">Schließen</button></div>
-    </div>
-  </dialog>
-
-  <!-- Admin Login -->
-  <dialog id="dlgAdminLogin">
-    <div class="dlg-body">
-      <div class="dlg-head"><h3 class="dlg-title">Admin Anmeldung</h3></div>
-      <div class="dlg-scroll">
-        <form id="adminLogin" class="grid">
-          <input type="email" id="admEmail" placeholder="Admin E Mail" required>
-          <input type="password" id="admPass" placeholder="Passwort" required>
-          <div class="actions">
-            <button type="button" id="btnLogin">Anmelden</button>
-            <span id="authMsg" class="muted" aria-live="polite"></span>
-          </div>
-        </form>
-      </div>
-      <div class="dlg-foot"><button type="button" class="secondary" data-close="dlgAdminLogin">Schließen</button></div>
-    </div>
-  </dialog>
-
-  <!-- Nachrückerliste Dialog -->
-  <dialog id="dlgWaitlist">
-    <div class="dlg-body">
-      <div class="dlg-head"><h3 class="dlg-title">Eintrag in die Nachrückerliste</h3></div>
-      <div class="dlg-scroll">
-        <form id="waitlistForm" novalidate>
-          <div>
-            <label for="wName">Name oder Gruppe</label>
-            <input id="wName" name="wName" type="text" required placeholder="Zum Beispiel Familie Müller oder Verein">
-          </div>
-          <div class="grid cols-2">
-            <div>
-              <label for="wEmail">E Mail</label>
-              <input id="wEmail" name="wEmail" type="email" required placeholder="beispiel@mail.de">
-            </div>
-            <div>
-              <label for="wTel">Telefon</label>
-              <input id="wTel" name="wTel" type="tel" required placeholder="Zum Beispiel 0151 12345678">
-            </div>
-          </div>
-          <div class="grid cols-2">
-            <div>
-              <label for="wStreet">Straße und Hausnummer</label>
-              <input id="wStreet" name="wStreet" type="text" required placeholder="Zum Beispiel Musterstraße 5">
-            </div>
-            <div>
-              <label for="wCity">PLZ Ort</label>
-              <input id="wCity" name="wCity" type="text" required placeholder="Zum Beispiel 37235 Hessisch Lichtenau">
-            </div>
-          </div>
-          <div>
-            <label for="wNote">Bemerkungen optional</label>
-            <textarea id="wNote" name="wNote" placeholder="Hinweise, Besonderheiten oder Wünsche"></textarea>
-          </div>
-          <div class="actions">
-            <button type="submit" id="wSend">Eintragen</button>
-            <button type="button" class="secondary" data-close="dlgWaitlist">Abbrechen</button>
-            <span id="wMsg" role="status" aria-live="polite"></span>
-          </div>
-        </form>
-      </div>
-      <div class="dlg-foot">
-        <button type="button" class="secondary" data-close="dlgWaitlist">Schließen</button>
+        <div id="karteBox" role="region" aria-label="Karte der Veranstaltungsorte"></div>
       </div>
     </div>
   </dialog>
 
-  <!-- Admin Panel -->
-  <dialog id="dlgAdminPanel">
-    <div class="dlg-body">
-      <div class="dlg-head"><h3 class="dlg-title">Admin Bereich</h3></div>
-      <div class="dlg-scroll">
-
-        <!-- Fortschritt -->
-        <div class="prog-wrap" id="progWrap" aria-live="polite">
-          <div class="prog-label"><span>Belegung 1 bis 23 Dezember</span><span id="progPercent">0%</span></div>
-          <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
-          <div class="muted" id="progMeta">0 von 23 Abenden vergeben</div>
-        </div>
-
-        <h4>Anmeldungen zuweisen</h4>
-        <p class="muted">Klicke auf einen gewünschten Termin einer Anmeldung, um ihn sofort als endgültigen Termin zu setzen. Neueste Anmeldungen stehen oben.</p>
-        <table class="table" id="tblAnmeldungen" aria-describedby="anmeldHelp">
-          <thead><tr><th>Name und Kontakt</th><th>Adresse</th><th>Wunschtermine</th><th>Bemerkung</th><th>Aktion</th></tr></thead>
-          <tbody></tbody>
-        </table>
-        <p id="anmeldHelp" class="muted">Nach der Zuweisung kannst du den Antrag optional löschen.</p>
-
-        <h4>Termine pflegen</h4>
-        <p class="muted">Kompakte Kartenansicht. Uhrzeit, Gastgeber, Adresse, Notiz und Markierungen bearbeiten. Änderungen speichern. Das Kästchen „auf Karte als Gottesdienst markieren“ färbt diesen Termin auf der Karte wie einen Gottesdienst.</p>
-        <div class="event-cards" id="eventCards"></div>
-
-        <h4>Gottesdienste am 24. Dezember</h4>
-        <p class="muted">Mit der Griffleiste lassen sich die Einträge manuell sortieren. Danach Reihenfolge speichern.</p>
-        <div class="service-list" id="serviceList"></div>
-        <div class="actions" style="margin-top:6px">
-          <button type="button" id="saveServiceOrder" class="secondary">Reihenfolge speichern</button>
-          <button type="button" id="addService" class="secondary">Neuen Gottesdienst hinzufügen</button>
-        </div>
-
-        <div class="email-box" style="margin-top:10px">
-          <div class="actions" style="justify-content:space-between">
-            <label for="emailAll">E Mail Adressen der Gastgeber</label>
-            <label class="muted"><input type="checkbox" id="includePending"> auch Anmeldungen einbeziehen</label>
-            <button type="button" class="secondary" id="btnCopyEmails">Adressen kopieren</button>
-          </div>
-          <textarea id="emailAll" class="email-area" readonly></textarea>
-          <div class="muted">Tipp: Im Mailprogramm das Feld BCC nutzen.</div>
-        </div>
-
-        <!-- Nachrückerliste Abschnitt nur sichtbar, wenn aktiv -->
-        <div id="waitlistSection" style="display:none">
-          <h4 style="margin-top:14px">Nachrückerliste</h4>
-          <p class="muted" id="waitlistStateText">Status wird geladen</p>
-          <table class="table" id="tblWaitlist">
-            <thead><tr><th>Name und Kontakt</th><th>Adresse</th><th>Bemerkung</th><th>Aktion</th></tr></thead>
-            <tbody></tbody>
-          </table>
-        </div>
-
-        <div class="actions" style="margin-top:10px; justify-content:flex-end; gap:8px">
-          <button type="button" class="secondary" id="btnToggleWaitlist">Nachrückerliste aktivieren</button>
-          <button type="button" class="secondary" id="btnChronik">Chronik</button>
-        </div>
-
-      </div>
-      <div class="dlg-foot">
-        <button type="button" id="btnLogout" class="secondary">Abmelden</button>
-        <button type="button" class="secondary" data-close="dlgAdminPanel">Schließen</button>
-      </div>
-    </div>
-  </dialog>
-
-  <!-- Termin Picker -->
-  <dialog id="dlgPicker">
-    <div class="dlg-body">
-      <div class="dlg-head"><h3 class="dlg-title">Wunschtermine im Dezember 2025</h3></div>
-      <div class="dlg-scroll">
-        <p class="muted">Bitte wählen Sie alle passenden Abende. Beginn ist jeweils 18 Uhr für etwa 20 bis 30 Minuten.</p>
-        <div class="picker-wrap">
-          <div class="week-head">
-            <div>Mo</div><div>Di</div><div>Mi</div><div>Do</div><div>Fr</div><div>Sa</div><div>So</div>
-          </div>
-          <div id="pickerGrid" class="picker-grid"></div>
-        </div>
-      </div>
-      <div class="dlg-foot">
-        <button type="button" class="secondary" data-close="dlgPicker">Abbrechen</button>
-        <button type="button" id="pickerOk">Auswahl übernehmen</button>
-      </div>
-    </div>
-  </dialog>
-
-  <!-- Karten Dialog -->
-  <dialog id="dlgMap">
-    <div class="dlg-body">
-      <div class="dlg-head"><h3 class="dlg-title">Karte der Veranstaltungsorte</h3></div>
-      <div class="dlg-scroll">
-        <div class="map-legend">
-          <span><span class="dot regular"></span> Veranstaltungen</span>
-          <span><span class="dot service"></span> Gottesdienste</span>
-          <label style="margin-left:auto" class="muted">
-            <input type="checkbox" id="mapShowPending"> auch Adressen aus Anmeldungen anzeigen
-          </label>
-        </div>
-        <div id="map" role="region" aria-label="Karte der Veranstaltungsorte"></div>
-      </div>
-      <div class="dlg-foot">
-        <button type="button" class="secondary" data-close="dlgMap">Schließen</button>
-      </div>
-    </div>
-  </dialog>
-
-  <dialog id="dlgSubmitConfirm" aria-labelledby="dlgSubmitConfirmTitle">
-    <div class="dlg-body">
-      <div class="dlg-head"><h3 class="dlg-title" id="dlgSubmitConfirmTitle">Anmeldung bestätigt</h3></div>
-      <div class="dlg-scroll">
-        <p>Vielen Dank für Ihre Anmeldung. Das Organisationsteam meldet sich, sobald die Termine verteilt wurden.</p>
-      </div>
-      <div class="dlg-foot">
-        <button type="button" class="secondary" data-close="dlgSubmitConfirm">Schließen</button>
-      </div>
-    </div>
-  </dialog>
-
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-analytics.js";
-    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-    import {
-      getFirestore, collection, addDoc, getDocs, setDoc, doc, deleteDoc, query, orderBy, getDoc, writeBatch
-    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyCZuvHUy6xMN6WIrHUQBpxuobZkQRKB20s",
-      authDomain: "adventskalender-90bb1.firebaseapp.com",
-      projectId: "adventskalender-90bb1",
-      storageBucket: "adventskalender-90bb1.firebasestorage.app",
-      messagingSenderId: "816945632051",
-      appId: "1:816945632051:web:817e7a3d8945c3a65aa446",
-      measurementId: "G-GYH086SXWE"
-    };
-
-    const $  = s => document.querySelector(s);
-    const $$ = s => Array.from(document.querySelectorAll(s));
-    const WDAY = ["So","Mo","Di","Mi","Do","Fr","Sa"];
-
-    const LEGACY_YEAR = 2025;
-    let ACTIVE_YEAR = parseInt(localStorage.getItem("LA_ACTIVE_YEAR") || "2025", 10);
-
-    const rangeStartFor = y => new Date(y, 10, 30);
-    const rangeEndFor   = y => new Date(y, 11, 24);
-
-    function ymd(d){ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`; }
-    function deDate(d){ return `${String(d.getDate()).padStart(2,"0")}.${String(d.getMonth()+1).padStart(2,"0")}.${d.getFullYear()}`; }
-
-    function allDates(year=ACTIVE_YEAR){
-      const start = rangeStartFor(year);
-      const end = rangeEndFor(year);
-      const out=[]; const d=new Date(start);
-      while(d<=end){ out.push(new Date(d)); d.setDate(d.getDate()+1); }
-      return out;
-    }
-    function decDates(year=ACTIVE_YEAR){ const out=[]; for(let i=1;i<=23;i++){ out.push(new Date(year,11,i)); } return out; }
-
-    const selected = new Set();
-    let eventsMap = new Map();
-    let services = [];
-    let assignedEmails = new Set();
-    let pendingEmails = new Set();
-
-    let waitlistActive = false;
-
-    // Karte und Geocache nur einmal definieren
-    let mapInstance = null;
-    let markerLayer = null;
-    let geoCache = JSON.parse(localStorage.getItem("LA_GEOCACHE")||"{}");
-
-    let app, auth, db;
-
-    init();
-
-    async function init(){
-      app = initializeApp(firebaseConfig);
-      try { getAnalytics(app); } catch(e){}
-      auth = getAuth(app);
-      db = getFirestore(app);
-
-      $("#openContact").addEventListener("click", e=>{ e.preventDefault(); $("#dlgContact").showModal(); });
-      $("#qrThumb").addEventListener("click", ()=> $("#dlgQr").showModal());
-      $("#openLegal")?.addEventListener("click", e => { e.preventDefault(); $("#dlgLegal").showModal(); });
-      $("#openAdminLogin")?.addEventListener("click", () => $("#dlgAdminLogin").showModal());
-
-      $("#openPicker")?.addEventListener("click", openPicker);
-      $("#pickerOk").addEventListener("click", ()=>{ updatePreview(); $("#dlgPicker").close(); });
-
-      $("#btnPdf").addEventListener("click", ()=> downloadPdfFromData());
-      $("#btnIcs").addEventListener("click", ()=> downloadIcsFromData());
-      $("#btnMap").addEventListener("click", openMapDialog);
-
-      const sendBtn = $("#sendBtn");
-      const consent = $("#consent");
-      function updateSendDisabled(){ if(sendBtn && consent) sendBtn.disabled = !consent.checked; }
-      if(consent){ consent.addEventListener("change", updateSendDisabled); updateSendDisabled(); }
-
-      $("#hostForm").addEventListener("submit", onSubmitHostForm());
-      $("#resetBtn").addEventListener("click", ()=>{
-        selected.clear();
-        updatePreview();
-        if(consent){ consent.checked = false; updateSendDisabled(); }
-      });
-
-      $("#waitlistForm").addEventListener("submit", onSubmitWaitlistForm());
-      $("#openWaitlist")?.addEventListener("click", ()=> $("#dlgWaitlist").showModal());
-
-      document.addEventListener("click", e=>{
-        const btn = e.target.closest("[data-close]");
-        if(btn){ const id = btn.getAttribute("data-close"); try{ $("#"+id).close(); }catch(_){} }
-      });
-
-      $("#btnLogin").addEventListener("click", adminLogin);
-      $("#btnLogout").addEventListener("click", async ()=>{ await signOut(auth); $("#dlgAdminPanel").close(); });
-
-      onAuthStateChanged(auth, async user=>{
-        if(user){
-          $("#authMsg").textContent = "Angemeldet";
-          try{ $("#dlgAdminLogin").close(); }catch(e){}
-          await adminLoad();
-          $("#dlgAdminPanel").showModal();
-        }else{
-          $("#authMsg").textContent = "Abgemeldet";
-        }
-      });
-
-      // Daten laden und anzeigen
-      await loadEventsAndServices();
-      renderLists();
-      setHeuteFromFirst();
-      await loadWeatherForDate(computeNextDate(), currentTimeForNext());
-      await loadWaitlistState();
-
-      // Toggle Nachrückerliste
-      $("#btnToggleWaitlist").addEventListener("click", toggleWaitlistActive);
-    }
-
-    function settingsPath(){
-      if(ACTIVE_YEAR === LEGACY_YEAR){ return "settings"; }
-      return `calendars/${ACTIVE_YEAR}/settings`;
-    }
-    function colRef(name){
-      if(ACTIVE_YEAR === LEGACY_YEAR){ return collection(db, name); }
-      return collection(db, `calendars/${ACTIVE_YEAR}/${name}`);
-    }
-    function docRef(name, id){
-      if(ACTIVE_YEAR === LEGACY_YEAR){ return doc(db, name, id); }
-      return doc(db, `calendars/${ACTIVE_YEAR}/${name}/${id}`);
-    }
-
-    async function toggleWaitlistActive(){
-      const want = !waitlistActive;
-      const text = want
-        ? "Möchtest du die Nachrückerliste jetzt wirklich aktivieren"
-        : "Möchtest du die Nachrückerliste jetzt wirklich deaktivieren";
-      if(!confirm(text)) return;
-      try{
-        const ref = doc(db, settingsPath(), "nachruecker");
-        await setDoc(ref, { active: want, updatedAt: new Date().toISOString() }, { merge:true });
-        waitlistActive = want;
-        await loadWaitlistState();
-        if(waitlistActive){ await renderWaitlistTable(); }
-      }catch(e){
-        alert("Einstellung konnte nicht gespeichert werden");
-      }
-    }
-
-    async function loadWaitlistState(){
-      try{
-        const ref = doc(db, settingsPath(), "nachruecker");
-        const snap = await getDoc(ref);
-        waitlistActive = !!(snap.exists() && snap.data().active === true);
-      }catch(e){
-        waitlistActive = false;
-      }
-      const box = $("#waitlistBox");
-      const grid = $("#waGrid");
-      if(box){ box.style.display = waitlistActive ? "block" : "none"; }
-      if(grid){ grid.classList.toggle("has-waitlist", waitlistActive); }
-      const btn = $("#btnToggleWaitlist");
-      const stateText = $("#waitlistStateText");
-      if(btn){ btn.textContent = waitlistActive ? "Nachrückerliste deaktivieren" : "Nachrückerliste aktivieren"; }
-      if(stateText){ stateText.textContent = waitlistActive ? "Die Nachrückerliste ist aktiv und auf der Hauptseite sichtbar" : "Die Nachrückerliste ist inaktiv und auf der Hauptseite verborgen"; }
-      const waTitle = $("#wa-title");
-      if(waTitle){ waTitle.textContent = waitlistActive ? "Aktuelles und Nachrückerliste" : "WhatsApp Kanal"; }
-      const wlSection = $("#waitlistSection");
-      if(wlSection){ wlSection.style.display = waitlistActive ? "block" : "none"; }
-    }
-
-    function onSubmitHostForm(){
-      return async ev=>{
-        ev.preventDefault();
-        const msg = $("#formMsg"); msg.textContent = ""; msg.className = "";
-        const name   = $("#name").value.trim();
-        const email  = $("#email").value.trim();
-        const tel    = $("#tel").value.trim();
-        const street = $("#street").value.trim();
-        const city   = $("#city").value.trim();
-        const note   = $("#note").value.trim();
-        const wishes = Array.from(selected).sort();
-        const bf     = $("#barrierefrei")?.checked === true;
-        const consentOk = $("#consent")?.checked === true;
-
-        if(!name || !email || !tel || !street || !city){
-          msg.textContent = "Bitte füllen Sie alle Pflichtfelder aus"; msg.className = "error"; return;
-        }
-        if(wishes.length === 0){
-          msg.textContent = "Bitte wählen Sie mindestens einen möglichen Termin"; msg.className = "error"; return;
-        }
-        if(!consentOk){
-          msg.textContent = "Bitte stimmen Sie der Veröffentlichung von Name und Adresse zu"; msg.className = "error"; return;
-        }
-
-        const btn = $("#sendBtn"); btn.disabled = true;
-        try{
-          await addDoc(colRef("anmeldungen"), {
-            year: ACTIVE_YEAR,
-            name,
-            email,
-            telefon: tel,
-            adresse: `${street}, ${city}`,
-            wuensche: wishes,
-            bemerkung: note || "",
-            barrierefrei: bf === true,
-            consentPublish: true,
-            consentTextVersion: "2025-10-12",
-            createdAt: new Date().toISOString()
-          });
-          msg.textContent = "Vielen Dank. Ihre Anmeldung ist eingegangen"; msg.className = "success";
-          $("#hostForm").reset(); selected.clear(); updatePreview();
-          const consent = $("#consent"); if(consent){ consent.checked = false; }
-          const sendBtn = $("#sendBtn"); if(sendBtn){ sendBtn.disabled = true; }
-          $("#dlgSubmitConfirm").showModal();
-        }catch(err){
-          console.error(err);
-          msg.textContent = "Die Anmeldung konnte nicht gespeichert werden"; msg.className = "error";
-        }finally{ btn.disabled = !$("#consent")?.checked; }
-      };
-    }
-
-    function onSubmitWaitlistForm(){
-      return async ev=>{
-        ev.preventDefault();
-        const msg = $("#wMsg"); msg.textContent = ""; msg.className = "";
-        const name   = $("#wName").value.trim();
-        const email  = $("#wEmail").value.trim();
-        const tel    = $("#wTel").value.trim();
-        const street = $("#wStreet").value.trim();
-        const city   = $("#wCity").value.trim();
-        const note   = $("#wNote").value.trim();
-
-        if(!name || !email || !tel || !street || !city){
-          msg.textContent = "Bitte füllen Sie alle Pflichtfelder aus"; msg.className = "error"; return;
-        }
-        const btn = $("#wSend"); btn.disabled = true;
-        try{
-          await addDoc(colRef("nachruecker"), {
-            year: ACTIVE_YEAR,
-            name,
-            email,
-            telefon: tel,
-            adresse: `${street}, ${city}`,
-            bemerkung: note || "",
-            createdAt: new Date().toISOString()
-          });
-          msg.textContent = "Vielen Dank. Sie stehen nun auf der Nachrückerliste"; msg.className = "success";
-          $("#waitlistForm").reset();
-          if(waitlistActive){ await renderWaitlistTable(); }
-        }catch(err){
-          console.error(err);
-          msg.textContent = "Eintrag konnte nicht gespeichert werden"; msg.className = "error";
-        }finally{
-          btn.disabled = false;
-        }
-      };
-    }
-
-    async function loadEventsAndServices(){
-      eventsMap.clear();
-      services = [];
-      try{
-        const qy = query(colRef("events"), orderBy("datum","asc"));
-        const snap = await getDocs(qy);
-        snap.forEach(d => {
-          const e=d.data(); if(!e) return;
-          // mapAsService für normale Termine berücksichtigen
-          if(e.datum === `${ACTIVE_YEAR}-12-24` && e.isService){
-            services.push({ id:d.id, ...e });
-          }else if(e.datum){
-            eventsMap.set(e.datum, { id:d.id, ...e });
-          }
-        });
-      }catch(err){
-        console.warn("Termine konnten nicht geladen werden.", err);
-      }
-      services.sort((a,b)=>{
-        const oa = typeof a.order === "number" ? a.order : 9999;
-        const ob = typeof b.order === "number" ? b.order : 9999;
-        if(oa !== ob) return oa - ob;
-        const ta = parseTime(a.uhrzeit||"23:59");
-        const tb = parseTime(b.uhrzeit||"23:59");
-        return ta - tb;
-      });
-    }
-
-    function renderLists(){
-      const list = $("#terminListe"); list.innerHTML = "";
-      allDates().forEach(d=>{
-        const key = ymd(d);
-        const item = document.createElement("div"); item.className = "item";
-        const day = document.createElement("div"); day.className = "day";
-        const e = eventsMap.get(key);
-        const timeForBox = e && e.uhrzeit && /^\d{1,2}:\d{2}$/.test(e.uhrzeit) ? `${e.uhrzeit} Uhr` : "18:00 Uhr";
-        let timeHtml = `<div class="time">${timeForBox}</div>`;
-        if(key === `${ACTIVE_YEAR}-12-24`){ timeHtml = ""; }
-        day.innerHTML = `<div class="wd">${WDAY[d.getDay()]}</div><div class="date">${String(d.getDate()).padStart(2,"0")}.${String(d.getMonth()+1).padStart(2,"0")}</div>${timeHtml}`;
-        const meta = document.createElement("div"); meta.className = "meta";
-
-        if(key === `${ACTIVE_YEAR}-12-24`){
-          if(services.length){
-            const listHtml = services.map(s=>{
-              const time = s.uhrzeit ? ` um ${escapeHtml(s.uhrzeit)} Uhr` : "";
-              const line = `${escapeHtml(s.gemeinde||"Gemeinde")}${time}`;
-              const addr = s.adresse ? `<div class="addr">${escapeHtml(s.adresse)}</div>` : "";
-              const info = s.info ? `<div class="badge">${escapeHtml(s.info)}</div>` : "";
-              return `<div class="host">${line}</div>${addr}${info}`;
-            }).join("<hr style='border:none;border-top:1px solid #eee5da;margin:6px 0'>");
-            meta.innerHTML = `<div class="badge">Heiligabend Gottesdienste</div>${listHtml}`;
-          }else{
-            meta.innerHTML = `<div class="host muted">Gottesdienste werden ergänzt</div>`;
-          }
-        }else{
-          if(e && e.hostName){
-            const changed = e.changed ? `<div class="badge changed">Hinweis: geändert</div>` : "";
-            const info = e.info ? `<div class="badge">${escapeHtml(e.info)}</div>` : "";
-            const bf  = e.barrierefrei ? `<div class="badge">♿ barrierefrei</div>` : "";
-            meta.innerHTML = `<div class="host">${escapeHtml(e.hostName)}</div><div class="addr">${escapeHtml(e.hostAdresse || "")}</div>${info}${bf}${changed}`;
-          }else{
-            meta.innerHTML = `<div class="host muted">Noch frei</div><div class="badge free">Anmeldung möglich</div>`;
-          }
-        }
-        item.append(day, meta); list.appendChild(item);
-      });
-
-      const next = computeNextDate();
-      const e = eventsMap.get(next);
-      const d = new Date(next);
-      $("#heuteDatum").textContent = `${WDAY[d.getDay()]}, ${deDate(d)}`;
-      const timeStr = e && e.uhrzeit && /^\d{1,2}:\d{2}$/.test(e.uhrzeit) ? e.uhrzeit : "18:00";
-      setHeuteTime(timeStr);
-
-      if(next === `${ACTIVE_YEAR}-12-24`){
-        $("#heuteTitel").textContent = "Heiligabend Gottesdienste";
-        $("#heuteAdresse").textContent = "Mehrere Orte in Hessisch Lichtenau und Umgebung";
-        $("#heuteHinweis").textContent = "Zeiten und Orte finden Sie in der Terminliste";
-      }else if(e && e.hostName){
-        $("#heuteTitel").textContent = e.hostName;
-        $("#heuteAdresse").textContent = e.hostAdresse || "";
-        $("#heuteHinweis").textContent = e.info ? e.info : "";
-      }else{
-        $("#heuteTitel").textContent = "Noch freie Vergabe";
-        $("#heuteAdresse").textContent = "Sobald ein Ort feststeht, erscheint er hier";
-      }
-      updateProgress();
-    }
-
-    function setHeuteTime(hhmm){
-      const pill = $("#heuteZeit");
-      pill.textContent = `Beginn ${hhmm} Uhr`;
-      pill.style.display = "inline-block";
-    }
-
-    function computeNextDate(){
-      const today = new Date(); today.setHours(0,0,0,0);
-      for(const d of allDates()){
-        if(d >= today) return ymd(d);
-      }
-      return ymd(rangeStartFor(ACTIVE_YEAR));
-    }
-    function currentTimeForNext(){
-      const e = eventsMap.get(computeNextDate());
-      return e && e.uhrzeit ? e.uhrzeit : "18:00";
-    }
-
-    async function loadWeatherForDate(dateYmd, hhmm="18:00"){
-      try{
-        const parts = dateYmd.split("-"); const year=+parts[0], month=+parts[1]-1, day=+parts[2];
-        const hm = parseHm(hhmm);
-        const today = new Date();
-        const target = new Date(year, month, day);
-        const diffDays = Math.round((target - new Date(today.getFullYear(),today.getMonth(),today.getDate()))/86400000);
-        if(diffDays > 16){
-          $("#wText").textContent = "Vorhersage sichtbar, sobald das Datum näher rückt";
-          $("#wMeta").textContent = ""; $("#wTemp").textContent = "n. a."; return;
-        }
-        const url = new URL("https://api.open-meteo.com/v1/forecast");
-        url.searchParams.set("latitude","51.195");
-        url.searchParams.set("longitude","9.713");
-        url.searchParams.set("hourly","temperature_2m,precipitation_probability,weathercode");
-        url.searchParams.set("timezone","Europe/Berlin");
-        url.searchParams.set("forecast_days", String(Math.min(16, Math.max(2,diffDays+2))));
-        const res = await fetch(url.toString());
-        const data = await res.json();
-        const hourTag = String(hm.h).padStart(2,"0")+":"+String(hm.m).padStart(2,"0");
-        const idx = data.hourly.time.findIndex(t => t.startsWith(dateYmd) && t.endsWith(hourTag));
-        let text = "Keine Daten verfügbar", meta = "", temp = "n. a.";
-        if(idx >= 0){
-          const t = Math.round(data.hourly.temperature_2m[idx]);
-          const p = data.hourly.precipitation_probability[idx];
-          const code = data.hourly.weathercode[idx];
-          const map = new Map([
-            [[0],"Klarer Himmel"], [[1,2,3],"Leicht bewölkt"], [[45,48],"Nebel"],
-            [[51,53,55],"Nieselregen"], [[61,63,65],"Regen"], [[66,67],"Gefrierender Regen"],
-            [[71,73,75],"Schnee"], [[77],"Schneekörner"], [[80,81,82],"Regenschauer"],
-            [[85,86],"Schneeschauer"], [[95],"Gewitter"], [[96,99],"Gewitter mit Hagel"]
-          ]);
-          let desc = "Wetter";
-          for(const [codes, dsc] of map){ if(codes.includes(code)){ desc = dsc; break; } }
-          temp = `${t}°C`; text = `${desc} um ${hourTag}`; meta = `Niederschlagswahrscheinlichkeit ${p} Prozent`;
-        }
-        $("#wTemp").textContent = temp; $("#wText").textContent = text; $("#wMeta").textContent = meta;
-      }catch(err){
-        console.error(err);
-        $("#wText").textContent = "Wetter konnte nicht geladen werden"; $("#wMeta").textContent = "";
-      }
-    }
-
-    function openPicker(){ buildPickerGrid(); $("#dlgPicker").showModal(); }
-    function buildPickerGrid(){
-      const grid = $("#pickerGrid"); grid.innerHTML = "";
-      const days = decDates();
-      days.forEach(d=>{
-        const key = ymd(d);
-        const box = document.createElement("div");
-        const e = eventsMap.get(key);
-        box.className = "pick " + (e && e.hostName ? "booked" : "free");
-        if(selected.has(key)) box.classList.add("sel");
-        const wd = WDAY[d.getDay()];
-        box.innerHTML = `<div class="d">${String(d.getDate()).padStart(2,"0")}.12</div><div class="wd">${wd}</div>`;
-        box.setAttribute("role","button"); box.setAttribute("tabindex","0");
-        box.setAttribute("aria-pressed", selected.has(key) ? "true" : "false");
-        box.addEventListener("click", ()=> toggleDaySelect(key, box));
-        box.addEventListener("keydown", ev=>{ if(ev.key === " " || ev.key === "Enter"){ ev.preventDefault(); toggleDaySelect(key, box); }});
-        grid.appendChild(box);
-      });
-    }
-    function toggleDaySelect(key, el){
-      if(selected.has(key)){ selected.delete(key); el.classList.remove("sel"); el.setAttribute("aria-pressed","false"); }
-      else { selected.add(key); el.classList.add("sel"); el.setAttribute("aria-pressed","true"); }
-      updatePreview();
-    }
-    function updatePreview(){
-      const wrap = $("#wishesPreview"); wrap.innerHTML = "";
-      const arr = Array.from(selected).sort();
-      if(arr.length === 0){ wrap.innerHTML = `<span class="muted">Noch keine Auswahl</span>`; return; }
-      arr.forEach(k=>{
-        const d = new Date(k);
-        const chip = document.createElement("span"); chip.className = "chip";
-        const wd = WDAY[d.getDay()];
-        chip.textContent = `${String(d.getDate()).padStart(2,"0")}.12 (${wd})`;
-        wrap.appendChild(chip);
-      });
-    }
-
-    function updateProgress(){
-      let count=0;
-      allDates().forEach(d=>{
-        const key = ymd(d);
-        const e = eventsMap.get(key);
-        if(e && e.hostName && key !== `${ACTIVE_YEAR}-12-24`) count++;
-      });
-      const pct = Math.round((count/23)*100);
-      const fill = document.getElementById("progFill"); if(fill) fill.style.width = `${pct}%`;
-      const percent = document.getElementById("progPercent"); if(percent) percent.textContent = `${pct}%`;
-      const meta = document.getElementById("progMeta"); if(meta) meta.textContent = `${count} von 23 Abenden vergeben`;
-    }
-
-    function updateEmailTextarea(){
-      const all = new Set(assignedEmails);
-      if($("#includePending")?.checked){ pendingEmails.forEach(e=> all.add(e)); }
-      $("#emailAll").value = Array.from(all).join(", ");
-    }
-    function copyEmails(){ const ta = $("#emailAll"); ta.select(); document.execCommand("copy"); }
-
-    async function adminLogin(){
-      const e = $("#admEmail").value.trim();
-      const p = $("#admPass").value;
-      $("#authMsg").textContent = "";
-      try{
-        await signInWithEmailAndPassword(auth, e, p);
-        $("#authMsg").textContent = "Angemeldet";
-        $("#dlgAdminLogin").close();
-        await adminLoad();
-        $("#dlgAdminPanel").showModal();
-      }catch(err){
-        console.error(err);
-        $("#authMsg").textContent = "Anmeldung nicht möglich";
-      }
-    }
-
-    async function adminLoad(){
-      assignedEmails = new Set();
-      pendingEmails = new Set();
-
-      await loadWaitlistState();
-
-      // Anmeldungen
-      const bodyA = $("#tblAnmeldungen tbody"); bodyA.innerHTML = "";
-      try{
-        const qAnm = query(colRef("anmeldungen"), orderBy("createdAt","desc"));
-        const snap = await getDocs(qAnm);
-        const seen = new Set();
-        snap.forEach(d=>{
-          if(seen.has(d.id)) return; seen.add(d.id);
-          const a = d.data();
-          if(a && a.email) pendingEmails.add(a.email.trim());
-          const tr = document.createElement("tr");
-          const wishes = Array.isArray(a.wuensche)? a.wuensche : [];
-          const chips = wishes.map(w=>{
-            const dd = new Date(w);
-            const label = `${String(dd.getDate()).padStart(2,"0")}.12 (${WDAY[dd.getDay()]})`;
-            const title = "Als Termin festlegen";
-            return `<span class="chip" style="cursor:pointer" data-assign="${w}" data-id="${d.id}" data-email="${escapeAttr(a.email||"")}" title="${title}">${label}</span>`;
-          }).join(" ");
-          tr.innerHTML = `
-            <td><strong>${escapeHtml(a.name||"")}</strong><br><span class="muted">${escapeHtml(a.email||"")}</span><br><span class="muted">${escapeHtml(a.telefon||"")}</span></td>
-            <td>${escapeHtml(a.adresse||"")}</td>
-            <td>${chips || "<span class='muted'>Keine Auswahl</span>"}</td>
-            <td>${escapeHtml(a.bemerkung||"")}${a.barrierefrei ? "<div class='badge' style='margin-top:6px'>♿ barrierefrei</div>" : ""}</td>
-            <td><button class="warn" data-del="${d.id}">Löschen</button></td>
-          `;
-          bodyA.appendChild(tr);
-        });
-      }catch(e){
-        const tr = document.createElement("tr");
-        tr.innerHTML = `<td colspan="5" class="center">Anmeldungen konnten nicht geladen werden</td>`;
-        bodyA.appendChild(tr);
-      }
-
-      bodyA.querySelectorAll("[data-assign]").forEach(ch=>{
-        ch.addEventListener("click", async ()=>{
-          const dateKey = ch.getAttribute("data-assign");
-          const row = ch.closest("tr");
-          const name = row.querySelector("td:first-child strong").textContent;
-          const addr = row.children[1].textContent.trim();
-          const email = ch.getAttribute("data-email") || "";
-          const bfBadge = row.children[3].querySelector(".badge");
-          const bf = !!bfBadge && /barrierefrei/.test(bfBadge.textContent);
-          try{
-            await setDoc(docRef("events", dateKey), {
-              datum: dateKey,
-              wochentag: WDAY[new Date(dateKey).getDay()],
-              hostName: name,
-              hostAdresse: addr,
-              hostEmail: email,
-              barrierefrei: bf,
-              info: "Aus Anmeldung gesetzt",
-              changed: true
-            }, { merge: true });
-            await loadEventsAndServices();
-            await adminLoad();
-          }catch(e){
-            alert("Zuweisung nicht möglich");
-          }
-        });
-      });
-
-      bodyA.querySelectorAll("button[data-del]").forEach(btn=>{
-        btn.addEventListener("click", async ()=>{
-          if(confirm("Diesen Eintrag wirklich löschen")){
-            await deleteDoc(docRef("anmeldungen", btn.dataset.del));
-            adminLoad();
-          }
-        });
-      });
-
-      // Terminpflege als kompakte Karten
-      renderEventCards();
-
-      // Gottesdienste mit Drag and Drop
-      renderServiceList();
-
-      // E Mailliste
-      updateProgress();
-      $("#includePending").addEventListener("change", updateEmailTextarea);
-      $("#btnCopyEmails").addEventListener("click", copyEmails);
-      updateEmailTextarea();
-
-      // Nachrückerliste Tabelle nur bei aktiver Liste
-      if(waitlistActive){
-        await renderWaitlistTable();
-      }else{
-        const body = $("#tblWaitlist tbody"); if(body) body.innerHTML = "";
-      }
-    }
-
-    function renderEventCards(){
-      const wrap = $("#eventCards"); wrap.innerHTML = "";
-      const dates = allDates().filter(d => ymd(d) !== `${ACTIVE_YEAR}-12-24`);
-      dates.forEach(d=>{
-        const id = ymd(d);
-        const e = eventsMap.get(id) || { datum: id, uhrzeit:"", hostName:"", hostAdresse:"", hostEmail:"", info:"", changed:false, barrierefrei:false, mapAsService:false };
-        const card = document.createElement("div"); card.className = "event-card";
-        const wd = WDAY[new Date(id).getDay()];
-        card.innerHTML = `
-          <div class="event-head">
-            <div class="date-badge">${String(new Date(id).getDate()).padStart(2,"0")}.12<br><span style="font-size:11px;font-weight:600;">${wd}</span></div>
-            <div><strong>${e.hostName ? escapeHtml(e.hostName) : "Noch frei"}</strong><br><span class="muted">${e.hostAdresse ? escapeHtml(e.hostAdresse) : "Adresse folgt"}</span></div>
-          </div>
-          <div class="event-body">
-            <div class="event-field">
-              <label>Uhrzeit</label>
-              <input type="text" value="${escapeAttr(e.uhrzeit||"")}" data-f="uhrzeit" placeholder="z. B. 17:30">
-            </div>
-            <div class="event-field">
-              <label>Gastgeber</label>
-              <input type="text" value="${escapeAttr(e.hostName||"")}" data-f="hostName">
-            </div>
-            <div class="event-field">
-              <label>Adresse</label>
-              <input type="text" value="${escapeAttr(e.hostAdresse||"")}" data-f="hostAdresse">
-            </div>
-            <div class="event-field">
-              <label>Notiz</label>
-              <input type="text" value="${escapeAttr(e.info||"")}" data-f="info" placeholder="Hinweise">
-            </div>
-            <div class="event-field">
-              <label>Markierungen</label>
-              <div>
-                <label style="margin-right:8px"><input type="checkbox" ${e.barrierefrei ? "checked" : ""} data-f="barrierefrei"> ♿</label>
-                <label style="margin-right:8px"><input type="checkbox" ${e.changed ? "checked" : ""} data-f="changed"> geändert</label>
-                <label><input type="checkbox" ${e.mapAsService ? "checked" : ""} data-f="mapAsService"> auf Karte als Gottesdienst markieren</label>
-              </div>
-            </div>
-          </div>
-          <div class="event-actions">
-            <button data-save="${id}">Speichern</button>
-          </div>
-        `;
-        wrap.appendChild(card);
-      });
-
-      wrap.addEventListener("click", async ev=>{
-        const btn = ev.target.closest("button[data-save]");
-        if(!btn) return;
-        const card = btn.closest(".event-card");
-        const inputs = card.querySelectorAll("input[data-f]");
-        const payload = { datum: btn.dataset.save, wochentag: WDAY[new Date(btn.dataset.save).getDay()] };
-        let timeInvalid = false;
-        inputs.forEach(i=>{
-          if(i.type === "checkbox"){ payload[i.dataset.f] = i.checked; }
-          else {
-            const v = i.value.trim();
-            if(i.dataset.f === "uhrzeit" && v && !/^\d{1,2}:\d{2}$/.test(v)){ timeInvalid = true; }
-            payload[i.dataset.f] = v;
-          }
-        });
-        if(timeInvalid){ alert("Uhrzeit bitte als HH:MM eintragen"); return; }
-        try{
-          await setDoc(docRef("events", btn.dataset.save), payload, { merge:true });
-          btn.textContent = "Gespeichert"; btn.disabled = true;
-          setTimeout(()=>{ btn.textContent = "Speichern"; btn.disabled = false; }, 900);
-          await loadEventsAndServices(); updateProgress();
-          const next = computeNextDate();
-          if(btn.dataset.save === next){
-            const e = eventsMap.get(next);
-            const t = e && e.uhrzeit ? e.uhrzeit : "18:00";
-            setHeuteTime(t);
-            await loadWeatherForDate(next, t);
-          }
-        }catch(e){ alert("Speichern nicht möglich"); }
-      });
-    }
-
-    function renderServiceList(){
-      const list = $("#serviceList"); list.innerHTML = "";
-      services.forEach((s, idx)=>{
-        list.appendChild(buildServiceRow(s, idx));
-      });
-      list.appendChild(buildServiceRow(null, services.length));
-      enableServiceDrag(list);
-
-      list.addEventListener("click", async ev=>{
-        const btn = ev.target.closest("button[data-act]");
-        if(!btn) return;
-        const row = btn.closest(".service-row");
-        if(btn.dataset.act === "save-new"){
-          const payload = getServicePayload(row);
-          if(!payload.gemeinde && !payload.uhrzeit){ alert("Bitte Angaben ergänzen"); return; }
-          payload.isService = true;
-          payload.datum = `${ACTIVE_YEAR}-12-24`;
-          payload.order = services.length;
-          try{
-            await addDoc(colRef("events"), payload);
-            await loadEventsAndServices();
-            renderServiceList();
-          }catch(e){ alert("Speichern nicht möglich"); }
-        }else if(btn.dataset.act === "save"){
-          const payload = getServicePayload(row);
-          payload.isService = true;
-          try{
-            await setDoc(docRef("events", btn.dataset.sid), payload, { merge:true });
-            btn.textContent = "Gespeichert"; btn.disabled = true;
-            setTimeout(()=>{ btn.textContent = "Speichern"; btn.disabled = false; }, 800);
-            await loadEventsAndServices();
-          }catch(e){ alert("Speichern nicht möglich"); }
-        }else if(btn.dataset.act === "del"){
-          if(confirm("Diesen Eintrag wirklich löschen")){
-            try{ await deleteDoc(docRef("events", btn.dataset.sid)); await loadEventsAndServices(); renderServiceList(); }catch(e){ alert("Löschen nicht möglich"); }
-          }
-        }
-      });
-
-      $("#saveServiceOrder").onclick = saveServiceOrder;
-
-      function buildServiceRow(s, idx){
-        const row = document.createElement("div"); row.className = "service-row";
-        row.draggable = !!s;
-        row.dataset.sid = s?.id || "";
-        row.dataset.order = typeof s?.order === "number" ? String(s.order) : String(idx);
-        row.innerHTML = `
-          <div class="service-grid">
-            <div class="handle">${s ? `Reihenfolge: ${Number(row.dataset.order)+1}` : "Neuer Eintrag"}</div>
-            <input type="text" value="${escapeAttr(s?.uhrzeit||"")}" data-f="uhrzeit" placeholder="z. B. 16:00">
-            <input type="text" value="${escapeAttr(s?.gemeinde||"")}" data-f="gemeinde" placeholder="Gemeinde oder Kirche">
-            <input type="text" value="${escapeAttr(s?.adresse||"")}" data-f="adresse" placeholder="Adresse">
-            <div>
-              ${s?.id
-                ? `<button data-act="save" data-sid="${s.id}">Speichern</button> <button class="warn" data-act="del" data-sid="${s.id}">Löschen</button>`
-                : `<button data-act="save-new">Speichern</button>`}
-            </div>
-          </div>
-        `;
-        return row;
-      }
-      function getServicePayload(row){
-        const f = {};
-        row.querySelectorAll("[data-f]").forEach(i=> f[i.dataset.f] = i.value.trim());
-        return f;
-      }
-    }
-
-    function enableServiceDrag(container){
-      let dragEl = null;
-      container.addEventListener("dragstart", e=>{
-        const row = e.target.closest(".service-row[draggable='true']");
-        if(!row) return;
-        dragEl = row;
-        row.classList.add("dragging");
-        e.dataTransfer.effectAllowed = "move";
-      });
-      container.addEventListener("dragend", e=>{
-        const row = e.target.closest(".service-row.dragging");
-        if(row) row.classList.remove("dragging");
-        dragEl = null;
-        renumberServiceHandles(container);
-      });
-      container.addEventListener("dragover", e=>{
-        if(!dragEl) return;
-        e.preventDefault();
-        const after = getDragAfterElement(container, e.clientY);
-        if(after == null) container.insertBefore(dragEl, container.querySelector(".service-row:last-child"));
-        else container.insertBefore(dragEl, after);
-      });
-
-      function getDragAfterElement(container, y){
-        const rows = [...container.querySelectorAll(".service-row[draggable='true']:not(.dragging)")];
-        let closest = null;
-        let closestOffset = Number.NEGATIVE_INFINITY;
-        for(const child of rows){
-          const box = child.getBoundingClientRect();
-          const offset = y - box.top - box.height / 2;
-          if(offset < 0 && offset > closestOffset){
-            closestOffset = offset;
-            closest = child;
-          }
-        }
-        return closest;
-      }
-      function renumberServiceHandles(container){
-        const rows = [...container.querySelectorAll(".service-row")];
-        rows.forEach((r,i)=>{
-          const h = r.querySelector(".handle");
-          if(h && r.dataset.sid){ h.textContent = `Reihenfolge: ${i+1}`; }
-        });
-      }
-    }
-
-    async function saveServiceOrder(){
-      const list = $("#serviceList");
-      const rows = [...list.querySelectorAll(".service-row")].filter(r => r.dataset.sid);
-      if(rows.length === 0) return;
-      try{
-        const batch = writeBatch(db);
-        rows.forEach((r, idx)=>{
-          const ref = docRef("events", r.dataset.sid);
-          batch.set(ref, { order: idx, isService: true, datum: `${ACTIVE_YEAR}-12-24` }, { merge:true });
-        });
-        await batch.commit();
-        await loadEventsAndServices();
-        renderServiceList();
-        alert("Reihenfolge gespeichert");
-      }catch(e){
-        alert("Reihenfolge konnte nicht gespeichert werden");
-      }
-    }
-
-    async function renderWaitlistTable(){
-      const body = $("#tblWaitlist tbody"); body.innerHTML = "";
-      try{
-        const qy = query(colRef("nachruecker"), orderBy("createdAt","desc"));
-        const snap = await getDocs(qy);
-        if(snap.empty){
-          const tr = document.createElement("tr");
-          tr.innerHTML = `<td colspan="4" class="center muted">Keine Einträge</td>`;
-          body.appendChild(tr);
-        }else{
-          snap.forEach(d=>{
-            const a = d.data();
-            const tr = document.createElement("tr");
-            tr.innerHTML = `
-              <td><strong>${escapeHtml(a.name||"")}</strong><br><span class="muted">${escapeHtml(a.email||"")}</span><br><span class="muted">${escapeHtml(a.telefon||"")}</span></td>
-              <td>${escapeHtml(a.adresse||"")}</td>
-              <td>${escapeHtml(a.bemerkung||"")}</td>
-              <td><button class="warn" data-wdel="${d.id}">Löschen</button></td>
-            `;
-            body.appendChild(tr);
-          });
-          body.querySelectorAll("button[data-wdel]").forEach(btn=>{
-            btn.addEventListener("click", async ()=>{
-              if(confirm("Diesen Eintrag wirklich löschen")){
-                await deleteDoc(docRef("nachruecker", btn.dataset.wdel));
-                renderWaitlistTable();
-              }
-            });
-          });
-        }
-      }catch(e){
-        const tr = document.createElement("tr");
-        tr.innerHTML = `<td colspan="4" class="center">Nachrückerliste konnte nicht geladen werden</td>`;
-        body.appendChild(tr);
-      }
-    }
-
-    function openMapDialog(){
-      $("#dlgMap").showModal();
-      setTimeout(initOrUpdateMap, 50);
-    }
-
-    async function initOrUpdateMap(){
-      if(!mapInstance){
-        mapInstance = L.map("map").setView([51.195, 9.713], 14);
-        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-          maxZoom: 19,
-          attribution: "&copy; OpenStreetMap Mitwirkende"
-        }).addTo(mapInstance);
-        markerLayer = L.layerGroup().addTo(mapInstance);
-        $("#mapShowPending").addEventListener("change", initOrUpdateMap);
-      }
-      markerLayer.clearLayers();
-
-      const features = [];
-      allDates().forEach(d=>{
-        const key = ymd(d);
-        const e = eventsMap.get(key);
-        if(key !== `${ACTIVE_YEAR}-12-24` && e && e.hostAdresse && e.hostName){
-          features.push({
-            type: e.mapAsService ? "service" : "event",
-            date: deDate(d),
-            dateShort: `${String(d.getDate()).padStart(2,"0")}.12.`,
-            time: e.uhrzeit || "18:00",
-            host: e.hostName,
-            addr: e.hostAdresse
-          });
-        }
-      });
-      services.forEach(s=>{
-        if(s.adresse){
-          features.push({
-            type: "service",
-            date: "24.12."+ACTIVE_YEAR,
-            dateShort: "24.12.",
-            time: s.uhrzeit || "",
-            host: s.gemeinde || "Gottesdienst",
-            addr: s.adresse
-          });
-        }
-      });
-
-      if($("#mapShowPending")?.checked){
-        try{
-          const qAnm = query(colRef("anmeldungen"), orderBy("createdAt","desc"));
-          const snap = await getDocs(qAnm);
-          const seenAddr = new Set(features.map(f=>f.addr));
-          snap.forEach(d=>{
-            const a = d.data();
-            const addr = a?.adresse || "";
-            if(addr && !seenAddr.has(addr)){
-              features.push({
-                type: "pending",
-                date: "offen",
-                dateShort: "",
-                time: "",
-                host: a?.name || "Anmeldung",
-                addr
-              });
-              seenAddr.add(addr);
-            }
-          });
-        }catch(e){ console.warn("Anmeldungen für Karte nicht geladen", e); }
-      }
-
-      for(const f of features){
-        try{
-          const geo = await geocodeCached(`${f.addr}, 37235 Hessisch Lichtenau, Deutschland`);
-          const icon = buildDivIcon(f.dateShort || "?", f.type);
-          const m = L.marker([geo.lat, geo.lon], { icon });
-          const title = f.type === "service" ? "Gottesdienst" : (f.type === "pending" ? "Anmeldung" : "Veranstaltung");
-          const timeRow = f.time ? `<div class="popup-time">${escapeHtml(f.time)} Uhr</div>` : "";
-          m.bindPopup(`
-            <div style="font-family:system-ui;min-width:220px">
-              <div class="popup-date" style="color:${f.type==="service" ? "var(--pin-service)" : "var(--pin-regular)"}">${escapeHtml(f.date)} ${escapeHtml(f.time)}</div>
-              <div class="popup-host"><strong>${escapeHtml(title)}</strong> · ${escapeHtml(f.host)}</div>
-              <div class="popup-address">${escapeHtml(f.addr)}</div>
-              ${timeRow}
-            </div>
-          `);
-          m.addTo(markerLayer);
-        }catch(err){
-          console.warn("Geocoding fehlgeschlagen für", f.addr);
-        }
-        await sleep(300);
-      }
-
-      const g = markerLayer.getLayers();
-      if(g.length){
-        const group = L.featureGroup(g);
-        mapInstance.fitBounds(group.getBounds().pad(0.15));
-      }else{
-        mapInstance.setView([51.195, 9.713], 14);
-      }
-    }
-
-    function buildDivIcon(text, type){
-      const color = type==="service" ? getCss("--pin-service") : type==="pending" ? getCss("--pin-pending") : getCss("--pin-regular");
-      const txt = text || "";
-      const html = `
-        <div style="background:${color}; width:42px; height:42px; border-radius:50% 50% 50% 0; border:3px solid #ffffff; transform:rotate(-45deg); box-shadow:0 2px 8px rgba(0,0,0,.3); display:flex; align-items:center; justify-content:center;">
-          <span style="transform:rotate(45deg); color:#fff; font-weight:800; font-size:11px; line-height:1">${escapeHtml(txt.replace(/\.$/, ""))}</span>
-        </div>`;
-      return L.divIcon({ className:"", html, iconSize:[42,42], iconAnchor:[21,42], popupAnchor:[0,-40] });
-    }
-    function getCss(varName){ return getComputedStyle(document.documentElement).getPropertyValue(varName).trim() || "#7b1e36"; }
-    function sleep(ms){ return new Promise(r=>setTimeout(r, ms)); }
-
-    async function geocodeCached(query){
-      if(!geoCache) geoCache = JSON.parse(localStorage.getItem("LA_GEOCACHE")||"{}");
-      const key = query.trim();
-      if(geoCache[key]) return geoCache[key];
-      const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(key)}&limit=1&addressdetails=0`;
-      const res = await fetch(url, { headers:{ "Accept":"application/json" }});
-      const data = await res.json();
-      if(!Array.isArray(data) || data.length===0) throw new Error("Not found");
-      const out = { lat: parseFloat(data[0].lat), lon: parseFloat(data[0].lon) };
-      geoCache[key] = out;
-      localStorage.setItem("LA_GEOCACHE", JSON.stringify(geoCache));
-      return out;
-    }
-
-    function downloadPdfFromData(){
-      const rows = [];
-      allDates().forEach(d=>{
-        const key = ymd(d);
-        if(key === `${ACTIVE_YEAR}-12-24`){
-          if(services.length){
-            services.forEach(s=>{
-              const time = s.uhrzeit ? `${s.uhrzeit} Uhr` : "Heiligabend";
-              rows.push(`<tr><td>${deDate(d)}</td><td>${WDAY[d.getDay()]}</td><td>${escapeHtml(s.gemeinde||"Gemeinde")} ${time}</td><td>${escapeHtml(s.adresse||"")}</td></tr>`);
-            });
-          }else{
-            rows.push(`<tr><td>${deDate(d)}</td><td>${WDAY[d.getDay()]}</td><td>Gottesdienste folgen</td><td></td></tr>`);
-          }
-        }else{
-          const e = eventsMap.get(key);
-          const host = e && e.hostName ? e.hostName : "Noch frei";
-          const addr = e && e.hostAdresse ? e.hostAdresse : "";
-          const time = e && e.uhrzeit ? `${e.uhrzeit} Uhr` : "18:00 Uhr";
-          rows.push(`<tr><td>${deDate(d)}</td><td>${WDAY[d.getDay()]}</td><td>${escapeHtml(host)} (${time})</td><td>${escapeHtml(addr)}</td></tr>`);
-        }
-      });
-
-      const html = `
-        <!doctype html><html><head><meta charset="utf-8">
-        <title>Lebendiger Adventskalender Übersicht ${ACTIVE_YEAR}</title>
-        <style>
-          @page { size: A4; margin: 16mm; }
-          body{ font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; }
-          h1{ font-size:18pt; margin:0 0 10pt 0; }
-          table{ width:100%; border-collapse:collapse; font-size:11pt; }
-          th,td{ border:1px solid #ddd; padding:6px 8px; vertical-align:top; }
-          th{ background:#f5f5f5; text-align:left; }
-        </style></head><body>
-        <h1>Lebendiger Adventskalender Hessisch Lichtenau ${ACTIVE_YEAR}</h1>
-        <p>Übersicht aller Termine mit Uhrzeit und Adresse. Heiligabend zeigt die Gottesdienste.</p>
-        <table><thead><tr><th>Datum</th><th>Tag</th><th>Gastgeber oder Gottesdienst</th><th>Adresse</th></tr></thead>
-        <tbody>${rows.join("")}</tbody></table>
-        </body></html>`;
-      const w = window.open("", "_blank");
-      if(w){ w.document.open(); w.document.write(html); w.document.close(); w.addEventListener("load", ()=> { try{ w.focus(); w.print(); }catch(e){} }); }
-    }
-
-    function downloadIcsFromData(){
-      const lines = [];
-      lines.push("BEGIN:VCALENDAR");
-      lines.push("VERSION:2.0");
-      lines.push("PRODID:-//Lebendiger Adventskalender//DE");
-      lines.push("CALSCALE:GREGORIAN");
-      lines.push(`X-WR-CALNAME:Lebendiger Adventskalender ${ACTIVE_YEAR}`);
-      lines.push("X-WR-TIMEZONE:Europe/Berlin");
-
-      allDates().forEach(d=>{
-        const key = ymd(d);
-        if(key === `${ACTIVE_YEAR}-12-24`){
-          services.forEach(s=>{
-            const hm = parseHm2(s.uhrzeit || "16:00");
-            const dtStart = toIcsLocal(d, hm.h, hm.m);
-            const dtEnd   = toIcsLocal(d, hm.h, hm.m + 60);
-            const uid = `GD-${s.id || key}@adventskalender`;
-            const summary = escapeIcs("Heiligabend Gottesdienst");
-            const desc = escapeIcs(s.gemeinde || "Gottesdienst");
-            const loc = escapeIcs(s.adresse || "");
-            lines.push("BEGIN:VEVENT");
-            lines.push(`UID:${uid}`);
-            lines.push(`DTSTART;TZID=Europe/Berlin:${dtStart}`);
-            lines.push(`DTEND;TZID=Europe/Berlin:${dtEnd}`);
-            lines.push(`SUMMARY:${summary}`);
-            lines.push(`DESCRIPTION:${desc}`);
-            lines.push(`LOCATION:${loc}`);
-            lines.push("END:VEVENT");
-          });
-        }else{
-          const e = eventsMap.get(key);
-          if(e && e.hostName && e.hostAdresse){
-            const hm = parseHm2(e.uhrzeit || "18:00");
-            const dtStart = toIcsLocal(d, hm.h, hm.m);
-            const dtEnd   = toIcsLocal(d, hm.h, hm.m + 30);
-            const uid = `LA-${key}@adventskalender`;
-            const summary = escapeIcs("Lebendiger Adventskalender");
-            const desc = escapeIcs(e.hostName);
-            const loc = escapeIcs(e.hostAdresse);
-            lines.push("BEGIN:VEVENT");
-            lines.push(`UID:${uid}`);
-            lines.push(`DTSTART;TZID=Europe/Berlin:${dtStart}`);
-            lines.push(`DTEND;TZID=Europe/Berlin:${dtEnd}`);
-            lines.push(`SUMMARY:${summary}`);
-            lines.push(`DESCRIPTION:${desc}`);
-            lines.push(`LOCATION:${loc}`);
-            lines.push("END:VEVENT");
-          }
-        }
-      });
-
-      lines.push("END:VCALENDAR");
-      const blob = new Blob([lines.join("\r\n")], {type:"text/calendar;charset=utf-8"});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url; a.download = `Lebendiger-Adventskalender-${ACTIVE_YEAR}.ics`;
-      document.body.appendChild(a); a.click();
-      setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); }, 1200);
-
-      function toIcsLocal(dateObj, hour, min){
-        const d2 = new Date(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate(), hour, min, 0);
-        const y = d2.getFullYear(); const m = String(d2.getMonth()+1).padStart(2,"0");
-        const da = String(d2.getDate()).padStart(2,"0"); const h = String(d2.getHours()).padStart(2,"0"); const mi = String(d2.getMinutes()).padStart(2,"0");
-        return `${y}${m}${da}T${h}${mi}00`;
-      }
-      function escapeIcs(s){ return String(s).replace(/([,;])/g,"\\$1").replace(/\n/g,"\\n"); }
-      function parseHm2(s){
-        const m = /^(\d{1,2}):(\d{2})$/.exec((s||"").trim());
-        if(!m) return {h:18,m:0};
-        return { h: Math.max(0, Math.min(23, parseInt(m[1],10))), m: Math.max(0, Math.min(59, parseInt(m[2],10))) };
-      }
-    }
-
-    function setHeuteFromFirst(){
-      const next = computeNextDate();
-      const e = eventsMap.get(next);
-      const t = e && e.uhrzeit ? e.uhrzeit : "18:00";
-      setHeuteTime(t);
-    }
-
-    function escapeHtml(s){ return String(s||"").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-    function escapeAttr(s){ return escapeHtml(s).replace(/"/g, "&quot;"); }
-    function parseTime(hhmm){
-      const m = /^(\d{1,2}):(\d{2})$/.exec(hhmm||"");
-      if(!m) return 2359;
-      return parseInt(m[1].padStart(2,"0")+m[2],10);
-    }
-    function parseHm(s){
-      const m = /^(\d{1,2}):(\d{2})$/.exec((s||"").trim());
-      if(!m) return {h:18,m:0};
-      return { h: Math.max(0, Math.min(23, parseInt(m[1],10))), m: Math.max(0, Math.min(59, parseInt(m[2],10))) };
-    }
-  </script>
+  <script src="firebase-config.js"></script>
+  <script src="js/app.js"></script>
 </body>
 </html>

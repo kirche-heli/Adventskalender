@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Verwaltung – Lebendiger Adventskalender</title>
+  <meta name="robots" content="noindex, nofollow">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://nominatim.openstreetmap.org; font-src 'self'; base-uri 'self'; form-action 'self'; object-src 'none'">
+  <meta name="referrer" content="no-referrer">
+  <meta name="theme-color" content="#7a1733">
+  <link rel="icon" href="assets/favicon.png">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="admin">
+
+  <!-- Anmeldung -->
+  <div id="loginAnsicht" class="login-huelle">
+    <div class="login-karte">
+      <img src="assets/logo.png" alt="Lebendiger Adventskalender" style="filter:invert(24%) sepia(38%) saturate(2470%) hue-rotate(313deg) brightness(70%) contrast(95%)">
+      <h2 class="center" style="font-size:20px">Verwaltung</h2>
+      <p id="demoLoginHinweis" class="muted center hidden" style="background:var(--hinweis-bg);border-radius:10px;padding:8px">
+        <strong>Vorschau-Modus:</strong> Zum Testen genügt eine beliebige E-Mail-Adresse mit beliebigem Passwort.
+      </p>
+      <form id="loginForm">
+        <div class="feld">
+          <label for="loginEmail">E-Mail</label>
+          <input id="loginEmail" type="email" autocomplete="username" required>
+        </div>
+        <div class="feld">
+          <label for="loginPass">Passwort</label>
+          <input id="loginPass" type="password" autocomplete="current-password" required>
+        </div>
+        <button class="btn btn-wein" type="submit" style="width:100%">Anmelden</button>
+        <p id="loginMsg" class="form-status fehler" role="status" aria-live="polite"></p>
+      </form>
+      <p class="center" style="margin-bottom:0"><a href="index.html">← Zur Startseite</a></p>
+    </div>
+  </div>
+
+  <!-- App -->
+  <div id="appAnsicht" class="hidden">
+    <div class="admin-topbar">
+      <span class="titel">Adventskalender · Verwaltung</span>
+      <label class="sr-only" for="saisonWahl">Saison wählen</label>
+      <select id="saisonWahl"></select>
+      <div class="rechts">
+        <span id="wer" class="muted" style="color:var(--creme);font-size:13px"></span>
+        <a class="btn btn-ghost btn-klein" href="index.html">Startseite</a>
+        <button id="btnAbmelden" class="btn btn-ghost btn-klein" type="button">Abmelden</button>
+      </div>
+    </div>
+
+    <!-- Ersteinrichtung -->
+    <div id="setupAnsicht" class="admin-inhalt hidden">
+      <div class="einstell-karte" style="max-width:640px;margin:20px auto">
+        <h3>Willkommen! Ersteinrichtung</h3>
+        <p class="muted">Es ist noch keine Saison angelegt. In einem Schritt entsteht der komplette Kalender – alle Abende vom ersten Advent bis zum 23. Dezember plus der Heiligabend-Bereich.</p>
+        <form id="setupForm">
+          <div class="form-grid zwei">
+            <div class="feld">
+              <label for="setupJahr">Jahr</label>
+              <input id="setupJahr" type="number" min="2024" max="2100" required>
+            </div>
+            <div class="feld">
+              <label for="setupStart">Start (1. Advent)</label>
+              <input id="setupStart" type="date" required>
+            </div>
+          </div>
+          <div class="feld">
+            <label for="setupVorlauf">Zusätzliche Tage vor dem 1. Advent</label>
+            <input id="setupVorlauf" type="number" min="0" max="60" value="0">
+            <div class="hilfe">0 bedeutet: Der Kalender beginnt am ersten Advent. Lässt sich später jederzeit unter „Termine“ ändern.</div>
+          </div>
+          <div class="feld">
+            <label class="check"><input type="checkbox" id="setupAuftakt" checked> <span>Auftakt-Eintrag am ersten Tag anlegen</span></label>
+            <input id="setupAuftaktText" type="text" value="Eröffnung an der Stadtkirche" style="margin-top:6px">
+          </div>
+          <div class="feld">
+            <label class="check"><input type="checkbox" id="setupOffen" checked> <span>Anmeldung für Gastgeber sofort öffnen</span></label>
+          </div>
+          <button class="btn btn-gold" type="submit">Saison anlegen</button>
+        </form>
+      </div>
+    </div>
+
+    <div id="hauptAnsicht" class="hidden">
+      <nav class="tabs" aria-label="Verwaltungsbereiche">
+        <button class="tab aktiv" data-tab="uebersicht" type="button">Übersicht</button>
+        <button class="tab" data-tab="anmeldungen" type="button">Anmeldungen</button>
+        <button class="tab" data-tab="termine" type="button">Termine</button>
+        <button class="tab" data-tab="nachruecker" type="button">Nachrücker</button>
+        <button class="tab" data-tab="einstellungen" type="button">Einstellungen</button>
+        <button class="tab" data-tab="saisons" type="button">Saisons</button>
+      </nav>
+
+      <div class="admin-inhalt">
+
+        <!-- Übersicht -->
+        <div id="panel-uebersicht" class="panel">
+          <div id="uebersichtStatusChips" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px"></div>
+          <div class="statz">
+            <div class="stat"><div id="statBelegt" class="zahl">–</div><div class="label">Abende vergeben</div></div>
+            <div class="stat"><div id="statAnmeldungen" class="zahl">–</div><div class="label">neue Anmeldungen</div></div>
+            <div class="stat"><div id="statNachruecker" class="zahl">–</div><div class="label">Nachrücker</div></div>
+            <div class="stat"><div id="statGd" class="zahl">–</div><div class="label">Gottesdienste 24.12.</div></div>
+          </div>
+          <div class="prog" style="margin-top:12px">
+            <div class="prog-kopf"><span>Belegung</span><span id="progProzent">0 %</span></div>
+            <div class="prog-balken"><div id="progWert" class="prog-wert"></div></div>
+            <div id="progText" class="muted" style="margin-top:6px"></div>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
+            <button id="btnRegToggle" class="btn btn-gold btn-klein" type="button">Anmeldung öffnen</button>
+          </div>
+
+          <h2>Ankündigung auf der Startseite</h2>
+          <div class="einstell-karte">
+            <p class="muted" style="margin-top:0">Für kurzfristige Hinweise, z. B. „Heute fällt der Abend leider aus“ – erscheint als goldenes Band ganz oben.</p>
+            <div class="feld"><textarea id="ankText" rows="2" placeholder="Text der Ankündigung"></textarea></div>
+            <label class="check" style="margin-bottom:10px"><input type="checkbox" id="ankAktiv"> <span>Ankündigung anzeigen</span></label>
+            <div><button id="btnAnkSpeichern" class="btn btn-wein btn-klein" type="button">Speichern</button></div>
+          </div>
+        </div>
+
+        <!-- Anmeldungen -->
+        <div id="panel-anmeldungen" class="panel hidden">
+          <h2>Anmeldungen</h2>
+          <p class="muted">Ein Tipp auf einen goldenen Wunschtermin weist diesen Abend sofort zu. Durchgestrichene Termine sind inzwischen vergeben.</p>
+          <div id="anmListe"></div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+            <button id="btnAnmCsv" class="btn btn-line btn-klein" type="button">Als Excel-Datei (CSV) exportieren</button>
+          </div>
+
+          <h2>E-Mails an die Gastgeber</h2>
+          <div class="einstell-karte">
+            <label class="check" style="margin-bottom:8px"><input type="checkbox" id="mailAuchNeue"> <span>auch neue (noch nicht zugeteilte) Anmeldungen einbeziehen</span></label>
+            <textarea id="mailListe" rows="3" readonly></textarea>
+            <div style="display:flex;gap:8px;align-items:center;margin-top:8px;flex-wrap:wrap">
+              <button id="btnMailsKopieren" class="btn btn-wein btn-klein" type="button">Adressen kopieren</button>
+              <span class="muted" style="font-size:13.5px">Tipp: im Mailprogramm das Feld „BCC“ verwenden.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Termine -->
+        <div id="panel-termine" class="panel hidden">
+          <h2>Zeitraum des Kalenders</h2>
+          <div class="einstell-karte">
+            <p class="muted" style="margin-top:0">Normalerweise beginnt der Kalender am ersten Advent. Es lassen sich aber beliebig viele Tage davor ergänzen – etwa wenn ein Abend schon vor dem ersten Advent stattfinden soll. Die neuen Tage erscheinen sofort im Kalender und im Anmeldeformular. Bereits eingetragene Abende bleiben dabei unangetastet.</p>
+            <div id="zeitraumInfo" class="chip" style="margin-bottom:10px"></div>
+            <div class="form-grid zwei">
+              <div class="feld">
+                <label for="zrStart">Erster Tag des Kalenders</label>
+                <input id="zrStart" type="date">
+                <div id="zrHinweis" class="hilfe"></div>
+              </div>
+              <div class="feld" style="align-self:end">
+                <button id="btnZrSpeichern" class="btn btn-gold btn-klein" type="button">Zeitraum übernehmen</button>
+              </div>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="btn btn-line btn-klein" data-zr="-1" type="button">1 Tag früher</button>
+              <button class="btn btn-line btn-klein" data-zr="-3" type="button">3 Tage früher</button>
+              <button class="btn btn-line btn-klein" data-zr="-7" type="button">1 Woche früher</button>
+              <button class="btn btn-line btn-klein" data-zr="advent" type="button">Zurück zum 1. Advent</button>
+            </div>
+          </div>
+
+          <h2>Alle Abende</h2>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px">
+            <div id="terminFilter" style="display:flex;gap:6px">
+              <button class="tab aktiv" data-filter="alle" type="button">Alle</button>
+              <button class="tab" data-filter="frei" type="button">Nur freie</button>
+              <button class="tab" data-filter="belegt" type="button">Nur vergebene</button>
+            </div>
+            <div style="margin-left:auto;display:flex;gap:8px;flex-wrap:wrap">
+              <button id="btnGeoAlle" class="btn btn-line btn-klein" type="button">📍 Koordinaten für alle ermitteln</button>
+              <button id="btnTermineCsv" class="btn btn-line btn-klein" type="button">CSV exportieren</button>
+            </div>
+          </div>
+          <div id="terminListe"></div>
+
+          <h2>Heiligabend – Gottesdienste am 24.12.</h2>
+          <p class="muted">Mit der Griffleiste ⋮⋮ lässt sich die Reihenfolge per Ziehen ändern – danach „Reihenfolge speichern“.</p>
+          <div id="gdListe"></div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+            <button id="btnGdNeu" class="btn btn-gold btn-klein" type="button">Gottesdienst hinzufügen</button>
+            <button id="btnGdReihenfolge" class="btn btn-line btn-klein" type="button">Reihenfolge speichern</button>
+          </div>
+        </div>
+
+        <!-- Nachrücker -->
+        <div id="panel-nachruecker" class="panel hidden">
+          <h2>Nachrückerliste</h2>
+          <p id="nrStatus" class="muted"></p>
+          <div style="margin-bottom:12px"><button id="btnNrToggle" class="btn btn-gold btn-klein" type="button"></button></div>
+          <div id="nrListe"></div>
+        </div>
+
+        <!-- Einstellungen -->
+        <div id="panel-einstellungen" class="panel hidden">
+          <h2>Einstellungen</h2>
+
+          <div class="einstell-karte">
+            <h3>Texte auf der Startseite</h3>
+            <div class="feld"><label for="eUntertitel">Untertitel im Kopfbereich</label><textarea id="eUntertitel" rows="2"></textarea></div>
+            <div class="feld"><label for="eIntro1">„Was ist das?“ – Absatz 1</label><textarea id="eIntro1" rows="3"></textarea></div>
+            <div class="feld"><label for="eIntro2">„Was ist das?“ – Absatz 2</label><textarea id="eIntro2" rows="3"></textarea></div>
+            <div class="feld"><label for="eOrga">Organisation und nächste Schritte</label><textarea id="eOrga" rows="3"></textarea></div>
+            <div class="feld"><label for="eFormIntro">Einleitung über dem Anmeldeformular</label><textarea id="eFormIntro" rows="3"></textarea></div>
+            <div class="feld"><label for="eBestaetigung">Dankestext nach der Anmeldung</label><textarea id="eBestaetigung" rows="2"></textarea></div>
+            <button class="btn btn-wein btn-klein" data-speichern="texte" type="button">Texte speichern</button>
+          </div>
+
+          <div class="einstell-karte">
+            <h3>WhatsApp-Kanal</h3>
+            <label class="check" style="margin-bottom:8px"><input type="checkbox" id="eWaZeigen"> <span>WhatsApp-Bereich auf der Startseite anzeigen</span></label>
+            <div class="feld"><label for="eWaLink">Link zum Kanal</label><input id="eWaLink" type="text" placeholder="https://whatsapp.com/channel/…">
+              <div class="hilfe">Der QR-Code auf der Startseite wird automatisch aus diesem Link erzeugt.</div></div>
+            <button class="btn btn-wein btn-klein" data-speichern="whatsapp" type="button">Speichern</button>
+          </div>
+
+          <div class="einstell-karte">
+            <h3>Wetter und Karte</h3>
+            <label class="check" style="margin-bottom:8px"><input type="checkbox" id="eWetterZeigen"> <span>Wettervorhersage beim nächsten Abend anzeigen (Open-Meteo)</span></label>
+            <div class="form-grid zwei">
+              <div class="feld"><label for="eWetterOrt">Ortsname</label><input id="eWetterOrt" type="text"></div>
+              <div class="feld"><label for="eWetterLat">Breitengrad</label><input id="eWetterLat" type="text" inputmode="decimal"></div>
+            </div>
+            <div class="form-grid zwei">
+              <div class="feld"><label for="eWetterLon">Längengrad</label><input id="eWetterLon" type="text" inputmode="decimal"></div>
+              <div class="feld" style="align-self:end"><label class="check"><input type="checkbox" id="eKarteZeigen"> <span>„Karte ansehen“-Knopf anzeigen</span></label></div>
+            </div>
+            <button class="btn btn-wein btn-klein" data-speichern="wetter" type="button">Speichern</button>
+          </div>
+
+          <div class="einstell-karte">
+            <h3>Kontakt</h3>
+            <div class="feld"><label for="eKontaktEmail">E-Mail-Adresse</label><input id="eKontaktEmail" type="email"></div>
+            <div class="feld"><label for="eKontaktText">Kontakttext</label><textarea id="eKontaktText" rows="2"></textarea></div>
+            <button class="btn btn-wein btn-klein" data-speichern="kontakt" type="button">Speichern</button>
+          </div>
+
+          <div class="einstell-karte">
+            <h3>Impressum und Datenschutz</h3>
+            <p class="muted" style="margin-top:0">Diese Texte erscheinen auf den Seiten „Impressum“ und „Datenschutz“. Bleibt das Datenschutz-Feld leer, wird der eingebaute Mustertext angezeigt. Bitte beide Texte einmal mit den Verantwortlichen der Gemeinde abstimmen.</p>
+            <div class="feld"><label for="eImpressum">Impressum</label><textarea id="eImpressum" rows="7"></textarea></div>
+            <div class="feld"><label for="eDatenschutz">Datenschutzerklärung (leer = Mustertext)</label><textarea id="eDatenschutz" rows="7"></textarea></div>
+            <button class="btn btn-wein btn-klein" data-speichern="recht" type="button">Speichern</button>
+          </div>
+
+          <div id="demoZuruecksetzen" class="einstell-karte hidden">
+            <h3>Vorschau-Modus</h3>
+            <p class="muted" style="margin-top:0">Alle Beispieldaten zurück auf den Anfangszustand setzen.</p>
+            <button id="btnDemoReset" class="btn btn-warn btn-klein" type="button">Vorschau zurücksetzen</button>
+          </div>
+        </div>
+
+        <!-- Saisons -->
+        <div id="panel-saisons" class="panel hidden">
+          <h2>Saisons</h2>
+          <p class="muted">Hier wird der Kalender Jahr für Jahr weitergeführt: Neue Saison anlegen, öffentlich schalten, alte Jahre ins Archiv legen. Alle Daten vergangener Jahre bleiben erhalten und lassen sich oben über die Saison-Auswahl ansehen.</p>
+          <div id="saisonListe"></div>
+
+          <h2>Neue Saison anlegen</h2>
+          <div class="einstell-karte">
+            <form id="neuForm">
+              <div class="form-grid zwei">
+                <div class="feld">
+                  <label for="neuJahr">Jahr</label>
+                  <input id="neuJahr" type="number" min="2024" max="2100" required>
+                  <div id="neuHinweis" class="hilfe"></div>
+                </div>
+                <div class="feld">
+                  <label for="neuStart">Start (1. Advent)</label>
+                  <input id="neuStart" type="date" required>
+                </div>
+              </div>
+              <div class="feld">
+                <label class="check"><input type="checkbox" id="neuGdUebernehmen" checked> <span>Gottesdienste übernehmen aus:</span></label>
+                <select id="neuGdQuelle" style="margin-top:6px"></select>
+              </div>
+              <div class="feld">
+                <label for="neuVorlauf">Zusätzliche Tage vor dem 1. Advent</label>
+                <input id="neuVorlauf" type="number" min="0" max="60" value="0">
+                <div class="hilfe">0 bedeutet: Der Kalender beginnt am ersten Advent. Lässt sich später jederzeit unter „Termine“ ändern.</div>
+              </div>
+              <div class="feld">
+                <label class="check"><input type="checkbox" id="neuAuftakt" checked> <span>Auftakt-Eintrag am ersten Tag anlegen</span></label>
+                <input id="neuAuftaktText" type="text" value="Eröffnung an der Stadtkirche" style="margin-top:6px">
+              </div>
+              <div class="feld"><label class="check"><input type="checkbox" id="neuOffen"> <span>Anmeldung für Gastgeber sofort öffnen</span></label></div>
+              <div class="feld"><label class="check"><input type="checkbox" id="neuAktiv" checked> <span>Sofort öffentlich schalten (Anmeldung der bisherigen Saison wird geschlossen)</span></label></div>
+              <button class="btn btn-gold" type="submit">Saison anlegen</button>
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="firebase-config.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

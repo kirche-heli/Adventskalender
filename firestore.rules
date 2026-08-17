@@ -1,0 +1,98 @@
+rules_version = '2';
+
+// Sicherheitsregeln für den Lebendigen Adventskalender
+//
+// WICHTIG: Unten bei istAdmin() die E-Mail-Adressen aller Personen
+// eintragen, die den Verwaltungsbereich nutzen dürfen. Nur diese
+// Adressen dürfen Daten ändern und Anmeldungen lesen.
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function istAdmin() {
+      return request.auth != null
+        && request.auth.token.email in [
+          'dominik.teminski@ekkw.de',
+          'britta.ackermann@ekkw.de'
+          // , 'weitere.person@ekkw.de'
+        ];
+    }
+
+    function textOk(feld, maxLaenge) {
+      return feld is string && feld.size() <= maxLaenge;
+    }
+
+    // Öffentliche Einstellungen (Texte, Links, aktive Saison)
+    match /settings/{doc} {
+      allow read: if true;
+      allow write: if istAdmin();
+    }
+
+    // Saisons
+    match /seasons/{seasonId} {
+      allow read: if true;
+      allow write: if istAdmin();
+
+      // Die einzelnen Abende
+      match /days/{dayId} {
+        allow read: if true;
+        allow write: if istAdmin();
+      }
+
+      // Gottesdienste am 24.12.
+      match /services/{serviceId} {
+        allow read: if true;
+        allow write: if istAdmin();
+      }
+
+      // Anmeldungen als Gastgeber:
+      // Jede und jeder darf eine Anmeldung anlegen, solange die
+      // Anmeldung geöffnet ist. Lesen darf nur die Verwaltung.
+      match /anmeldungen/{anmId} {
+        allow read, update, delete: if istAdmin();
+        allow create: if
+          get(/databases/$(database)/documents/seasons/$(seasonId)).data.registrationOpen == true
+          && request.resource.data.keys().hasOnly([
+               'name','email','telefon','street','city','wishes','note',
+               'barrierefrei','consentPublish','consentTextVersion',
+               'createdAt','status','website'
+             ])
+          && textOk(request.resource.data.name, 120)
+          && textOk(request.resource.data.email, 160)
+          && textOk(request.resource.data.telefon, 60)
+          && textOk(request.resource.data.street, 160)
+          && textOk(request.resource.data.city, 120)
+          && textOk(request.resource.data.note, 1500)
+          && request.resource.data.wishes is list
+          && request.resource.data.wishes.size() >= 1
+          && request.resource.data.wishes.size() <= 30
+          && request.resource.data.barrierefrei is bool
+          && request.resource.data.consentPublish == true
+          && request.resource.data.status == 'neu'
+          && request.resource.data.website == '';
+      }
+
+      // Nachrückerliste – nur wenn sie aktiv geschaltet ist
+      match /nachruecker/{nrId} {
+        allow read, update, delete: if istAdmin();
+        allow create: if
+          get(/databases/$(database)/documents/seasons/$(seasonId)).data.waitlistActive == true
+          && request.resource.data.keys().hasOnly([
+               'name','email','telefon','street','city','note','createdAt','website'
+             ])
+          && textOk(request.resource.data.name, 120)
+          && textOk(request.resource.data.email, 160)
+          && textOk(request.resource.data.telefon, 60)
+          && textOk(request.resource.data.street, 160)
+          && textOk(request.resource.data.city, 120)
+          && textOk(request.resource.data.note, 800)
+          && request.resource.data.website == '';
+      }
+    }
+
+    // Alles andere ist gesperrt
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
