@@ -1,0 +1,550 @@
+/* ============================================================
+   Lebendiger Adventskalender – Stylesheet
+   Farben und Schriftbild folgen dem Logo:
+   Weinrot, Champagner-Creme, Serifenschrift + Schreibschrift.
+   Alle Schriften werden lokal geladen (keine Google-Server).
+   ============================================================ */
+
+/* ---------- Schriften (lokal, DSGVO-freundlich) ---------- */
+@font-face{ font-family:"Playfair Display"; font-style:normal; font-weight:400; font-display:swap; src:url("../fonts/playfair-display-latin-400-normal.woff2") format("woff2"); }
+@font-face{ font-family:"Playfair Display"; font-style:normal; font-weight:600; font-display:swap; src:url("../fonts/playfair-display-latin-600-normal.woff2") format("woff2"); }
+@font-face{ font-family:"Playfair Display"; font-style:normal; font-weight:700; font-display:swap; src:url("../fonts/playfair-display-latin-700-normal.woff2") format("woff2"); }
+@font-face{ font-family:"Great Vibes"; font-style:normal; font-weight:400; font-display:swap; src:url("../fonts/great-vibes-latin-400-normal.woff2") format("woff2"); }
+@font-face{ font-family:"Lato"; font-style:normal; font-weight:400; font-display:swap; src:url("../fonts/lato-latin-400-normal.woff2") format("woff2"); }
+@font-face{ font-family:"Lato"; font-style:normal; font-weight:700; font-display:swap; src:url("../fonts/lato-latin-700-normal.woff2") format("woff2"); }
+
+/* ---------- Design-Token ---------- */
+:root{
+  --wein:#7a1733;
+  --wein-tief:#5b0f25;
+  --wein-hell:#93224a;
+  --blob:#69132d;
+
+  --creme:#f2d9a9;
+  --creme-hell:#f8ecd5;
+  --papier:#faf5ea;
+  --karte:#ffffff;
+
+  --gold:#c99d55;
+  --gold-hell:#e6c98d;
+  --licht:#ffdf9e;
+
+  --tinte:#33222a;
+  --grau:#7d6b73;
+  --linie:#e9d9c1;
+
+  --ok:#2e6b4f;
+  --ok-bg:#e8f3ec;
+  --fehler:#a32323;
+  --fehler-bg:#fbeaea;
+  --hinweis-bg:#fdf3d7;
+
+  --schatten:0 10px 26px rgba(60,15,30,.10), 0 2px 6px rgba(60,15,30,.08);
+  --schatten-tief:0 18px 44px rgba(60,15,30,.18);
+  --radius:18px;
+  --radius-klein:12px;
+
+  --schrift:"Lato", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --schrift-display:"Playfair Display", Georgia, serif;
+  --schrift-schnoerkel:"Great Vibes", cursive;
+}
+
+/* ---------- Basis ---------- */
+*,*::before,*::after{ box-sizing:border-box; }
+html{ scroll-behavior:smooth; }
+html,body{ margin:0; padding:0; }
+body{
+  font-family:var(--schrift);
+  font-size:16px; line-height:1.6; color:var(--tinte);
+  background:var(--papier);
+  -webkit-text-size-adjust:100%;
+}
+img{ max-width:100%; height:auto; }
+a{ color:var(--wein); }
+:focus-visible{ outline:3px solid var(--gold); outline-offset:2px; border-radius:4px; }
+.sr-only{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); border:0; }
+
+h1,h2,h3,h4{ font-family:var(--schrift-display); color:var(--wein-tief); line-height:1.25; margin:0 0 .5em; }
+h2{ font-size:clamp(24px,4.5vw,32px); }
+h3{ font-size:clamp(19px,3.5vw,23px); }
+
+.container{ max-width:1080px; margin:0 auto; padding:0 16px; }
+.muted{ color:var(--grau); }
+.center{ text-align:center; }
+.hidden{ display:none !important; }
+
+/* Abschnitts-Kopf mit Schreibschrift-Akzent */
+.abschnitt-kopf{ text-align:center; margin:0 0 22px; }
+.abschnitt-kopf .schnoerkel{
+  font-family:var(--schrift-schnoerkel); font-size:clamp(30px,6vw,44px);
+  color:var(--gold); display:block; line-height:1; margin-bottom:2px;
+}
+.abschnitt-kopf h2{ letter-spacing:.06em; text-transform:uppercase; font-weight:700; }
+.abschnitt-kopf p{ max-width:640px; margin:8px auto 0; color:var(--grau); }
+
+/* ---------- Kopfleiste ---------- */
+.topbar{
+  position:sticky; top:0; z-index:60;
+  background:var(--wein); color:var(--creme);
+  box-shadow:0 2px 12px rgba(0,0,0,.18);
+}
+.topbar-innen{
+  max-width:1080px; margin:0 auto; padding:10px 16px;
+  display:flex; align-items:center; gap:12px;
+}
+.marke{ display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--creme); min-width:0; }
+.marke svg{ flex:none; }
+.marke-text{
+  font-family:var(--schrift-display); font-weight:700; letter-spacing:.08em;
+  text-transform:uppercase; font-size:14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.topnav{ margin-left:auto; display:flex; gap:4px; }
+.topnav a{
+  color:var(--creme); text-decoration:none; font-weight:700; font-size:14.5px;
+  padding:8px 12px; border-radius:999px;
+}
+.topnav a:hover{ background:rgba(255,255,255,.12); }
+.burger{
+  margin-left:auto; background:none; border:2px solid var(--creme); color:var(--creme);
+  border-radius:10px; padding:6px 10px; font-size:18px; line-height:1; cursor:pointer; display:none;
+}
+@media(max-width:820px){
+  .topnav{ position:absolute; left:0; right:0; top:100%; background:var(--wein-tief);
+    display:none; flex-direction:column; padding:8px 12px 14px; gap:2px; box-shadow:0 14px 24px rgba(0,0,0,.25); }
+  .topnav.offen{ display:flex; }
+  .topnav a{ padding:12px 12px; font-size:16px; }
+  .burger{ display:inline-block; }
+}
+
+/* ---------- Hinweis-Banner (Ankündigung) ---------- */
+.banner{
+  background:var(--gold); color:var(--wein-tief);
+  padding:10px 16px; text-align:center; font-weight:700;
+}
+.banner .container{ padding:0; }
+
+/* ---------- Hero ---------- */
+.hero{
+  position:relative; overflow:hidden;
+  background:linear-gradient(175deg, var(--wein) 0%, var(--wein-tief) 90%);
+  color:var(--creme); text-align:center;
+  padding:44px 16px 88px;
+}
+.hero-blob{ position:absolute; left:50%; top:46%; transform:translate(-50%,-50%); width:min(760px,120vw); opacity:.55; pointer-events:none; }
+.hero-stern{ position:absolute; width:7px; height:7px; border-radius:50%; background:var(--creme); opacity:.55; }
+.hero-stern.s2{ width:5px; height:5px; }
+.hero-stern.s3{ width:4px; height:4px; }
+@keyframes funkeln{ 0%,100%{opacity:.2; transform:scale(.8);} 50%{opacity:.85; transform:scale(1);} }
+.hero-stern{ animation:funkeln 4.5s ease-in-out infinite; }
+.hero-stern.s2{ animation-duration:6s; animation-delay:1.2s; }
+.hero-stern.s3{ animation-duration:5s; animation-delay:2.4s; }
+.hero-innen{ position:relative; max-width:820px; margin:0 auto; }
+.hero-logo{ width:min(560px,86vw); filter:drop-shadow(0 10px 26px rgba(0,0,0,.35)); }
+.hero-untertitel{ font-size:clamp(15px,2.4vw,18px); max-width:620px; margin:14px auto 0; opacity:.96; }
+.hero-pillen{ display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-top:16px; }
+.hero-pille{
+  border:1.5px solid var(--gold-hell); color:var(--creme);
+  border-radius:999px; padding:6px 14px; font-size:14px; font-weight:700; letter-spacing:.03em;
+}
+.hero-aktionen{ display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:22px; }
+
+/* geschwungener Übergang zum Inhalt */
+.hero-bogen{ position:absolute; left:0; right:0; bottom:-1px; height:46px;
+  background:var(--papier); border-radius:32px 32px 0 0; }
+
+main{ position:relative; margin-top:-30px; padding-bottom:56px; }
+section.block{ padding:26px 0 6px; }
+section.block:first-of-type{ padding-top:4px; }
+
+/* ---------- Karten ---------- */
+.card{
+  background:var(--karte); border-radius:var(--radius);
+  box-shadow:var(--schatten); padding:20px; border:1px solid #f2e6d2;
+}
+.card + .card{ margin-top:14px; }
+
+/* ---------- Knöpfe ---------- */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  border:none; cursor:pointer; text-decoration:none;
+  font-family:var(--schrift); font-weight:700; font-size:15.5px;
+  padding:12px 20px; border-radius:999px; line-height:1.2;
+  transition:transform .12s ease, box-shadow .12s ease, background .12s ease;
+}
+.btn:active{ transform:translateY(1px); }
+.btn-gold{ background:var(--gold); color:var(--wein-tief); box-shadow:0 6px 16px rgba(120,80,20,.28); }
+.btn-gold:hover{ background:var(--gold-hell); }
+.btn-wein{ background:var(--wein); color:var(--creme); box-shadow:0 6px 16px rgba(90,15,37,.28); }
+.btn-wein:hover{ background:var(--wein-hell); }
+.btn-ghost{ background:transparent; color:var(--creme); border:2px solid var(--creme); }
+.btn-ghost:hover{ background:rgba(255,255,255,.12); }
+.btn-line{ background:#fff; color:var(--wein); border:2px solid var(--wein); }
+.btn-line:hover{ background:var(--creme-hell); }
+.btn-warn{ background:var(--fehler); color:#fff; }
+.btn-klein{ padding:8px 14px; font-size:14px; }
+.btn[disabled]{ opacity:.55; cursor:not-allowed; transform:none; }
+
+/* ---------- Chips und Badges ---------- */
+.chip{
+  display:inline-block; background:var(--creme-hell); color:var(--wein-tief);
+  border:1px solid var(--linie); border-radius:999px;
+  padding:4px 11px; font-size:13px; font-weight:700;
+}
+.chip-gold{ background:var(--hinweis-bg); border-color:var(--gold-hell); }
+.chip-frei{ background:#fff; border-style:dashed; border-color:var(--gold); color:var(--gold); }
+.chip-ok{ background:var(--ok-bg); border-color:#bcd8c8; color:var(--ok); }
+.chip-warn{ background:var(--fehler-bg); border-color:#e7bcbc; color:var(--fehler); }
+.chip-klick{ cursor:pointer; }
+.chip-klick:hover{ background:var(--gold-hell); }
+
+/* ---------- Heute-Karte ---------- */
+.heute-kopf{ display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:8px; }
+.heute-titel{ font-family:var(--schrift-display); font-size:clamp(21px,4vw,26px); font-weight:700; color:var(--wein-tief); margin:6px 0 2px; }
+.heute-adresse{ font-size:17px; }
+.heute-zeile{ display:grid; gap:16px; }
+@media(min-width:840px){ .heute-zeile{ grid-template-columns:1.6fr 1fr; align-items:start; } }
+.wetter{
+  display:flex; align-items:center; gap:14px;
+  background:var(--creme-hell); border:1px dashed var(--gold-hell);
+  border-radius:var(--radius-klein); padding:12px 14px;
+}
+.wetter-temp{ font-family:var(--schrift-display); font-size:30px; font-weight:700; color:var(--wein); min-width:64px; text-align:center; }
+.wetter small{ color:var(--grau); }
+
+/* ---------- Fenster-Wand (Kalender) ---------- */
+.wand-kopf{
+  display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); gap:4px;
+  text-align:center; font-size:11px; font-weight:700; letter-spacing:.08em;
+  text-transform:uppercase; color:var(--grau); margin-bottom:6px;
+}
+.wand-kopf span:nth-child(6),.wand-kopf span:nth-child(7){ color:var(--wein); }
+.fenster-wand{
+  display:grid; gap:4px;
+  grid-template-columns:repeat(7,minmax(0,1fr));
+}
+.tuer-luecke{ min-height:0; }
+.monats-trenner{
+  grid-column:1 / -1; display:flex; align-items:center; gap:10px;
+  font-family:var(--schrift-display); font-weight:700; color:var(--wein);
+  font-size:14px; letter-spacing:.06em; text-transform:uppercase; margin:8px 0 2px;
+}
+.monats-trenner::after{ content:""; flex:1; height:1px; background:var(--linie); }
+
+.tuer{
+  position:relative; display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+  min-height:60px; padding:16px 3px 6px;
+  background:var(--wein);
+  border:2px solid var(--creme); outline:3px solid var(--wein); outline-offset:-1px;
+  border-radius:8px; color:var(--creme);
+  font-family:var(--schrift); cursor:pointer; text-align:center;
+  box-shadow:var(--schatten);
+  transition:transform .14s ease, box-shadow .14s ease;
+  overflow:hidden;
+}
+.tuer:hover{ transform:translateY(-3px); box-shadow:var(--schatten-tief); }
+.tuer:focus-visible{ outline:3px solid var(--gold); outline-offset:3px; }
+.tuer-wt{
+  position:absolute; top:4px; left:0; right:0;
+  font-size:9.5px; letter-spacing:.1em; text-transform:uppercase; opacity:.8;
+}
+.tuer-zahl{ font-family:var(--schrift-display); font-weight:700; font-size:22px; line-height:1; position:relative; }
+.tuer-monat{ display:none; }
+.tuer-punkt{
+  position:relative; margin-top:5px; width:6px; height:6px; border-radius:50%;
+  background:var(--creme); opacity:.85;
+}
+.tuer-info{
+  display:none;
+  position:relative; margin-top:6px; font-size:11.5px; line-height:1.3; font-weight:700;
+  max-width:100%; overflow:hidden; -webkit-line-clamp:2; -webkit-box-orient:vertical;
+}
+/* frei */
+.tuer.frei{ background:var(--karte); color:var(--wein); outline-color:var(--karte);
+  border:2px dashed var(--gold); }
+.tuer.frei .tuer-info{ color:var(--gold); }
+.tuer.frei .tuer-punkt{ background:var(--gold); }
+/* vergangen */
+.tuer.vorbei{ opacity:.5; filter:saturate(.65); }
+/* heute: geöffnetes Fenster mit warmem Licht */
+.tuer.heute{
+  background:radial-gradient(circle at 50% 42%, #ffe9b5 0%, #f5c775 58%, #e8a94f 100%);
+  color:var(--wein-tief); border-color:var(--wein); outline-color:transparent;
+  box-shadow:0 0 0 4px rgba(201,157,85,.35), 0 12px 30px rgba(201,157,85,.45);
+}
+.tuer.heute .tuer-punkt{ background:var(--wein); }
+@keyframes leuchten{ 0%,100%{ box-shadow:0 0 0 4px rgba(201,157,85,.30), 0 10px 26px rgba(201,157,85,.38);} 50%{ box-shadow:0 0 0 6px rgba(201,157,85,.5), 0 14px 34px rgba(201,157,85,.55);} }
+.tuer.heute{ animation:leuchten 3.2s ease-in-out infinite; }
+.tuer-heute-band{ display:none; }
+
+@media(min-width:620px){
+  .wand-kopf{ gap:8px; font-size:12.5px; }
+  .fenster-wand{ gap:8px; }
+  .tuer{ min-height:106px; padding:22px 6px 10px; border-radius:10px; }
+  .tuer-wt{ font-size:10.5px; top:6px; }
+  .tuer-zahl{ font-size:30px; }
+  .tuer-punkt{ display:none; }
+  .tuer-info{ display:-webkit-box; display:box; }
+  .tuer-heute-band{
+    display:block;
+    position:absolute; top:5px; left:50%; transform:translateX(-50%);
+    background:var(--wein); color:var(--creme); border-radius:999px;
+    font-size:9.5px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; padding:2px 8px; z-index:2;
+  }
+  .tuer.heute .tuer-wt{ opacity:0; }
+}
+@media(min-width:900px){
+  .wand-kopf{ gap:10px; }
+  .fenster-wand{ gap:10px; }
+  .tuer{ min-height:126px; }
+  .tuer-zahl{ font-size:34px; }
+  .tuer-info{ font-size:12px; }
+}
+
+/* Heiligabend – breites Fenster */
+.tuer.heiligabend{ grid-column:1 / -1; min-height:0; padding:20px 14px 16px; cursor:default; margin-top:6px; }
+.tuer.heiligabend:hover{ transform:none; box-shadow:var(--schatten); }
+.tuer.heiligabend .tuer-zahl{ font-size:26px; }
+.tuer.heiligabend .tuer-wt{ position:static; font-size:11px; margin-bottom:2px; }
+.tuer.heiligabend .tuer-punkt{ display:none; }
+.heiligabend-titel{ font-family:var(--schrift-display); font-weight:700; font-size:18px; margin-top:2px; position:relative; }
+.gd-liste{ position:relative; display:grid; gap:6px; margin-top:10px; width:100%; max-width:640px; }
+.gd-zeile{
+  display:flex; gap:10px; align-items:baseline; justify-content:center; flex-wrap:wrap;
+  background:rgba(255,255,255,.09); border:1px solid rgba(242,217,169,.4);
+  border-radius:10px; padding:7px 10px; font-size:14px;
+}
+.gd-zeit{ font-weight:700; color:var(--gold-hell); min-width:56px; }
+
+.legende{ display:flex; gap:14px; flex-wrap:wrap; justify-content:center; margin:14px 0 4px; font-size:13.5px; color:var(--grau); }
+.legende span{ display:inline-flex; align-items:center; gap:6px; }
+.legende i{ width:14px; height:14px; border-radius:4px; display:inline-block; }
+.legende .l-belegt{ background:var(--wein); border:1px solid var(--creme); }
+.legende .l-frei{ background:#fff; border:1.5px dashed var(--gold); }
+.legende .l-heute{ background:#f5c775; border:1px solid var(--wein); }
+
+.kalender-aktionen{ display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-top:18px; }
+
+/* ---------- Formulare ---------- */
+label{ font-weight:700; display:block; margin-bottom:5px; }
+input[type=text],input[type=email],input[type=tel],input[type=password],input[type=number],input[type=date],input[type=time],select,textarea{
+  width:100%; padding:11px 13px; font-size:16px; font-family:var(--schrift);
+  border:1.5px solid var(--linie); border-radius:var(--radius-klein);
+  background:#fff; color:var(--tinte);
+}
+input:focus,select:focus,textarea:focus{ border-color:var(--gold); outline:none; box-shadow:0 0 0 3px rgba(201,157,85,.25); }
+textarea{ min-height:96px; resize:vertical; }
+.feld{ margin-bottom:14px; }
+.feld .hilfe{ font-weight:400; font-size:13.5px; color:var(--grau); margin-top:4px; }
+.form-grid{ display:grid; gap:0 14px; }
+@media(min-width:640px){ .form-grid.zwei{ grid-template-columns:1fr 1fr; } }
+.check{ display:flex; align-items:flex-start; gap:9px; font-weight:400; }
+.check input{ width:19px; height:19px; margin-top:3px; flex:none; accent-color:var(--wein); }
+.consent{
+  background:var(--creme-hell); border:1px solid var(--gold-hell);
+  border-radius:var(--radius-klein); padding:13px; margin-bottom:14px;
+}
+.form-status{ font-weight:700; margin-left:4px; }
+.form-status.ok{ color:var(--ok); }
+.form-status.fehler{ color:var(--fehler); }
+.hp-feld{ position:absolute; left:-9999px; top:-9999px; height:1px; width:1px; overflow:hidden; }
+
+/* Wunschtermin-Raster */
+.picker-kopf{ display:grid; grid-template-columns:repeat(7,1fr); gap:5px; text-align:center; font-size:12px; font-weight:700; color:var(--grau); margin-top:6px; }
+.picker{ display:grid; grid-template-columns:repeat(7,1fr); gap:5px; margin-top:5px; }
+.pick{
+  position:relative; border:1.5px solid var(--linie); border-radius:9px; background:#fff;
+  padding:7px 2px 13px; text-align:center; cursor:pointer; user-select:none; font-family:var(--schrift);
+}
+.pick .d{ font-weight:700; font-size:14px; }
+.pick .wd{ display:block; font-size:10.5px; color:var(--grau); }
+.pick::after{ content:""; position:absolute; left:6px; right:6px; bottom:5px; height:3.5px; border-radius:3px; background:var(--linie); }
+.pick.frei::after{ background:var(--ok); }
+.pick.belegt{ cursor:not-allowed; opacity:.5; }
+.pick.belegt::after{ background:var(--fehler); }
+.pick.sel{ border-color:var(--gold); box-shadow:0 0 0 2.5px var(--gold); background:var(--hinweis-bg); }
+.picker-legende{ display:flex; gap:14px; font-size:12.5px; color:var(--grau); margin-top:8px; flex-wrap:wrap; }
+.picker-legende i{ width:12px; height:4px; border-radius:3px; display:inline-block; margin-right:5px; vertical-align:middle; }
+.wunsch-chips{ display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; }
+
+/* ---------- WhatsApp ---------- */
+.wa-zeile{ display:flex; gap:18px; align-items:center; flex-wrap:wrap; }
+.wa-qr{
+  flex:none; width:150px; height:150px; background:#fff; border:1px solid var(--linie);
+  border-radius:var(--radius-klein); padding:8px; box-shadow:var(--schatten); cursor:zoom-in;
+}
+.wa-qr svg,.wa-qr img{ width:100%; height:100%; display:block; }
+.wa-text{ flex:1 1 260px; min-width:0; }
+.wa-text p{ margin:0 0 10px; }
+.btn-wa{ background:#1faa53; color:#fff; }
+.btn-wa:hover{ background:#25c15f; }
+.btn-wa img{ width:22px; height:22px; }
+
+/* ---------- Dialoge / Bottom-Sheet ---------- */
+dialog{ border:none; padding:0; background:transparent; max-width:none; }
+dialog::backdrop{ background:rgba(40,8,18,.55); backdrop-filter:blur(2px); }
+.sheet{
+  background:var(--karte); border-radius:var(--radius);
+  width:min(560px,94vw); max-height:86vh; overflow:auto;
+  box-shadow:var(--schatten-tief); padding:20px;
+}
+.sheet-breit{ width:min(980px,96vw); }
+.sheet-kopf{ display:flex; align-items:flex-start; gap:10px; margin-bottom:8px; }
+.sheet-kopf h3{ margin:0; flex:1; }
+.sheet-zu{
+  flex:none; background:var(--creme-hell); border:1px solid var(--linie); color:var(--wein);
+  width:36px; height:36px; border-radius:50%; font-size:17px; cursor:pointer; line-height:1;
+}
+.sheet-aktionen{ display:flex; gap:10px; flex-wrap:wrap; margin-top:16px; }
+@media(max-width:560px){
+  dialog.unten{ width:100vw; max-width:100vw; margin:auto 0 0; }
+  dialog.unten .sheet{ width:100vw; border-radius:22px 22px 0 0; max-height:88vh; padding-bottom:max(20px, env(safe-area-inset-bottom)); }
+}
+.detail-liste{ display:grid; gap:8px; margin:10px 0 0; }
+.detail-liste div{ display:flex; gap:10px; }
+.detail-liste dt{ flex:none; width:92px; font-weight:700; color:var(--grau); font-size:14px; padding-top:1px; }
+.detail-liste dd{ margin:0; }
+
+/* Karte (Leaflet) */
+#karteBox{ height:min(66vh,560px); border-radius:var(--radius-klein); border:1px solid var(--linie); }
+.karte-consent{ text-align:center; padding:28px 14px; }
+.karte-legende{ display:flex; gap:16px; flex-wrap:wrap; font-size:13.5px; color:var(--grau); margin-bottom:10px; }
+.punkt{ width:13px; height:13px; border-radius:50%; display:inline-block; margin-right:6px; vertical-align:-2px; border:2px solid #fff; box-shadow:0 1px 4px rgba(0,0,0,.3); }
+.punkt-wein{ background:var(--wein); } .punkt-gold{ background:var(--gold); }
+
+/* ---------- Fußzeile ---------- */
+footer.fuss{
+  margin-top:40px; background:var(--wein-tief); color:var(--creme);
+  padding:28px 16px 34px; text-align:center;
+}
+.fuss a{ color:var(--creme); }
+.fuss-links{ display:flex; gap:18px; justify-content:center; flex-wrap:wrap; margin-top:8px; font-size:14.5px; }
+.fuss-klein{ opacity:.75; font-size:13px; margin-top:14px; }
+
+/* ---------- Demo-Hinweis ---------- */
+.demo-band{
+  position:fixed; z-index:90; right:-46px; top:26px; transform:rotate(45deg);
+  background:var(--gold); color:var(--wein-tief); font-weight:700; font-size:12.5px;
+  letter-spacing:.1em; padding:6px 52px; box-shadow:0 4px 12px rgba(0,0,0,.25); pointer-events:none;
+}
+
+/* ============================================================
+   Verwaltung (admin.html)
+   ============================================================ */
+body.admin{ background:#f6efe2; }
+.admin-topbar{
+  position:sticky; top:0; z-index:50; background:var(--wein); color:var(--creme);
+  padding:10px 16px; display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+  box-shadow:0 2px 12px rgba(0,0,0,.2);
+}
+.admin-topbar .titel{ font-family:var(--schrift-display); font-weight:700; letter-spacing:.05em; }
+.admin-topbar select{
+  width:auto; padding:7px 10px; font-size:14.5px; border-radius:9px; border:none;
+  background:var(--creme); color:var(--wein-tief); font-weight:700;
+}
+.admin-topbar .rechts{ margin-left:auto; display:flex; gap:8px; align-items:center; }
+
+.tabs{
+  position:sticky; top:56px; z-index:40; background:#f6efe2;
+  display:flex; gap:6px; overflow-x:auto; padding:10px 16px;
+  border-bottom:1px solid var(--linie); -webkit-overflow-scrolling:touch;
+}
+.tab{
+  flex:none; border:1.5px solid var(--linie); background:#fff; color:var(--tinte);
+  border-radius:999px; padding:8px 15px; font-weight:700; font-size:14.5px; cursor:pointer;
+}
+.tab.aktiv{ background:var(--wein); border-color:var(--wein); color:var(--creme); }
+.admin-inhalt{ max-width:1080px; margin:0 auto; padding:18px 16px 80px; }
+.admin-inhalt h2{ font-size:22px; margin:22px 0 10px; }
+.admin-inhalt h2:first-child{ margin-top:4px; }
+
+.statz{ display:grid; gap:10px; grid-template-columns:repeat(2,1fr); }
+@media(min-width:760px){ .statz{ grid-template-columns:repeat(4,1fr); } }
+.stat{
+  background:#fff; border:1px solid var(--linie); border-radius:var(--radius-klein);
+  padding:14px; text-align:center; box-shadow:var(--schatten);
+}
+.stat .zahl{ font-family:var(--schrift-display); font-size:30px; font-weight:700; color:var(--wein); line-height:1.1; }
+.stat .label{ font-size:13px; color:var(--grau); font-weight:700; }
+
+.prog{ background:#fff; border:1px solid var(--linie); border-radius:var(--radius-klein); padding:14px; box-shadow:var(--schatten); }
+.prog-kopf{ display:flex; justify-content:space-between; font-weight:700; margin-bottom:7px; }
+.prog-balken{ height:12px; background:var(--creme-hell); border-radius:999px; overflow:hidden; }
+.prog-wert{ height:100%; width:0; background:linear-gradient(90deg,var(--gold),var(--gold-hell)); transition:width .5s ease; }
+
+.a-karte{
+  background:#fff; border:1px solid var(--linie); border-radius:var(--radius-klein);
+  padding:14px; box-shadow:var(--schatten); margin-bottom:10px;
+}
+.a-kopf{ display:flex; gap:10px; align-items:flex-start; flex-wrap:wrap; margin-bottom:6px; }
+.a-kopf .wer{ font-weight:700; font-size:16.5px; }
+.a-kopf .rechts{ margin-left:auto; display:flex; gap:6px; flex-wrap:wrap; }
+.a-meta{ font-size:14.5px; color:var(--grau); }
+.a-chips{ display:flex; gap:6px; flex-wrap:wrap; margin:8px 0; }
+
+.termin-karte{
+  background:#fff; border:1px solid var(--linie); border-radius:var(--radius-klein);
+  padding:12px; box-shadow:var(--schatten); margin-bottom:10px;
+}
+.termin-kopf{ display:flex; align-items:center; gap:10px; margin-bottom:8px; flex-wrap:wrap; }
+.datum-badge{
+  flex:none; background:var(--wein); color:var(--creme); border-radius:9px;
+  min-width:82px; text-align:center; padding:7px 8px; line-height:1.15; font-weight:700;
+  border:1.5px solid var(--creme); outline:3px solid var(--wein);
+}
+.datum-badge small{ display:block; font-size:11px; font-weight:400; opacity:.9; }
+.datum-badge.frei-b{ background:#fff; color:var(--gold); border:1.5px dashed var(--gold); outline:none; }
+.termin-felder{ display:grid; gap:8px; }
+@media(min-width:900px){ .termin-felder{ grid-template-columns:.55fr 1fr 1.2fr 1fr; } }
+.termin-flags{ display:flex; gap:14px; flex-wrap:wrap; margin-top:8px; font-size:14px; }
+.termin-flags .check{ align-items:center; }
+.termin-flags .check input{ margin-top:0; }
+.termin-aktionen{ display:flex; gap:8px; justify-content:flex-end; flex-wrap:wrap; margin-top:8px; align-items:center; }
+.geo-status{ font-size:13px; color:var(--grau); margin-right:auto; }
+.geo-status.ok{ color:var(--ok); font-weight:700; }
+
+.gd-row{ background:#fff; border:1px solid var(--linie); border-radius:var(--radius-klein); padding:10px; margin-bottom:8px; }
+.gd-row.dragging{ opacity:.55; }
+.gd-grid{ display:grid; gap:8px; }
+@media(min-width:900px){ .gd-grid{ grid-template-columns:26px .5fr 1fr 1.2fr 1fr auto; align-items:center; } }
+.griff{ cursor:grab; color:var(--grau); font-size:18px; text-align:center; user-select:none; }
+
+.einstell-karte{ background:#fff; border:1px solid var(--linie); border-radius:var(--radius-klein); padding:16px; box-shadow:var(--schatten); margin-bottom:14px; }
+.einstell-karte h3{ margin-top:0; }
+
+.saison-karte{ background:#fff; border:1px solid var(--linie); border-radius:var(--radius-klein); padding:16px; box-shadow:var(--schatten); margin-bottom:12px; }
+.saison-kopf{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+.saison-kopf .jahr{ font-family:var(--schrift-display); font-size:24px; font-weight:700; color:var(--wein); }
+.saison-kopf .rechts{ margin-left:auto; display:flex; gap:6px; flex-wrap:wrap; }
+.saison-aktionen{ display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+
+.login-huelle{ min-height:calc(100vh - 0px); display:flex; align-items:center; justify-content:center; padding:20px;
+  background:linear-gradient(170deg,var(--wein) 0%,var(--wein-tief) 100%); }
+.login-karte{ background:var(--karte); border-radius:var(--radius); box-shadow:var(--schatten-tief); padding:26px; width:min(420px,94vw); }
+.login-karte img{ width:220px; display:block; margin:0 auto 6px; }
+
+.leer{
+  background:var(--creme-hell); border:1.5px dashed var(--gold-hell); border-radius:var(--radius-klein);
+  padding:18px; text-align:center; color:var(--grau);
+}
+
+/* Toast */
+.toast{
+  position:fixed; left:50%; bottom:22px; transform:translateX(-50%) translateY(20px);
+  background:var(--tinte); color:#fff; padding:11px 18px; border-radius:999px;
+  font-weight:700; box-shadow:var(--schatten-tief); opacity:0; pointer-events:none;
+  transition:opacity .25s ease, transform .25s ease; z-index:120; max-width:92vw; text-align:center;
+}
+.toast.sichtbar{ opacity:1; transform:translateX(-50%) translateY(0); }
+.toast.fehler{ background:var(--fehler); }
+
+/* ---------- Bewegung reduzieren ---------- */
+@media (prefers-reduced-motion: reduce){
+  *{ animation:none !important; transition:none !important; }
+  html{ scroll-behavior:auto; }
+}
+
+/* Fließtext auf Impressum und Datenschutz */
+.fliess h3{margin:20px 0 6px;font-size:17px;color:var(--wein)}
+.fliess h3:first-child{margin-top:0}
+.fliess p{margin:0 0 10px;line-height:1.7}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
